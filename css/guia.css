@@ -1,0 +1,401 @@
+/* ============================================================
+   GUIA.CSS — Apenas estilos exclusivos da página de Guias.
+   Header, footer, cards de categoria, botões → global.css
+   ============================================================ */
+
+:root {
+    --verde: #4CAF50;
+    --azul:  #0E6BA8;
+}
+
+/* ── Telas (sistema de navegação interna) ── */
+.screen {
+    display: none;
+    padding: 60px 0;
+    animation: fadeIn 0.35s ease;
+}
+
+.screen.active { display: block; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Hero: Escolha seu Guia ── */
+.hero-guia {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px 60px;
+}
+
+.hero-texto h1 {
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 18px;
+    color: #1a1a1a;
+}
+
+.hero-texto p {
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 28px;
+    font-size: 16px;
+}
+
+/* Cards de opção (Humano / Digital) */
+.opcoes-guia {
+    display: flex;
+    gap: 20px;
+}
+
+.card-opcao-guia {
+    background: #fff;
+    padding: 28px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    flex: 1;
+    text-align: center;
+    border: 1px solid #f0f0f0;
+    transition: 0.3s;
+}
+
+.card-opcao-guia:hover {
+    box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+    transform: translateY(-4px);
+}
+
+.guia-foto-destaque {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 16px;
+    border: 3px solid #C29D5B;
+}
+
+.guia-digital-icon {
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    font-size: 72px;
+    color: var(--verde);
+}
+
+.card-opcao-guia h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #1a1a1a;
+}
+
+.preco-desde {
+    font-size: 14px;
+    color: #666;
+    margin: 14px 0 0;
+}
+
+.preco-desde strong { color: #E61C2E; }
+
+/* Lista de features */
+.features-list {
+    list-style: none;
+    text-align: left;
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: #444;
+}
+
+.features-list li {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.features-list li i { color: var(--verde); font-size: 16px; }
+
+/* Botões específicos desta página */
+.btn-verde {
+    background: var(--verde);
+    color: #fff;
+    padding: 11px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+}
+
+.btn-verde:hover { background: #3d9140; transform: translateY(-2px); }
+
+.btn-outline {
+    background: transparent;
+    color: #666;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+    font-family: inherit;
+}
+
+.btn-outline:hover { border-color: #E61C2E; color: #E61C2E; }
+
+/* ── Separador ── */
+.separador {
+    border: none;
+    border-top: 2px dashed #ddd;
+    margin: 20px 0 50px;
+}
+
+/* ── Layout lista de guias + filtros ── */
+.guias-lista-wrap {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+/* Painel de filtros */
+.filtros-guia {
+    width: 220px;
+    flex-shrink: 0;
+    background: #fff;
+    border-radius: 15px;
+    padding: 22px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.filtros-guia h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: #1a1a1a;
+}
+
+.filtro-grupo {
+    margin-bottom: 20px;
+}
+
+.filtro-titulo {
+    font-size: 12px;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+.filtros-guia label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.filtros-guia input { accent-color: #E61C2E; }
+
+/* Lista de guias */
+.guias-lista { flex: 1; }
+
+/* Badge de idioma */
+.badge-idioma {
+    background: #f0f0f0;
+    color: #555;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.badge-idioma.ativo {
+    background: #E61C2E;
+    color: #fff;
+}
+
+.guia-idiomas {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+}
+
+/* ── Roteiro Digital ── */
+.roteiro-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.roteiro-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.roteiro-header h2 { font-size: 22px; font-weight: 800; }
+.roteiro-header p  { font-size: 14px; color: #666; margin-top: 4px; }
+
+.badge-offline {
+    background: #e8fff0;
+    color: #1E7F43;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.roteiro-main img {
+    width: 100%;
+    border-radius: 14px;
+    margin-bottom: 18px;
+    object-fit: cover;
+    height: 220px;
+}
+
+.idiomas-roteiro {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.iniciar-btn {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    border-radius: 14px;
+}
+
+.roteiro-sidebar h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #1a1a1a;
+}
+
+.ponto-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.ponto-numero {
+    background: #C29D5B;
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.ponto-item strong { font-size: 14px; color: #1a1a1a; display: block; }
+.ponto-item small  { font-size: 12px; color: #999; }
+
+/* ── Perfil ── */
+.perfil-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.perfil-foto {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 16px;
+    border: 3px solid #C29D5B;
+}
+
+.perfil-info {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.perfil-info h2 { font-size: 24px; font-weight: 700; }
+.perfil-info p  { color: #666; font-size: 14px; margin-top: 4px; }
+
+.perfil-stats {
+    display: flex;
+    justify-content: space-around;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 14px;
+}
+
+.stat-item { text-align: center; }
+.stat-item strong { display: block; font-size: 22px; font-weight: 800; }
+.stat-item small  { font-size: 12px; color: #666; }
+
+/* ── Navbar inferior mobile ── */
+.navbar-inferior {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    padding: 14px 40px;
+    border-radius: 50px;
+    display: flex;
+    gap: 44px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    z-index: 1001;
+}
+
+.navbar-inferior i {
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.navbar-inferior i.ativo { color: #E61C2E; }
+.navbar-inferior i:hover { color: #E61C2E; transform: translateY(-2px); }
+
+/* ── Responsividade ── */
+@media (max-width: 1024px) {
+    .hero-guia { grid-template-columns: 1fr; gap: 30px; }
+    .roteiro-container { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+    .opcoes-guia { flex-direction: column; }
+    .guias-lista-wrap { flex-direction: column; }
+    .filtros-guia { width: 100%; }
+    .hero-texto h1 { font-size: 32px; }
+    .navbar-inferior { gap: 28px; padding: 12px 28px; }
+}

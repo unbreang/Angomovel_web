@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-ao">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AngoMovel - Descubra as belezas de Angola">
+    <title>AngoMovel - Turismo em Angola</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="../ANGOMOVEL WEB/css/global.css">
+    <link rel="stylesheet" href="../ANGOMOVEL WEB/angomovel.css">
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header class="header">
+    <div class="header-inner">
+        <a href="angomovel.html" class="logo">
+            <span class="icon-aviao">✈</span>
+            <h1>ANGOMOVEL</h1>
+        </a>
+        <nav class="nav">
+            <a href="abas/categorias.html">Categorias</a>
+            <a href="abas/guia.html">Guias</a>
+            <a href="abas/destino.html">Destinos</a>
+            <a href="#">Sobre</a>
+        </nav>
+        <a href="abas/cadastroAngo.html">
+            <button class="btn-entrar">Entrar</button>
+        </a>
+    </div>
+</header>
+
+<!-- ══ CARROSSEL ══ -->
+<div class="carousel">
+    <div class="list">
+
+        <div class="item">
+            <img src="assets/mumu-novo.png" alt="Mussulo" loading="lazy">
+            <div class="content">
+                <div class="author">Área de Turismo</div>
+                <div class="title">Local</div>
+                <div class="topic">MUSSULO</div>
+                <div class="des">A Ilha do Mussulo é uma das joias do turismo angolano. Uma península paradisíaca com praias deslumbrantes, águas cristalinas e uma vista única sobre a baía de Luanda.</div>
+                <div class="buttons">
+                    <button onclick="window.location.href='abas/categorias.html'">EXPLORAR</button>
+                    <button onclick="window.location.href='abas/destino.html'">VER MAPA</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="item">
+            <img src="assets/falsa-caladula.png" alt="Calandula" loading="lazy">
+            <div class="content">
+                <div class="author">Área de Turismo</div>
+                <div class="title">Local</div>
+                <div class="topic">CALANDULA</div>
+                <div class="des">As Quedas de Calandula são uma das maiores cataratas de África, com 105 metros de altura e 400 metros de largura. Uma maravilha natural em Malanje.</div>
+                <div class="buttons">
+                    <button onclick="window.location.href='abas/categorias.html'">EXPLORAR</button>
+                    <button onclick="window.location.href='abas/destino.html'">VER MAPA</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="item">
+            <img src="assets/animal.png" alt="Iona" loading="lazy">
+            <div class="content">
+                <div class="author">Área de Turismo</div>
+                <div class="title">Local</div>
+                <div class="topic">PARQUE IONA</div>
+                <div class="des">O Parque Nacional da Iona é o maior parque de Angola e um dos maiores de África. Um santuário de biodiversidade com paisagens desérticas únicas.</div>
+                <div class="buttons">
+                    <button onclick="window.location.href='abas/categorias.html'">EXPLORAR</button>
+                    <button onclick="window.location.href='abas/destino.html'">VER MAPA</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="item">
+            <img src="assets/resort-novamente.png" alt="Resort" loading="lazy">
+            <div class="content">
+                <div class="author">Área de Turismo</div>
+                <div class="title">Local</div>
+                <div class="topic">RESORT TROPICAL</div>
+                <div class="des">Descubra os resorts mais exclusivos de Angola. Conforto, luxo e natureza reunidos numa experiência única com praias privadas e gastronomia de excelência.</div>
+                <div class="buttons">
+                    <button onclick="window.location.href='abas/categorias.html'">EXPLORAR</button>
+                    <button onclick="window.location.href='abas/destino.html'">VER MAPA</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Thumbnails -->
+    <div class="thumbnail">
+        <div class="item">
+            <img src="assets/mumu-novo.png" alt="Mussulo">
+            <div class="content">
+                <div class="title">MUSSULO</div>
+                <div class="description">PRAIAS</div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="assets/falsa-caladula.png" alt="Calandula">
+            <div class="content">
+                <div class="title">CALANDULA</div>
+                <div class="description">RIOS</div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="assets/animal.png" alt="Iona">
+            <div class="content">
+                <div class="title">PARQUE IONA</div>
+                <div class="description">PARQUES</div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="assets/resort-novamente.png" alt="Resort">
+            <div class="content">
+                <div class="title">RESORT</div>
+                <div class="description">RESORTS</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Setas -->
+    <div class="arrows">
+        <button id="prev">&#8249;</button>
+        <button id="next">&#8250;</button>
+    </div>
+
+    <div class="time"></div>
+</div>
+
+<!-- ══ INTRO ══ -->
+<section class="secao-intro">
+    <div class="intro-grid">
+        <div class="intro-texto">
+            <span class="etiqueta">🇦🇴 Explore Angola</span>
+            <h2>As <em>belezas</em> da arte e cultura de viver livre.</h2>
+            <p>Turismo é a arte de viajar, descobrir e viver novas experiências. Angola tem paisagens únicas que vão desde o deserto do Namibe às florestas tropicais de Cabinda.</p>
+            <p>Angola tem 7 maravilhas: Fenda da Tundavala, Floresta do Mayombe, Grutas do Nzenzo, Lagoa Carumbo, Morro do Môco, Quedas de Kalandula e as 7 Quedas do Rio Chiumbe.</p>
+            <a href="abas/categorias.html" class="btn-primario" style="margin-top:24px; display:inline-flex;">Explorar Destinos →</a>
+        </div>
+        <div class="intro-stats">
+            <div class="stat-card">
+                <div class="stat-icon">🏖️</div>
+                <div class="stat-numero">48+</div>
+                <div class="stat-label">Praias e Destinos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🧭</div>
+                <div class="stat-numero">120+</div>
+                <div class="stat-label">Guias Certificados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🌍</div>
+                <div class="stat-numero">18</div>
+                <div class="stat-label">Províncias Cobertas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-numero">4.9</div>
+                <div class="stat-label">Avaliação Média</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ BANNERS PROMOÇÃO ══ -->
+<div class="featured-section">
+    <div class="featured-banner">
+        <img src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=800&q=80" alt="Promoção Natal">
+        <div class="featured-overlay">
+            <span class="featured-tag">🔥 PROMOÇÃO ESPECIAL</span>
+            <h2 class="featured-title">20% OFF em todas as reservas neste Natal</h2>
+            <p class="featured-desc">Use o cupom ANGOMOVEL20 e ganhe desconto na sua primeira viagem. Válido até 31/12/2026</p>
+            <button class="featured-btn" onclick="mostrarToast('🎉 Cupom ANGOMOVEL20 copiado!')">Aproveitar Oferta →</button>
+        </div>
+    </div>
+    <div class="featured-banner">
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80" alt="Promoção Portugal">
+        <div class="featured-overlay">
+            <span class="featured-tag">🔥 PROMOÇÃO ESPECIAL</span>
+            <h2 class="featured-title">50% de desconto na vinda de Portugal</h2>
+            <p class="featured-desc">Use o cupom PORTO98 e ganhe desconto na sua primeira viagem. Válido até 23/08/2026</p>
+            <button class="featured-btn" onclick="mostrarToast('🎉 Cupom PORTO98 copiado!')">Aproveitar Oferta →</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══ QUOTE ══ -->
+<div class="motivacional">
+    <div class="motivacional-inner">
+        <p>Viajar é a única coisa que compras e que te deixa mais rico. Explore as terras da Kianda com o AngoMovel.</p>
+        <div class="autor">AngoMovel</div>
+    </div>
+</div>
+
+<!-- ══ CARDS RÁPIDOS ══ -->
+<div class="cards-atum">
+    <div class="card-arma">
+        <h3>🏖️ Praias Paradisíacas</h3>
+        <p>Relaxe em cenários naturais de tirar o fôlego. Angola tem algumas das praias mais belas de África, do Mussulo ao Namibe.</p>
+    </div>
+    <div class="card-arma">
+        <h3>🏛️ Cultura & História</h3>
+        <p>Descubra tradições, sabores e histórias únicas. De Mbanza Kongo às Pedras Negras de Pungo Andongo, uma riqueza incomparável.</p>
+    </div>
+</div>
+
+<!-- ══ DESTINOS MAIS VISITADOS ══ -->
+<section class="galeria">
+    <div class="containerma">
+        <h2 class="titulo-secao">Destinos Mais Visitados</h2>
+        <div id="destinosContainer" class="destinos-grid">
+            <div class="loading"><div class="spinner"></div><p>A carregar destinos...</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ TURISMO ══ -->
+<section class="turismo">
+    <div class="turismo-inner">
+        <h1>Descubra novos destinos</h1>
+        <h2>Viajar é mais do que sair de casa</h2>
+        <p>Explore lugares incríveis, conheça novas culturas e crie memórias inesquecíveis. Cada viagem é uma oportunidade de viver algo único.</p>
+        <p>Planeie a sua próxima aventura com segurança, conforto e experiências feitas para você.</p>
+    </div>
+</section>
+
+<!-- ══ GUIAS ══ -->
+<div style="background: #F7F4F0; padding: 0 0 80px;">
+    <hr class="separador-dashed">
+
+    <div class="container">
+        <h2 class="titulo-secao">Guias Disponíveis</h2>
+        <div class="guias-lista">
+
+            <div class="guia-item">
+                <div class="guia-avatar">
+                    <img src="assets/jealife-pictures-Qu989R9zZp0-unsplash.jpg" alt="Rita Silva" loading="lazy">
+                </div>
+                <div class="guia-info">
+                    <div class="guia-nome">Rita Silva</div>
+                    <div class="guia-detalhes">
+                        <span>Gastronomia | Artes</span>
+                        <span class="guia-preco">30.000 Kz/dia</span>
+                    </div>
+                </div>
+                <button class="btn-contactar" onclick="window.location.href='abas/guia.html'"><span>+</span> Contactar</button>
+            </div>
+
+            <div class="guia-item">
+                <div class="guia-avatar">
+                    <img src="assets/khalid-aminu-R0ipcguzRIU-unsplash.jpg" alt="Gomes Nmuréa" loading="lazy">
+                </div>
+                <div class="guia-info">
+                    <div class="guia-nome">Gomes Nmuréa</div>
+                    <div class="guia-detalhes">
+                        <span>PT | EN | FR | História</span>
+                        <span class="guia-preco">53.000 Kz/dia</span>
+                    </div>
+                </div>
+                <button class="btn-contactar" onclick="window.location.href='abas/guia.html'"><span>+</span> Contactar</button>
+            </div>
+
+            <div class="guia-item">
+                <div class="guia-avatar">
+                    <img src="assets/levi-meir-clancy-tS7zCQf9dGQ-unsplash.jpg" alt="Levi Silva" loading="lazy">
+                </div>
+                <div class="guia-info">
+                    <div class="guia-nome">Levi Silva</div>
+                    <div class="guia-detalhes">
+                        <span>CN | FR | Natureza</span>
+                        <span class="guia-preco">15.000 Kz/dia</span>
+                    </div>
+                </div>
+                <button class="btn-contactar" onclick="window.location.href='abas/guia.html'"><span>+</span> Contactar</button>
+            </div>
+
+            <div class="guia-item">
+                <div class="guia-avatar">
+                    <img src="assets/nana-kwame-VEWUZkWnGL4-unsplash.jpg" alt="Joana Silva" loading="lazy">
+                </div>
+                <div class="guia-info">
+                    <div class="guia-nome">Joana Silva</div>
+                    <div class="guia-detalhes">
+                        <span>PT | ESP | FR</span>
+                        <span class="guia-preco">60.000 Kz/dia</span>
+                    </div>
+                </div>
+                <button class="btn-contactar" onclick="window.location.href='abas/guia.html'"><span>+</span> Contactar</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Guias mais avaliados via JS -->
+    <div class="containerma" style="margin-top: 60px;">
+        <h2 class="titulo-secao">Guias Mais Bem Avaliados</h2>
+        <div id="guiasContainer" class="guides-grid">
+            <div class="loading"><div class="spinner"></div><p>A carregar guias...</p></div>
+        </div>
+    </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer class="main-footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <h2>ANGOMOVEL<span>.</span></h2>
+            <p>A tua porta de entrada para o turismo autêntico em Angola. Descobre resorts, guias e sabores únicos.</p>
+            <div class="social-icons">
+                <a href="#"><i class="ph ph-instagram-logo"></i></a>
+                <a href="#"><i class="ph ph-facebook-logo"></i></a>
+                <a href="#"><i class="ph ph-whatsapp-logo"></i></a>
+            </div>
+        </div>
+        <div class="footer-nav">
+            <h3>Explorar</h3>
+            <ul>
+                <li><a href="angomovel.html">Início</a></li>
+                <li><a href="abas/guia.html">Guias Certificados</a></li>
+                <li><a href="abas/categorias.html">Categorias</a></li>
+                <li><a href="abas/destino.html">Destinos Populares</a></li>
+            </ul>
+        </div>
+        <div class="footer-contact">
+            <h3>Contacto</h3>
+            <p><i class="ph ph-envelope"></i> info@angomovel.ao</p>
+            <p><i class="ph ph-phone"></i> +244 9xx xxx xxx</p>
+            <p><i class="ph ph-map-pin"></i> Luanda, Angola</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 AngoMovel - Todos os direitos reservados 🇦🇴</p>
+    </div>
+</footer>
+
+<script src="../ANGOMOVEL WEB/js/add.js"></script>
+<script src="../ANGOMOVEL WEB/js/scripp.js"></script>
+
+</body>
+</html>

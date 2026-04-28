@@ -1,0 +1,296 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Bungee", sans-serif;
+}
+/*menu ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+body {
+  font-family:poppins;
+  background: linen;
+}
+
+.header {
+  background: linear-gradient(90deg, #d90404, #ff1a1a);
+  padding: 15px 40px;
+}
+
+.containere {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffcc00;
+}
+
+.logo h1 {
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.icon {
+  font-size: 22px;
+}
+
+.nav {
+  display: flex;
+  gap: 30px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.nav a:hover {
+  color: #ffcc00;
+}
+
+.login button {
+  background-color: #ffcc00;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login button:hover {
+  background-color: #e6b800;
+}
+
+
+/*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+.container {
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.container a {
+  text-decoration: none;
+  color: #E61C2E;
+  font-weight: 600;
+  transition: 0.3s all ease;
+  display: inline-block;
+  padding: 5px 0;
+  border-bottom: 2px solid transparent;
+}
+
+.container a:hover {
+  color: #C29D5B;
+  border-bottom: 2px solid #C29D5B;
+  transform: translateX(5px);
+}
+
+
+.container h1 {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 38px;
+    color: #1a1a1a;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* CARDS */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    height: 250px;
+    border-radius: 25px;
+    padding: 25px;
+    color: #fff;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card .icon {
+    position: absolute;
+    top: 25px;
+    font-size: 38px;
+}
+
+.card h3 {
+    font-size: 26px;
+    margin-bottom: 6px;
+}
+
+.card span {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* CORES */
+.praias {
+    background: linear-gradient(rgba(14,107,168,0.9), rgba(14,107,168,0.9)),
+                url("praias.jpg") center/cover;
+}
+
+.hotel {
+    background: linear-gradient(rgb(106, 90, 205), rgb(106, 90, 205)),
+                url("hotel.jpg") center/cover;
+}
+
+.resort {
+    background: linear-gradient(rgb(238, 130, 238), rgb(238, 130, 238)),
+                url("resort.jpg") center/cover;
+}
+
+.parques {
+    background: linear-gradient(rgba(30,127,67,0.9), rgba(30,127,67,0.9)),
+                url("parques.jpg") center/cover;
+}
+
+.cultura {
+    background: linear-gradient(rgba(200,16,46,0.9), rgba(200,16,46,0.9)),
+                url("cultura.jpg") center/cover;
+}
+
+.gastronomia {
+    background: linear-gradient(rgba(250,196,48,0.9), rgba(250,196,48,0.9)),
+                url("gastronomia.jpg") center/cover;
+    color: #222;
+}
+@media (max-width: 900px) {
+    .cards {
+        grid-template-columns: repeat(2, 1fr); /* 2 colunas em tablets */
+    }
+}
+
+@media (max-width: 600px) {
+    .cards {
+        grid-template-columns: 1fr; /* 1 coluna em telemóveis */
+    }
+}
+
+/*//////////////////////////////////////////////////////////////////////////////////////////////////////*/
+.main-footer {
+    background-color: #8B0000; /* Cinza quase preto profissional */
+    color: #ffffff;
+    padding: 60px 5% 20px;
+    font-family: 'Inter', sans-serif;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Coluna da Marca */
+.footer-brand { flex: 2; min-width: 250px; }
+.footer-brand h2 { font-size: 24px; margin-bottom: 15px; letter-spacing: 2px; }
+.footer-brand h2 span { color: #E61C2E; } /* Ponto vermelho da marca */
+.footer-brand p { color: #aaa; line-height: 1.6; font-size: 14px; margin-bottom: 20px; }
+
+.social-icons { display: flex; gap: 15px; }
+.social-icons a { 
+    color: white; font-size: 22px; transition: 0.3s; 
+}
+.social-icons a:hover { color: #E61C2E; transform: translateY(-3px); }
+
+/* Colunas de Links e Contacto */
+.footer-nav, .footer-contact { flex: 1; min-width: 200px; }
+.footer-nav h3, .footer-contact h3 { 
+    font-size: 18px; margin-bottom: 20px; position: relative; padding-bottom: 10px;
+}
+.footer-nav h3::after {
+    content: ''; position: absolute; left: 0; bottom: 0; width: 30px; height: 2px; background: #E61C2E;
+}
+
+.footer-nav ul { list-style: none; padding: 0; }
+.footer-nav ul li { margin-bottom: 12px; }
+.footer-nav ul li a { 
+    color: #aaa; text-decoration: none; transition: 0.3s; font-size: 14px;
+}
+.footer-nav ul li a:hover { color: white; padding-left: 5px; }
+
+.footer-contact p { color: #aaa; font-size: 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.footer-contact i { color: #E61C2E; }
+
+/* Linha Final */
+.footer-bottom {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+}
+  
+  /* footer/////////////////////////////////////////////////////////////////////////////////*/
+
+.categorias-texto {
+  max-width: 1100px;
+  margin: 80px auto;
+  padding: 20px;
+}
+
+.categorias-texto h1 {
+  text-align: center;
+  font-size: 40px;
+  color: #C29D5B;
+  margin-bottom: 40px;
+}
+
+.colunas {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.colunas p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #444;
+}
+
+/* Responsivo (telemóvel) */
+@media (max-width: 768px) {
+  .colunas {
+    grid-template-columns: 1fr;
+  }
+}
+
+/*///////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-ao">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANGOMOVEL — Hotéis de Angola</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" href="../../css/categoriacss/subcategoria.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <a href="../../angomovel.html" class="logo">
+            <span class="icon-aviao">✈</span>
+            <h1>ANGOMOVEL</h1>
+        </a>
+        <nav class="nav">
+            <a href="../../angomovel.html">Início</a>
+            <a href="../categorias.html" class="ativo">Categorias</a>
+            <a href="../guia.html">Guias</a>
+            <a href="../destino.html">Destinos</a>
+        </nav>
+        <a href="../cadastroAngo.html">
+            <button class="btn-entrar">Entrar</button>
+        </a>
+    </div>
+</header>
+
+<section class="hero-categoria" style="background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1400&q=85')">
+    <div class="hero-overlay">
+        <div class="hero-breadcrumb">
+            <a href="../categorias.html">Categorias</a> / <span>Hotéis</span>
+        </div>
+        <h1>🛏️ Hotéis de Angola</h1>
+        <p>Encontre a hospedagem perfeita em Angola. De hotéis boutique a grandes cadeias internacionais, conforto e qualidade garantidos.</p>
+        <div class="hero-stats">
+            <span>🏨 38 Hotéis</span>
+            <span>📍 6 Cidades</span>
+            <span>⭐ 4.6 Avaliação</span>
+        </div>
+    </div>
+</section>
+
+<div class="filtros-bar">
+    <div class="container">
+        <div class="filtros-inner">
+            <button class="filtro-chip ativo" onclick="filtrar('todos')">Todos</button>
+            <button class="filtro-chip" onclick="filtrar('luanda')">Luanda</button>
+            <button class="filtro-chip" onclick="filtrar('benguela')">Benguela</button>
+            <button class="filtro-chip" onclick="filtrar('huambo')">Huambo</button>
+            <button class="filtro-chip" onclick="filtrar('lubango')">Lubango</button>
+        </div>
+    </div>
+</div>
+
+<main class="container secao">
+    <h2 class="titulo-secao">Hotéis em Destaque</h2>
+    <div class="destinos-grid-sub" id="gridDestinos">
+
+        <div class="destino-card-sub" data-provincia="luanda">
+            <div class="card-imagem">
+                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80" alt="Epic Sana Luanda">
+                <span class="card-badge">⭐ 4.9</span>
+                <div class="fav-btns card-favs">
+                    <button class="btn-fav tipo-favorito" data-tooltip="Favorito" onclick="toggleFav(this, 1, 'favorito')">❤️</button>
+                    <button class="btn-fav tipo-visitar" data-tooltip="Quero Visitar" onclick="toggleFav(this, 1, 'visitar')">📍</button>
+                    <button class="btn-fav tipo-guia" data-tooltip="Para o Guia" onclick="toggleFav(this, 1, 'guia')">🧭</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-provincia">📍 Luanda</div>
+                <h3>Epic Sana Luanda</h3>
+                <p>Hotel 5 estrelas de luxo na Marginal de Luanda com vista panorâmica para o oceano. Spa, piscina infinita, restaurantes gourmet e serviço premium.</p>
+                <div class="card-info">
+                    <span>⭐⭐⭐⭐⭐ 5 Estrelas</span>
+                    <span>🏊 Piscina</span>
+                    <span>💆 Spa</span>
+                </div>
+                <button class="btn-primario card-btn" onclick="verDetalhes('Epic Sana Luanda')">Ver Detalhes</button>
+            </div>
+        </div>
+
+        <div class="destino-card-sub" data-provincia="luanda">
+            <div class="card-imagem">
+                <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600&q=80" alt="Pullman Luanda">
+                <span class="card-badge">⭐ 4.7</span>
+                <div class="fav-btns card-favs">
+                    <button class="btn-fav tipo-favorito" data-tooltip="Favorito" onclick="toggleFav(this, 2, 'favorito')">❤️</button>
+                    <button class="btn-fav tipo-visitar" data-tooltip="Quero Visitar" onclick="toggleFav(this, 2, 'visitar')">📍</button>
+                    <button class="btn-fav tipo-guia" data-tooltip="Para o Guia" onclick="toggleFav(this, 2, 'guia')">🧭</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-provincia">📍 Luanda</div>
+                <h3>Pullman Luanda</h3>
+                <p>Hotel moderno no coração de Luanda com excelentes instalações para negócios e lazer. Quartos espaçosos, centro de conferências e restaurante internacional.</p>
+                <div class="card-info">
+                    <span>⭐⭐⭐⭐ 4 Estrelas</span>
+                    <span>💼 Business</span>
+                    <span>🍽️ Restaurante</span>
+                </div>
+                <button class="btn-primario card-btn" onclick="verDetalhes('Pullman Luanda')">Ver Detalhes</button>
+            </div>
+        </div>
+
+        <div class="destino-card-sub" data-provincia="luanda">
+            <div class="card-imagem">
+                <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&q=80" alt="Hotel Presidente Luanda">
+                <span class="card-badge">⭐ 4.5</span>
+                <div class="fav-btns card-favs">
+                    <button class="btn-fav tipo-favorito" data-tooltip="Favorito" onclick="toggleFav(this, 3, 'favorito')">❤️</button>
+                    <button class="btn-fav tipo-visitar" data-tooltip="Quero Visitar" onclick="toggleFav(this, 3, 'visitar')">📍</button>
+                    <button class="btn-fav tipo-guia" data-tooltip="Para o Guia" onclick="toggleFav(this, 3, 'guia')">🧭</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-provincia">📍 Luanda</div>
+                <h3>Hotel Presidente</h3>
+                <p>Um dos hotéis mais históricos de Luanda, localizado na Baixa. Excelente relação qualidade-preço, com vista para a baía e fácil acesso ao centro.</p>
+                <div class="card-info">
+                    <span>⭐⭐⭐⭐ 4 Estrelas</span>
+                    <span>🌊 Vista mar</span>
+                    <span>📍 Centro</span>
+                </div>
+                <button class="btn-primario card-btn" onclick="verDetalhes('Hotel Presidente')">Ver Detalhes</button>
+            </div>
+        </div>
+
+        <div class="destino-card-sub" data-provincia="benguela">
+            <div class="card-imagem">
+                <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&q=80" alt="Hotel Praia Morena">
+                <span class="card-badge">⭐ 4.6</span>
+                <div class="fav-btns card-favs">
+                    <button class="btn-fav tipo-favorito" data-tooltip="Favorito" onclick="toggleFav(this, 4, 'favorito')">❤️</button>
+                    <button class="btn-fav tipo-visitar" data-tooltip="Quero Visitar" onclick="toggleFav(this, 4, 'visitar')">📍</button>
+                    <button class="btn-fav tipo-guia" data-tooltip="Para o Guia" onclick="toggleFav(this, 4, 'guia')">🧭</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-provincia">📍 Benguela</div>
+                <h3>Hotel Praia Morena</h3>
+                <p>Localizado directamente na Praia Morena, ideal para famílias e turistas. Acesso directo à praia, piscina exterior e gastronomia local de qualidade.</p>
+                <div class="card-info">
+                    <span>⭐⭐⭐ 3 Estrelas</span>
+                    <span>🏖️ Frente de praia</span>
+                    <span>👨‍👩‍👧 Familiar</span>
+                </div>
+                <button class="btn-primario card-btn" onclick="verDetalhes('Hotel Praia Morena')">Ver Detalhes</button>
+            </div>
+        </div>
+
+        <div class="destino-card-sub" data-provincia="huambo">
+            <div class="card-imagem">
+                <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&q=80" alt="Hotel Huambo">
+                <span class="card-badge">⭐ 4.4</span>
+                <div class="fav-btns card-favs">
+                    <button class="btn-fav tipo-favorito" data-tooltip="Favorito" onclick="toggleFav(this, 5, 'favorito')">❤️</button>
+                    <button class="btn-fav tipo-visitar" data-tooltip="Quero Visitar" onclick="toggleFav(this, 5, 'visitar')">📍</button>
+                    <button class="btn-fav tipo-guia" data-tooltip="Para o Guia" onclick="toggleFav(this, 5, 'guia')">🧭</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-provincia">📍 Huambo</div>
+                <h3>Hotel Imperial Huambo</h3>
+                <p>Hotel confortável no planalto central angolano. Excelente ponto de partida para explorar a região de Huambo, com clima fresco e natureza envolvente.</p>
+                <div class="card-info">
+                    <span>⭐⭐⭐ 3 Estrelas</span>
+                    <span>🌿 Natureza</span>
+                    <span>🌡️ Clima fresco</span>
+                </div>
+                <button class="btn-primario card-btn" onclick="verDetalhes('Hotel Imperial Huambo')">Ver Detalhes</button>
+            </div>
+        </div>
+
+        <div class="destino-card-sub" data-provincia="lubango">
+            <div class="card-imagem">
+                <img src="https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=600&q=80" alt="Hotel Lubango">
+                <span class="card-badge">⭐ 4.5</span>
+                <div class="fav-btns card-favs">
+                    <button class="btn-fav tipo-favorito" data-tooltip="Favorito" onclick="toggleFav(this, 6, 'favorito')">❤️</button>
+                    <button class="btn-fav tipo-visitar" data-tooltip="Quero Visitar" onclick="toggleFav(this, 6, 'visitar')">📍</button>
+                    <button class="btn-fav tipo-guia" data-tooltip="Para o Guia" onclick="toggleFav(this, 6, 'guia')">🧭</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-provincia">📍 Lubango, Huíla</div>
+                <h3>Hotel Tundavala Lubango</h3>
+                <p>Hotel premium próximo da famosa Fenda da Tundavala. Quartos com vista para as montanhas, restaurante com culinária regional e excursões organizadas.</p>
+                <div class="card-info">
+                    <span>⭐⭐⭐⭐ 4 Estrelas</span>
+                    <span>⛰️ Vista montanha</span>
+                    <span>🗺️ Excursões</span>
+                </div>
+                <button class="btn-primario card-btn" onclick="verDetalhes('Hotel Tundavala Lubango')">Ver Detalhes</button>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<div id="modal" class="modal-sub" onclick="fecharModal(event)">
+    <div class="modal-sub-content">
+        <button class="modal-fechar" onclick="fecharModal()">✕</button>
+        <div id="modalConteudo"></div>
+    </div>
+</div>
+
+<footer class="main-footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <h2>ANGOMOVEL<span>.</span></h2>
+            <p>A tua porta de entrada para o turismo autêntico em Angola.</p>
+            <div class="social-icons">
+                <a href="#"><i class="ph ph-instagram-logo"></i></a>
+                <a href="#"><i class="ph ph-facebook-logo"></i></a>
+                <a href="#"><i class="ph ph-whatsapp-logo"></i></a>
+            </div>
+        </div>
+        <div class="footer-nav">
+            <h3>Explorar</h3>
+            <ul>
+                <li><a href="../../angomovel.html">Início</a></li>
+                <li><a href="../guia.html">Guias</a></li>
+                <li><a href="../categorias.html">Categorias</a></li>
+                <li><a href="../destino.html">Destinos</a></li>
+            </ul>
+        </div>
+        <div class="footer-contact">
+            <h3>Contacto</h3>
+            <p><i class="ph ph-envelope"></i> info@angomovel.ao</p>
+            <p><i class="ph ph-phone"></i> +244 9xx xxx xxx</p>
+            <p><i class="ph ph-map-pin"></i> Luanda, Angola</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 AngoMovel - Todos os direitos reservados 🇦🇴</p>
+    </div>
+</footer>
+
+<script>
+function filtrar(provincia) {
+    document.querySelectorAll('.filtro-chip').forEach(b => b.classList.remove('ativo'));
+    event.target.classList.add('ativo');
+    document.querySelectorAll('.destino-card-sub').forEach(card => {
+        card.style.display = (provincia === 'todos' || card.dataset.provincia === provincia) ? 'flex' : 'none';
+    });
+}
+function toggleFav(btn, id, tipo) {
+    event.stopPropagation(); btn.classList.toggle('ativo');
+    const favs = JSON.parse(localStorage.getItem('angomovel_favoritos') || '{}');
+    if (!favs[id]) favs[id] = {};
+    if (btn.classList.contains('ativo')) { favs[id][tipo] = true; mostrarToast(tipo === 'favorito' ? '❤️ Adicionado aos Favoritos' : tipo === 'visitar' ? '📍 Adicionado a Visitar' : '🧭 Enviado para o Guia'); }
+    else { delete favs[id][tipo]; }
+    localStorage.setItem('angomovel_favoritos', JSON.stringify(favs));
+}
+function mostrarToast(msg) { const t = document.createElement('div'); t.className = 'toast-fav'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
+function verDetalhes(nome) {
+    document.getElementById('modalConteudo').innerHTML = `<h2>${nome}</h2><p style="color:#666;margin:16px 0;">Detalhes e reservas em breve!</p><div class="fav-btns" style="justify-content:center;gap:16px;margin-top:20px;"><button class="btn-primario" onclick="fecharModal()">Fechar</button><a href="../guia.html" class="btn-primario" style="background:#1E7F43;">Contratar Guia</a></div>`;
+    document.getElementById('modal').classList.add('aberto');
+}
+function fecharModal(e) { if (!e || e.target === document.getElementById('modal')) document.getElementById('modal').classList.remove('aberto'); }
+</script>
+</body>
+</html>

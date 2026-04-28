@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-ao">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANGOMOVEL - Guias Turísticos</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- 1º global, 2º específico -->
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/guia.css">
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="header">
+    <div class="header-inner">
+        <a href="../angomovel.html" class="logo">
+            <span class="icon-aviao">✈</span>
+            <h1>ANGOMOVEL</h1>
+        </a>
+        <nav class="nav">
+            <a href="../angomovel.html">Início</a>
+            <a href="../abas/categorias.html">Categorias</a>
+            <a href="../abas/destino.html">Destinos</a>
+            <a href="#">Sobre</a>
+        </nav>
+        <a href="../abas/cadastroAngo.html">
+            <button class="btn-entrar">Entrar</button>
+        </a>
+    </div>
+</header>
+
+<!-- ══════════════════════════════════════════
+     TELA HOME — Escolha seu Guia
+══════════════════════════════════════════ -->
+<div id="home" class="screen active">
+
+    <!-- Hero: texto + cards de escolha -->
+    <div class="hero-guia">
+        <div class="hero-texto">
+            <h1>Escolha o seu Guia</h1>
+            <p>Escolha entre um guia humano local ou um guia digital gratuito para explorar Angola ao seu ritmo.</p>
+            <button class="btn-primario" onclick="document.querySelector('.lista-guias').scrollIntoView({behavior:'smooth'})">
+                Ver Guias
+            </button>
+        </div>
+
+        <div class="opcoes-guia">
+            <!-- Guia Humano -->
+            <div class="card-opcao-guia">
+                <img src="../assets/the-king.jpg" class="guia-foto-destaque" alt="Guia Humano">
+                <h3>Guia Humano <span>🏅</span></h3>
+                <ul class="features-list">
+                    <li><i class="ph-fill ph-check-circle"></i> Experiência local</li>
+                    <li><i class="ph-fill ph-check-circle"></i> Interação pessoal</li>
+                    <li><i class="ph-fill ph-check-circle"></i> Flexibilidade</li>
+                    <li><i class="ph-fill ph-check-circle"></i> Dicas exclusivas</li>
+                </ul>
+                <p class="preco-desde">Desde <strong>10.000 Kz</strong>/dia</p>
+                <button class="btn-primario" style="width:100%; margin-top:14px;"
+                    onclick="document.querySelector('.lista-guias').scrollIntoView({behavior:'smooth'})">
+                    Ver Guias
+                </button>
+            </div>
+
+            <!-- Guia Digital -->
+            <div class="card-opcao-guia">
+                <div class="guia-digital-icon">
+                    <i class="ph ph-map-trifold"></i>
+                </div>
+                <h3>Guia Digital <span>💻</span></h3>
+                <ul class="features-list">
+                    <li><i class="ph-fill ph-check-circle"></i> Disponível 24h</li>
+                    <li><i class="ph-fill ph-check-circle"></i> Funciona offline</li>
+                    <li><i class="ph-fill ph-check-circle"></i> Gratuito</li>
+                </ul>
+                <button class="btn-verde" style="width:100%; margin-top:14px;">
+                    Grátis
+                </button>
+                <button class="btn-outline" style="width:100%; margin-top:10px;"
+                    onclick="showScreen('digital')">
+                    Ver Roteiros
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Separador -->
+    <hr class="separador">
+
+    <!-- ── Lista de Guias ── -->
+    <div class="container lista-guias">
+        <h2 class="titulo-secao">Guias Disponíveis</h2>
+
+        <div class="guias-lista-wrap">
+
+            <!-- Filtros rápidos -->
+            <div class="filtros-guia">
+                <h3>Filtrar por</h3>
+                <div class="filtro-grupo">
+                    <p class="filtro-titulo">Idioma</p>
+                    <label><input type="checkbox" checked> Português</label>
+                    <label><input type="checkbox"> Inglês</label>
+                    <label><input type="checkbox"> Francês</label>
+                    <label><input type="checkbox"> Espanhol</label>
+                </div>
+                <div class="filtro-grupo">
+                    <p class="filtro-titulo">Especialidade</p>
+                    <label><input type="radio" name="esp" checked> Todos</label>
+                    <label><input type="radio" name="esp"> Praias</label>
+                    <label><input type="radio" name="esp"> Cultura</label>
+                    <label><input type="radio" name="esp"> Gastronomia</label>
+                    <label><input type="radio" name="esp"> Aventura</label>
+                </div>
+                <div class="filtro-grupo">
+                    <p class="filtro-titulo">Tipo</p>
+                    <label><input type="radio" name="tipo" checked> Todos</label>
+                    <label><input type="radio" name="tipo"> Guia Humano</label>
+                    <label><input type="radio" name="tipo"> Guia Digital</label>
+                </div>
+            </div>
+
+            <!-- Lista de guias -->
+            <div class="guias-lista">
+
+                <div class="guia-item">
+                    <div class="guia-avatar">
+                        <img src="../assets/stefan-stefancik-QXevDflbl8A-unsplash.jpg" alt="Helena Silva">
+                    </div>
+                    <div class="guia-info">
+                        <div class="guia-nome">Helena Silva <i class="ph-fill ph-seal-check" style="color:#0E6BA8"></i></div>
+                        <div class="guia-detalhes">
+                            <span>História e Artes</span>
+                            <span class="guia-preco">81.000 Kz/dia</span>
+                        </div>
+                        <div class="guia-idiomas">
+                            <span class="badge-idioma">PT</span>
+                            <span class="badge-idioma">EN</span>
+                            <span class="badge-idioma">FR</span>
+                        </div>
+                    </div>
+                    <button class="btn-contactar"><span>+</span> Contactar</button>
+                </div>
+
+                <div class="guia-item">
+                    <div class="guia-avatar">
+                        <img src="../assets/hans-eiskonen-JuMrIE10_5c-unsplash.jpg" alt="Davi Silva">
+                    </div>
+                    <div class="guia-info">
+                        <div class="guia-nome">Davi Silva <i class="ph-fill ph-seal-check" style="color:#0E6BA8"></i></div>
+                        <div class="guia-detalhes">
+                            <span>PT | EN | FR</span>
+                            <span class="guia-preco">45.000 Kz/dia</span>
+                        </div>
+                        <div class="guia-idiomas">
+                            <span class="badge-idioma">PT</span>
+                            <span class="badge-idioma">EN</span>
+                            <span class="badge-idioma">FR</span>
+                        </div>
+                    </div>
+                    <button class="btn-contactar"><span>+</span> Contactar</button>
+                </div>
+
+                <div class="guia-item">
+                    <div class="guia-avatar">
+                        <img src="../assets/jean-carlos-taravine-smith-sd2KLcITvHQ-unsplash.jpg" alt="José Silva">
+                    </div>
+                    <div class="guia-info">
+                        <div class="guia-nome">José Silva</div>
+                        <div class="guia-detalhes">
+                            <span>EN | FR</span>
+                            <span class="guia-preco">10.000 Kz/dia</span>
+                        </div>
+                        <div class="guia-idiomas">
+                            <span class="badge-idioma">EN</span>
+                            <span class="badge-idioma">FR</span>
+                        </div>
+                    </div>
+                    <button class="btn-contactar"><span>+</span> Contactar</button>
+                </div>
+
+                <div class="guia-item">
+                    <div class="guia-avatar">
+                        <img src="../assets/timothy-barlin-2BJwlRZaR5M-unsplash.jpg" alt="Maria Silva">
+                    </div>
+                    <div class="guia-info">
+                        <div class="guia-nome">Maria Silva <i class="ph-fill ph-seal-check" style="color:#0E6BA8"></i></div>
+                        <div class="guia-detalhes">
+                            <span>PT | ESP | FR</span>
+                            <span class="guia-preco">15.000 Kz/dia</span>
+                        </div>
+                        <div class="guia-idiomas">
+                            <span class="badge-idioma">PT</span>
+                            <span class="badge-idioma">ESP</span>
+                            <span class="badge-idioma">FR</span>
+                        </div>
+                    </div>
+                    <button class="btn-contactar"><span>+</span> Contactar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TELA CATEGORIAS DE GUIAS
+══════════════════════════════════════════ -->
+<div id="categorias" class="screen">
+    <div class="container">
+        <h2 class="titulo-secao">Categorias de Guias</h2>
+        <div class="categorias-grid">
+            <div class="card-categoria cat-praias">
+                <span class="cat-icon">🏖️</span>
+                <span>Guias de</span>
+                <h3>Praias</h3>
+            </div>
+            <div class="card-categoria cat-parques">
+                <span class="cat-icon">🌳</span>
+                <span>Guias de</span>
+                <h3>Parques</h3>
+            </div>
+            <div class="card-categoria cat-cultura">
+                <span class="cat-icon">🏛️</span>
+                <span>Guias de</span>
+                <h3>Cultura</h3>
+            </div>
+            <div class="card-categoria cat-gastronomia">
+                <span class="cat-icon">🍴</span>
+                <span>Guias de</span>
+                <h3>Gastronomia</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TELA GUIA DIGITAL — Roteiros
+══════════════════════════════════════════ -->
+<div id="digital" class="screen">
+    <div class="container">
+        <h2 class="titulo-secao">Guia Digital</h2>
+        <div class="roteiro-container">
+            <div class="roteiro-main">
+                <div class="roteiro-header">
+                    <div>
+                        <h2>Roteiro Histórico de Luanda</h2>
+                        <p>3 horas &nbsp;|&nbsp; 8 pontos de interesse</p>
+                    </div>
+                    <span class="badge-offline">📶 Disponível Offline</span>
+                </div>
+                <img src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=1000" alt="Mapa Luanda">
+                <div class="idiomas-roteiro">
+                    <span class="badge-idioma ativo">PT</span>
+                    <span class="badge-idioma">EN</span>
+                    <span class="badge-idioma">FR</span>
+                    <span class="badge-idioma">ES</span>
+                </div>
+                <button class="btn-primario iniciar-btn">
+                    ▶ Iniciar Roteiro
+                </button>
+            </div>
+
+            <div class="roteiro-sidebar">
+                <h3>Pontos do Roteiro</h3>
+                <div class="ponto-item">
+                    <div class="ponto-numero">1</div>
+                    <div>
+                        <strong>Fortaleza de São Miguel</strong>
+                        <small>Histórico · 1 M-40 km</small>
+                    </div>
+                </div>
+                <div class="ponto-item">
+                    <div class="ponto-numero">2</div>
+                    <div>
+                        <strong>Museu Nacional</strong>
+                        <small>Cultura · 1 M-40 km</small>
+                    </div>
+                </div>
+                <div class="ponto-item">
+                    <div class="ponto-numero">3</div>
+                    <div>
+                        <strong>Igreja da Nazaré</strong>
+                        <small>Religioso · 3 M-430 km</small>
+                    </div>
+                </div>
+                <div class="ponto-item">
+                    <div class="ponto-numero">4</div>
+                    <div>
+                        <strong>Marginal de Luanda</strong>
+                        <small>Lazer · 4 M-440 km</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TELA PERFIL
+══════════════════════════════════════════ -->
+<div id="perfil" class="screen">
+    <div class="container">
+        <div class="perfil-card">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150" class="perfil-foto" alt="João Silva">
+            <div class="perfil-info">
+                <h2>João Silva</h2>
+                <p>joao.silva@email.com</p>
+            </div>
+            <div class="perfil-stats">
+                <div class="stat-item"><strong>12</strong><small>Viagens</small></div>
+                <div class="stat-item"><strong>8</strong><small>Favoritos</small></div>
+                <div class="stat-item"><strong>4.9 ★</strong><small>Avaliação</small></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── NAVBAR INFERIOR MOBILE ── -->
+<nav class="navbar-inferior">
+    <i class="ph-fill ph-house ativo" onclick="showScreen('home')"></i>
+    <i class="ph ph-compass" onclick="showScreen('categorias')"></i>
+    <i class="ph ph-map-trifold" onclick="showScreen('digital')"></i>
+    <i class="ph ph-user" onclick="showScreen('perfil')"></i>
+</nav>
+
+<!-- ── FOOTER ── -->
+<footer class="main-footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <h2>ANGOMOVEL<span>.</span></h2>
+            <p>A tua porta de entrada para o turismo autêntico em Angola.</p>
+            <div class="social-icons">
+                <a href="#"><i class="ph ph-instagram-logo"></i></a>
+                <a href="#"><i class="ph ph-facebook-logo"></i></a>
+                <a href="#"><i class="ph ph-whatsapp-logo"></i></a>
+            </div>
+        </div>
+        <div class="footer-nav">
+            <h3>Explorar</h3>
+            <ul>
+                <li><a href="../angomovel.html">Início</a></li>
+                <li><a href="../abas/guia.html">Guias Certificados</a></li>
+                <li><a href="../abas/categorias.html">Categorias</a></li>
+                <li><a href="#">Destinos Populares</a></li>
+            </ul>
+        </div>
+        <div class="footer-contact">
+            <h3>Contacto</h3>
+            <p><i class="ph ph-envelope"></i> info@angomovel.ao</p>
+            <p><i class="ph ph-phone"></i> +244 9xx xxx xxx</p>
+            <p><i class="ph ph-map-pin"></i> Luanda, Angola</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 AngoMovel - Todos os direitos reservados 🇦🇴</p>
+    </div>
+</footer>
+
+<script>
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+        document.querySelectorAll('.navbar-inferior i').forEach(i => i.classList.remove('ativo'));
+        const map = { home: 0, categorias: 1, digital: 2, perfil: 3 };
+        const icons = document.querySelectorAll('.navbar-inferior i');
+        if (map[screenId] !== undefined) icons[map[screenId]].classList.add('ativo');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>

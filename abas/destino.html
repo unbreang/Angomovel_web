@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANGOMOVEL - Destinos Turísticos</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Leaflet Routing Machine -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+
+    <!-- 1º global, 2º específico -->
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/destino.css">
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="header">
+    <div class="header-inner">
+        <a href="../angomovel.html" class="logo">
+            <span class="icon-aviao">✈</span>
+            <h1>ANGOMOVEL</h1>
+        </a>
+        <nav class="nav">
+            <a href="../angomovel.html">Início</a>
+            <a href="../abas/categorias.html">Categorias</a>
+            <a href="../abas/guia.html">Guias</a>
+            <a href="#">Sobre</a>
+        </nav>
+        <a href="../abas/cadastroAngo.html">
+            <button class="btn-entrar">Entrar</button>
+        </a>
+    </div>
+</header>
+
+<!-- ── LAYOUT PRINCIPAL: Sidebar + Mapa ── -->
+<div class="destino-wrapper">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2 class="sidebar-titulo">🗺️ Visite Angola</h2>
+
+        <!-- Tipo de transporte -->
+        <div class="transporte-opcoes">
+            <button class="transporte-btn ativo" data-transporte="car">🚗 Carro</button>
+            <button class="transporte-btn" data-transporte="bike">🚴 Bicicleta</button>
+            <button class="transporte-btn" data-transporte="foot">🚶 A pé</button>
+        </div>
+
+        <!-- Criar rota -->
+        <div class="filtros-rota">
+            <h4>Criar Rota Turística</h4>
+            <select id="origem" class="select-rota">
+                <option value="">📍 Selecione a origem</option>
+            </select>
+            <select id="destino" class="select-rota">
+                <option value="">🏁 Selecione o destino</option>
+            </select>
+            <button id="traçarRota" class="btn-rota">🗺️ Traçar Rota</button>
+            <button id="limparRota" class="btn-limpar">🗑️ Limpar Rota</button>
+        </div>
+
+        <!-- Info da rota ativa -->
+        <div id="rotaInfo" class="rota-info">
+            <h4>📌 Rota Atual</h4>
+            <p id="rotaOrigem"></p>
+            <p id="rotaDestino"></p>
+            <p id="rotaDistancia"></p>
+            <p id="rotaTempo"></p>
+        </div>
+
+        <!-- Lista de destinos -->
+        <h3 class="sidebar-subtitulo">🏖️ Praias e Cidades</h3>
+        <div id="destinosLista" class="destinos-lista">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>A carregar destinos...</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mapa -->
+    <div class="mapa-wrapper">
+        <div id="mapa"></div>
+
+        <!-- Painel de destinos em destaque (sobre o mapa) -->
+        <div class="mapa-destaques">
+            <span class="destaque-tag">⭐ Destinos em Destaque</span>
+            <div class="destaques-lista" id="destaquesList"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="main-footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <h2>ANGOMOVEL<span>.</span></h2>
+            <p>A tua porta de entrada para o turismo autêntico em Angola. Descobre resorts, guias e sabores únicos.</p>
+            <div class="social-icons">
+                <a href="#"><i class="ph ph-instagram-logo"></i></a>
+                <a href="#"><i class="ph ph-facebook-logo"></i></a>
+                <a href="#"><i class="ph ph-whatsapp-logo"></i></a>
+            </div>
+        </div>
+        <div class="footer-nav">
+            <h3>Explorar</h3>
+            <ul>
+                <li><a href="../angomovel.html">Início</a></li>
+                <li><a href="../abas/guia.html">Guias Certificados</a></li>
+                <li><a href="../abas/categorias.html">Categorias</a></li>
+                <li><a href="#">Destinos Populares</a></li>
+            </ul>
+        </div>
+        <div class="footer-contact">
+            <h3>Contacto</h3>
+            <p><i class="ph ph-envelope"></i> info@angomovel.ao</p>
+            <p><i class="ph ph-phone"></i> +244 9xx xxx xxx</p>
+            <p><i class="ph ph-map-pin"></i> Luanda, Angola</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 AngoMovel - Todos os direitos reservados 🇦🇴</p>
+    </div>
+</footer>
+
+<script src="../js/destino.js"></script>
+</body>
+</html>

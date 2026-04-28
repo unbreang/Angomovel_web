@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="pt-ao">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngoMovel Studio — Dashboard Empresa</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vivo:    #E8192C;
+            --escuro:  #A00000;
+            --negro:   #0A0A0A;
+            --negro2:  #161616;
+            --negro3:  #1e1e1e;
+            --dourado: #D4A017;
+            --ouro:    #F0B429;
+            --branco:  #FFFFFF;
+            --cinza:   rgba(255,255,255,0.5);
+            --borda:   rgba(255,255,255,0.07);
+            --grad-r:  linear-gradient(135deg,#CC0000,#E8192C);
+            --grad-o:  linear-gradient(135deg,#D4A017,#F0B429);
+            --fonte-t: 'Playfair Display', serif;
+            --fonte-c: 'Plus Jakarta Sans', sans-serif;
+            --shadow-r: 0 8px 32px rgba(204,0,0,0.3);
+            --shadow-o: 0 8px 32px rgba(212,160,23,0.3);
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--fonte-c);
+            background: var(--negro);
+            color: var(--branco);
+            min-height: 100vh;
+        }
+
+        /* ════════════════════════
+           LAYOUT GERAL
+        ════════════════════════ */
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ════════════════════════
+           SIDEBAR
+        ════════════════════════ */
+        .sidebar {
+            width: 240px;
+            background: var(--negro2);
+            border-right: 1px solid var(--borda);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            z-index: 100;
+            transition: 0.3s;
+        }
+
+        .sidebar-logo {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--borda);
+        }
+
+        .sidebar-logo a {
+            display: flex; align-items: center; gap: 10px;
+            text-decoration: none;
+        }
+
+        .sidebar-logo span { font-size: 18px; color: var(--ouro); }
+
+        .sidebar-logo h1 {
+            font-family: var(--fonte-t);
+            font-size: 15px; font-weight: 900;
+            letter-spacing: 1.5px;
+            background: linear-gradient(90deg, #fff, var(--ouro));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-logo .badge {
+            display: block;
+            font-size: 8px; font-weight: 800;
+            letter-spacing: 3px;
+            color: var(--ouro);
+            text-transform: uppercase;
+        }
+
+        /* Empresa info */
+        .sidebar-emp {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--borda);
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .emp-avatar {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            background: var(--grad-r);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 800;
+            color: #fff; flex-shrink: 0;
+            font-family: var(--fonte-t);
+        }
+
+        .emp-info h3 { font-size: 13px; font-weight: 700; color: #fff; }
+        .emp-info p  { font-size: 11px; color: var(--cinza); margin-top: 2px; }
+
+        /* Nav links */
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            color: var(--cinza);
+            font-size: 13px; font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            border: none; background: transparent;
+            font-family: var(--fonte-c);
+            width: 100%; text-align: left;
+            text-decoration: none;
+        }
+
+        .nav-item i { font-size: 18px; flex-shrink: 0; }
+
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+
+        .nav-item.ativo {
+            background: rgba(232,25,44,0.12);
+            color: var(--vivo);
+            border: 1px solid rgba(232,25,44,0.2);
+        }
+
+        .nav-sep {
+            height: 1px;
+            background: var(--borda);
+            margin: 8px 0;
+        }
+
+        .nav-label {
+            font-size: 10px; font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            margin-top: 4px;
+        }
+
+        /* Plano badge no sidebar */
+        .plano-badge {
+            margin: 12px;
+            padding: 12px 14px;
+            background: rgba(212,160,23,0.1);
+            border: 1px solid rgba(212,160,23,0.25);
+            border-radius: 12px;
+        }
+
+        .plano-badge p {
+            font-size: 11px; color: var(--cinza); margin-bottom: 4px;
+        }
+
+        .plano-badge strong {
+            font-size: 14px; color: var(--ouro); font-weight: 800;
+        }
+
+        .plano-badge .btn-upgrade {
+            display: block; margin-top: 8px;
+            text-align: center;
+            font-size: 11px; font-weight: 700;
+            color: var(--negro);
+            background: var(--grad-o);
+            padding: 6px; border-radius: 8px;
+            cursor: pointer; border: none;
+            font-family: var(--fonte-c);
+            width: 100%;
+        }
+
+        /* Logout */
+        .sidebar-footer {
+            padding: 12px;
+            border-top: 1px solid var(--borda);
+        }
+
+        .btn-logout {
+            width: 100%;
+            display: flex; align-items: center; gap: 8px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: rgba(232,25,44,0.08);
+            border: 1px solid rgba(232,25,44,0.15);
+            color: var(--vivo);
+            font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: 0.2s;
+            font-family: var(--fonte-c);
+        }
+
+        .btn-logout:hover { background: rgba(232,25,44,0.15); }
+
+        /* ════════════════════════
+           MAIN CONTENT
+        ════════════════════════ */
+        .main {
+            margin-left: 240px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Topbar */
+        .topbar {
+            height: 64px;
+            background: var(--negro2);
+            border-bottom: 1px solid var(--borda);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0; z-index: 50;
+        }
+
+        .topbar-titulo {
+            font-family: var(--fonte-t);
+            font-size: 20px; font-weight: 800;
+        }
+
+        .topbar-acoes { display: flex; align-items: center; gap: 12px; }
+
+        .btn-notif {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--borda);
+            color: var(--cinza);
+            font-size: 18px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.2s; position: relative;
+        }
+
+        .btn-notif:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+        .notif-dot {
+            position: absolute; top: 6px; right: 6px;
+            width: 8px; height: 8px;
+            background: var(--vivo); border-radius: 50%;
+        }
+
+        /* Conteúdo das páginas */
+        .page-content {
+            padding: 32px;
+            flex: 1;
+        }
+
+        /* ════════════════════════
+           TELAS / PÁGINAS
+        ════════════════════════ */
+        .tela { display: none; }
+        .tela.ativa { display: block; }
+
+        /* ════════════════════════
+           PÁGINA DE PLANOS
+        ════════════════════════ */
+        .planos-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .planos-header .badge-plano {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(212,160,23,0.12);
+            border: 1px solid rgba(212,160,23,0.3);
+            color: var(--ouro);
+            padding: 6px 16px; border-radius: 999px;
+            font-size: 11px; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .planos-header h1 {
+            font-family: var(--fonte-t);
+            font-size: 42px; font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .planos-header h1 em {
+            font-style: normal;
+            background: linear-gradient(90deg, var(--vivo), var(--ouro));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .planos-header p {
+            font-size: 15px; color: var(--cinza); line-height: 1.7;
+            max-width: 500px; margin: 0 auto;
+        }
+
+        /* Toggle mensal/trimestral */
+        .planos-toggle {
+            display: flex; align-items: center; justify-content: center;
+            gap: 16px; margin-bottom: 40px;
+        }
+
+        .toggle-label { font-size: 14px; color: var(--cinza); font-weight: 600; }
+        .toggle-label.ativo { color: #fff; }
+
+        .toggle-switch {
+            width: 52px; height: 28px;
+            background: var(--grad-o);
+            border-radius: 999px;
+            position: relative; cursor: pointer;
+            border: none;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 4px; left: 4px;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: var(--negro);
+            transition: 0.3s;
+        }
+
+        .toggle-switch.ativo::after { left: 28px; }
+
+        .desconto-tag {
+            background: rgba(26,122,63,0.15);
+            border: 1px solid rgba(26,122,63,0.3);
+            color: #4CAF50;
+            font-size: 11px; font-weight: 700;
+            padding: 3px 10px; border-radius: 999px;
+        }
+
+        /* Grid de planos */
+        .planos-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto 48px;
+        }
+
+        .plano-card {
+            background: var(--negro2);
+            border: 1px solid var(--borda);
+            border-radius: 20px;
+            padding: 28px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            transition: 0.35s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plano-card:hover {
+            border-color: rgba(255,255,255,0.15);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+
+        .plano-card.popular {
+            border-color: var(--vivo);
+            background: linear-gradient(160deg, rgba(204,0,0,0.08), var(--negro2));
+        }
+
+        .popular-tag {
+            position: absolute;
+            top: 16px; right: 16px;
+            background: var(--vivo);
+            color: #fff;
+            font-size: 10px; font-weight: 800;
+            padding: 4px 10px; border-radius: 999px;
+            letter-spacing: 0.5px;
+        }
+
+        .plano-icon {
+            font-size: 36px; margin-bottom: 16px;
+        }
+
+        .plano-nome {
+            font-family: var(--fonte-t);
+            font-size: 20px; font-weight: 800;
+            color: #fff; margin-bottom: 6px;
+        }
+
+        .plano-desc {
+            font-size: 12px; color: var(--cinza);
+            line-height: 1.55; margin-bottom: 20px;
+        }
+
+        .plano-preco {
+            margin-bottom: 24px;
+        }
+
+        .plano-preco .valor {
+            font-family: var(--fonte-t);
+            font-size: 38px; font-weight: 900;
+            color: #fff; line-height: 1;
+        }
+
+        .plano-preco .valor em {
+            font-style: normal;
+            color: var(--vivo);
+        }
+
+        .plano-card.popular .plano-preco .valor em { color: var(--ouro); }
+
+        .plano-preco .periodo {
+            font-size: 12px; color: var(--cinza);
+            margin-top: 4px;
+        }
+
+        .plano-features {
+            list-style: none;
+            display: flex; flex-direction: column; gap: 10px;
+            flex: 1; margin-bottom: 24px;
+        }
+
+        .plano-features li {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 13px; color: rgba(255,255,255,0.7);
+        }
+
+        .plano-features li i { font-size: 15px; flex-shrink: 0; }
+        .plano-card:not(.popular) .plano-features li i { color: var(--vivo); }
+        .plano-card.popular .plano-features li i { color: var(--ouro); }
+
+        .plano-features li.disabled { color: rgba(255,255,255,0.2); text-decoration: line-through; }
+        .plano-features li.disabled i { color: rgba(255,255,255,0.15); }
+
+        .btn-plano {
+            width: 100%; padding: 13px;
+            border: none; border-radius: 12px;
+            font-family: var(--fonte-c); font-size: 14px; font-weight: 800;
+            cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+
+        .plano-card:not(.popular) .btn-plano {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        .plano-card:not(.popular) .btn-plano:hover {
+            background: var(--vivo); border-color: var(--vivo);
+        }
+
+        .plano-card.popular .btn-plano {
+            background: var(--grad-o); color: var(--negro);
+            box-shadow: var(--shadow-o);
+        }
+
+        .plano-card.popular .btn-plano:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+        /* ════════════════════════
+           DASHBOARD PRINCIPAL
+        ════════════════════════ */
+
+        /* Stats cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: var(--negro2);
+            border: 1px solid var(--borda);
+            border-radius: 16px;
+            padding: 20px;
+            transition: 0.3s;
+        }
+
+        .stat-card:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-3px); }
+
+        .stat-card-top {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .stat-card-icone {
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px;
+        }
+
+        .stat-card-tag {
+            font-size: 11px; font-weight: 700;
+            padding: 3px 8px; border-radius: 6px;
+        }
+
+        .tag-up { background: rgba(76,175,80,0.15); color: #4CAF50; }
+        .tag-down { background: rgba(232,25,44,0.15); color: var(--vivo); }
+
+        .stat-card-valor {
+            font-family: var(--fonte-t);
+            font-size: 32px; font-weight: 900;
+            color: #fff; line-height: 1; margin-bottom: 4px;
+        }
+
+        .stat-card-label { font-size: 12px; color: var(--cinza); }
+
+        /* Grid de conteúdo */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 20px;
+        }
+
+        /* Secção de guias */
+        .secao-titulo {
+            font-family: var(--fonte-t);
+            font-size: 20px; font-weight: 800;
+            margin-bottom: 16px;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .secao-titulo .count {
+            font-size: 12px; font-weight: 700;
+            background: rgba(232,25,44,0.15);
+            color: var(--vivo);
+            padding: 3px 10px; border-radius: 999px;
+            font-family: var(--fonte-c);
+        }
+
+        /* Filtros guias */
+        .guias-filtros {
+            display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
+        }
+
+        .filtro-chip {
+            padding: 7px 14px;
+            border: 1px solid var(--borda);
+            border-radius: 999px;
+            background: transparent;
+            color: var(--cinza);
+            font-size: 12px; font-weight: 600;
+            cursor: pointer; transition: 0.2s;
+            font-family: var(--fonte-c);
+        }
+
+        .filtro-chip:hover { border-color: rgba(255,255,255,0.15); color: #fff; }
+        .filtro-chip.ativo { background: var(--vivo); border-color: var(--vivo); color: #fff; }
+
+        /* Lista de guias */
+        .guias-lista { display: flex; flex-direction: column; gap: 12px; }
+
+        .guia-row {
+            background: var(--negro2);
+            border: 1px solid var(--borda);
+            border-radius: 14px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: 0.25s;
+        }
+
+        .guia-row:hover { border-color: rgba(255,255,255,0.12); }
+
+        .guia-avatar-w {
+            width: 52px; height: 52px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid var(--borda);
+        }
+
+        .guia-avatar-w img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        .guia-avatar-w .avatar-placeholder {
+            width: 100%; height: 100%;
+            background: var(--grad-r);
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--fonte-t); font-size: 20px; font-weight: 900; color: #fff;
+        }
+
+        .guia-info-w { flex: 1; }
+
+        .guia-info-w h4 {
+            font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px;
+        }
+
+        .guia-info-w .meta {
+            display: flex; gap: 12px; flex-wrap: wrap;
+        }
+
+        .guia-info-w .meta span {
+            font-size: 12px; color: var(--cinza);
+            display: flex; align-items: center; gap: 4px;
+        }
+
+        .guia-info-w .meta i { font-size: 13px; }
+
+        .guia-badges {
+            display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;
+        }
+
+        .badge-idioma {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--borda);
+            color: rgba(255,255,255,0.5);
+            font-size: 10px; font-weight: 700;
+            padding: 2px 8px; border-radius: 6px;
+        }
+
+        .badge-esp {
+            background: rgba(212,160,23,0.1);
+            border: 1px solid rgba(212,160,23,0.2);
+            color: var(--ouro);
+            font-size: 10px; font-weight: 700;
+            padding: 2px 8px; border-radius: 6px;
+        }
+
+        .guia-acoes { display: flex; gap: 8px; flex-shrink: 0; }
+
+        .btn-ver {
+            padding: 8px 14px;
+            border: 1px solid var(--borda);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--cinza);
+            font-size: 12px; font-weight: 600;
+            cursor: pointer; transition: 0.2s;
+            font-family: var(--fonte-c);
+            display: flex; align-items: center; gap: 5px;
+        }
+
+        .btn-ver:hover { border-color: rgba(255,255,255,0.2); color: #fff; }
+
+        .btn-contratar {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background: var(--vivo);
+            color: #fff;
+            font-size: 12px; font-weight: 800;
+            cursor: pointer; transition: 0.2s;
+            font-family: var(--fonte-c);
+            display: flex; align-items: center; gap: 5px;
+            box-shadow: var(--shadow-r);
+        }
+
+        .btn-contratar:hover { background: var(--escuro); transform: translateY(-1px); }
+
+        .btn-contratado {
+            padding: 8px 16px;
+            border: 1px solid rgba(76,175,80,0.3);
+            border-radius: 8px;
+            background: rgba(76,175,80,0.1);
+            color: #4CAF50;
+            font-size: 12px; font-weight: 800;
+            cursor: pointer; transition: 0.2s;
+            font-family: var(--fonte-c);
+            display: flex; align-items: center; gap: 5px;
+        }
+
+        .btn-contratado:hover { background: rgba(232,25,44,0.1); border-color: rgba(232,25,44,0.3); color: var(--vivo); }
+
+        /* Sidebar direita */
+        .sidebar-direita { display: flex; flex-direction: column; gap: 16px; }
+
+        .widget {
+            background: var(--negro2);
+            border: 1px solid var(--borda);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .widget-titulo {
+            font-size: 14px; font-weight: 700; color: #fff;
+            margin-bottom: 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .widget-titulo i { font-size: 16px; color: var(--vivo); }
+
+        /* Reservas recentes */
+        .reserva-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--borda);
+        }
+
+        .reserva-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+        .reserva-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%; flex-shrink: 0;
+        }
+
+        .dot-verde  { background: #4CAF50; }
+        .dot-amarelo{ background: var(--ouro); }
+        .dot-cinza  { background: rgba(255,255,255,0.2); }
+
+        .reserva-info { flex: 1; }
+        .reserva-info p { font-size: 12px; color: #fff; font-weight: 600; }
+        .reserva-info span { font-size: 11px; color: var(--cinza); }
+        .reserva-valor { font-size: 13px; font-weight: 800; color: var(--ouro); }
+
+        /* Modal detalhes guia */
+        .modal-overlay-g {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 500;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px;
+            opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+
+        .modal-overlay-g.aberto { opacity: 1; pointer-events: all; }
+
+        .modal-guia-detalhe {
+            background: var(--negro2);
+            border: 1px solid var(--borda);
+            border-radius: 24px;
+            width: 100%; max-width: 520px;
+            padding: 32px;
+            transform: scale(0.9);
+            transition: 0.3s;
+        }
+
+        .modal-overlay-g.aberto .modal-guia-detalhe { transform: scale(1); }
+
+        .modal-guia-header {
+            display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+        }
+
+        .modal-guia-foto {
+            width: 72px; height: 72px; border-radius: 50%;
+            overflow: hidden; border: 3px solid var(--borda);
+            flex-shrink: 0;
+        }
+
+        .modal-guia-foto .avatar-placeholder {
+            width: 100%; height: 100%;
+            background: var(--grad-r);
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--fonte-t); font-size: 28px; font-weight: 900; color: #fff;
+        }
+
+        .modal-guia-nome h2 { font-family: var(--fonte-t); font-size: 22px; font-weight: 800; }
+        .modal-guia-nome p  { font-size: 13px; color: var(--cinza); margin-top: 4px; }
+
+        .modal-guia-info-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 12px; margin-bottom: 20px;
+        }
+
+        .info-item label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--cinza); display: block; margin-bottom: 4px; }
+        .info-item p     { font-size: 14px; font-weight: 600; color: #fff; }
+
+        .modal-guia-btns { display: flex; gap: 10px; }
+
+        .btn-fechar-modal {
+            flex: 1; padding: 12px;
+            border: 1px solid var(--borda);
+            border-radius: 10px;
+            background: transparent; color: var(--cinza);
+            font-family: var(--fonte-c); font-size: 13px; font-weight: 700;
+            cursor: pointer; transition: 0.2s;
+        }
+
+        .btn-fechar-modal:hover { border-color: rgba(255,255,255,0.2); color: #fff; }
+
+        .btn-contratar-modal {
+            flex: 2; padding: 12px;
+            border: none; border-radius: 10px;
+            background: var(--vivo); color: #fff;
+            font-family: var(--fonte-c); font-size: 13px; font-weight: 800;
+            cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+
+        .btn-contratar-modal:hover { background: var(--escuro); }
+
+        /* Notificação toast */
+        .toast {
+            position: fixed; bottom: 28px; right: 28px;
+            background: var(--negro2);
+            border: 1px solid var(--borda);
+            border-left: 4px solid var(--ouro);
+            border-radius: 12px;
+            padding: 14px 20px;
+            display: flex; align-items: center; gap: 10px;
+            font-size: 13px; font-weight: 600; color: #fff;
+            z-index: 9999;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+            animation: toastIn 0.3s ease;
+        }
+
+        @keyframes toastIn {
+            from { opacity:0; transform: translateY(20px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+
+        /* Página vazia */
+        .vazio {
+            text-align: center; padding: 60px 20px;
+            color: var(--cinza);
+        }
+
+        .vazio i { font-size: 48px; opacity: 0.3; margin-bottom: 12px; display: block; }
+        .vazio p { font-size: 14px; }
+
+        /* ════════════════════════
+           RESPONSIVIDADE
+        ════════════════════════ */
+        @media (max-width: 1024px) {
+            .planos-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-row   { grid-template-columns: repeat(2, 1fr); }
+            .content-grid{ grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { width: 60px; }
+            .sidebar-logo h1, .sidebar-logo .badge,
+            .emp-info, .nav-item span, .nav-label,
+            .plano-badge, .sidebar-footer span { display: none; }
+            .main { margin-left: 60px; }
+            .planos-grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto 40px; }
+            .stats-row { grid-template-columns: 1fr 1fr; }
+            .page-content { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-layout">
+
+    <!-- ════ SIDEBAR ════ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <a href="studio.html">
+                <span>✈</span>
+                <div>
+                    <h1>ANGOMOVEL</h1>
+                    <span class="badge">Studio</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-emp">
+            <div class="emp-avatar" id="sideEmpAvatar">A</div>
+            <div class="emp-info">
+                <h3 id="sideEmpNome">Empresa</h3>
+                <p id="sideEmpEmail">empresa@email.com</p>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <span class="nav-label">Principal</span>
+            <button class="nav-item ativo" onclick="irPara('dashboard')" id="navDash">
+                <i class="ph-fill ph-gauge"></i><span>Dashboard</span>
+            </button>
+            <button class="nav-item" onclick="irPara('guias')" id="navGuias">
+                <i class="ph-fill ph-users"></i><span>Guias Disponíveis</span>
+            </button>
+            <button class="nav-item" onclick="irPara('meusguias')" id="navMeusGuias">
+                <i class="ph-fill ph-user-check"></i><span>Meus Guias</span>
+            </button>
+            <button class="nav-item" onclick="irPara('reservas')" id="navReservas">
+                <i class="ph-fill ph-calendar-check"></i><span>Reservas</span>
+            </button>
+
+            <div class="nav-sep"></div>
+            <span class="nav-label">Conta</span>
+            <button class="nav-item" onclick="irPara('planos')" id="navPlanos">
+                <i class="ph-fill ph-crown"></i><span>Plano</span>
+            </button>
+            <button class="nav-item" onclick="irPara('perfil')" id="navPerfil">
+                <i class="ph-fill ph-buildings"></i><span>Perfil Empresa</span>
+            </button>
+        </nav>
+
+        <div class="plano-badge">
+            <p>Plano atual</p>
+            <strong id="planoBadgeNome">Sem plano</strong>
+            <button class="btn-upgrade" onclick="irPara('planos')">Gerir Plano</button>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="btn-logout" onclick="sair()">
+                <i class="ph ph-sign-out"></i><span>Terminar sessão</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ════ MAIN ════ -->
+    <main class="main">
+
+        <!-- Topbar -->
+        <div class="topbar">
+            <h2 class="topbar-titulo" id="topbarTitulo">Dashboard</h2>
+            <div class="topbar-acoes">
+                <div class="btn-notif">
+                    <i class="ph ph-bell"></i>
+                    <div class="notif-dot"></div>
+                </div>
+                <div class="btn-notif" style="font-size:13px; width:auto; padding: 0 12px; color:#fff; font-weight:700;" id="topbarEmp">
+                    Empresa
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content">
+
+            <!-- ══ PÁGINA: PLANOS ══ -->
+            <div class="tela ativa" id="telaPlanos">
+                <div class="planos-header">
+                    <div class="badge-plano">
+                        <i class="ph-fill ph-crown"></i> Planos de Membro
+                    </div>
+                    <h1>Escolhe o teu <em>plano</em></h1>
+                    <p>Pagamento trimestral. Acede a guias certificados e ferramentas de gestão profissional.</p>
+                </div>
+
+                <div class="planos-toggle">
+                    <span class="toggle-label ativo">Trimestral</span>
+                    <button class="toggle-switch" id="togglePeriodo" onclick="togglePeriodo()"></button>
+                    <span class="toggle-label" id="labelAnual">Anual</span>
+                    <span class="desconto-tag">-20% no anual</span>
+                </div>
+
+                <div class="planos-grid">
+
+                    <!-- Plano 10 -->
+                    <div class="plano-card">
+                        <div class="plano-icon">🌱</div>
+                        <div class="plano-nome">Básico</div>
+                        <div class="plano-desc">Ideal para empresas que estão a começar no turismo angolano.</div>
+                        <div class="plano-preco">
+                            <div class="valor"><em id="p10">10.000</em> Kz</div>
+                            <div class="periodo" id="per10">/trimestre</div>
+                        </div>
+                        <ul class="plano-features">
+                            <li><i class="ph-fill ph-check-circle"></i> Até 3 guias</li>
+                            <li><i class="ph-fill ph-check-circle"></i> 10 reservas/mês</li>
+                            <li><i class="ph-fill ph-check-circle"></i> Perfil da empresa</li>
+                            <li><i class="ph-fill ph-check-circle"></i> Suporte básico</li>
+                            <li class="disabled"><i class="ph ph-x-circle"></i> Analytics avançado</li>
+                            <li class="disabled"><i class="ph ph-x-circle"></i> Guias certificados</li>
+                        </ul>
+                        <button class="btn-plano" onclick="escolherPlano('Básico', 10000)">
+                            <i class="ph ph-arrow-right"></i> Escolher Básico
+                        </button>
+                    </div>
+
+                    <!-- Plano 20 -->
+                    <div class="plano-card popular">
+                        <div class="popular-tag">🔥 Popular</div>
+                        <div class="plano-icon">🚀</div>
+                        <div class="plano-nome">Profissional</div>
+                        <div class="plano-desc">Para empresas que querem crescer com mais guias e reservas.</div>
+                        <div class="plano-preco">
+                            <div class="valor"><em id="p20">20.000</em> Kz</div>
+                            <div class="periodo" id="per20">/trimestre</div>
+                        </div>
+                        <ul class="plano-features">
+                            <li><i class="ph-fill ph-check-circle"></i> Até 10 guias</li>
+                            <li><i class="ph-fill ph-check-circle"></i> 50 reservas/mês</li>
+                            <li><i class="ph-fill ph-check-circle"></i> Analytics básico</li>
+                            <li><i class="ph-fill ph-check-circle"></i> Guias certificados</li>
+                            <li><i class="ph-fill ph-check-circle"></i> Suporte prioritário</li>
+                            <li class="disabled"><i class="ph ph-x-circle"></i> API de integração</li>
+                        </ul>
+                        <button class="btn-plano" onclick="escolherPlano('Profissional', 20000)">
+                            <i class="ph-fill ph-crown"></i> Escolher Profissional
+                        </button>
+                    </div>
+
+                    <!-- Plano 30 -->
+                    <div class="plano-card">
+                        <div class="plano-icon">💎</div>
+                        <div class="plano-nome">Empresarial</div>
+                        <div class="plano-desc">Para empresas estabelecidas com grande volume de operações.</div>
+                        <div class="plano-preco">
+                            <div class="valor"><em id="p30">30.000</em> Kz</div>
+                            <div class="periodo" id="per30">/trimestre</div>
+                        </div>
+                        <ul class="plano-features">
+                            <li><i class="ph-fill ph-check-circle"></i> Até 30 guias</li>
+                            <li><i class="ph-fill ph-check-circle"></i> Reservas ilimitadas</li>
+                            <li><i class="ph-fill ph-check-circle"></i> Analytics avançado</li>
+                            <li><i class="ph-fill ph-check-circle"></i> Guias certificados</li>
+                            <li><i class="ph-fill ph-check-circle"></i> API de integração</li>
+                            <li><i class="ph-fill ph-check-circle"></i> Suporte 24/7</li>
+                        </ul>
+                        <button class="btn-plano" onclick="escolherPlano('Empresarial', 30000)">
+                            <i class="ph ph-arrow-right"></i> Escolher Empresarial
+                        </button>
+                    </div>
+
+                    <!-- Plano 50 -->
+                    <div class="plano-card">
+                        <div class="plano-icon">👑</div>
+                        <div class="plano-nome">Enterprise</div>
+                        <div class="plano-desc">Solução completa para grandes grupos e cadeias de turismo.</div>
+                        <div class="plano-preco">
+                            <div class="valor"><em id="p50">50.000</em> Kz</div>
+                            <div class="periodo" id="per50">/trimestre</div>
+                        </div>
+                        <ul class="plano-features">
+                            <li><i class="ph-fill ph-check-circle"></i> Guias ilimitados</li>
+                            <li><i class="ph-fill ph-check-circle"></i> Tudo ilimitado</li>
+                            <li><i class="ph-fill ph-check-circle"></i> Dashboard personalizado</li>
+                            <li><i class="ph-fill ph-check-circle"></i> Gestor dedicado</li>
+                            <li><i class="ph-fill ph-check-circle"></i> Integração total</li>
+                            <li><i class="ph-fill ph-check-circle"></i> Suporte premium 24/7</li>
+                        </ul>
+                        <button class="btn-plano" onclick="escolherPlano('Enterprise', 50000)">
+                            <i class="ph ph-arrow-right"></i> Escolher Enterprise
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ══ PÁGINA: DASHBOARD ══ -->
+            <div class="tela" id="telaDashboard">
+
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-card-icone" style="background:rgba(232,25,44,0.12)"><i class="ph-fill ph-users" style="color:var(--vivo)"></i></div>
+                            <span class="stat-card-tag tag-up">+12%</span>
+                        </div>
+                        <div class="stat-card-valor" id="statGuias">0</div>
+                        <div class="stat-card-label">Guias contratados</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-card-icone" style="background:rgba(212,160,23,0.12)"><i class="ph-fill ph-calendar-check" style="color:var(--ouro)"></i></div>
+                            <span class="stat-card-tag tag-up">+8%</span>
+                        </div>
+                        <div class="stat-card-valor">24</div>
+                        <div class="stat-card-label">Reservas este mês</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-card-icone" style="background:rgba(76,175,80,0.12)"><i class="ph-fill ph-currency-circle-dollar" style="color:#4CAF50"></i></div>
+                            <span class="stat-card-tag tag-up">+22%</span>
+                        </div>
+                        <div class="stat-card-valor">1.2M</div>
+                        <div class="stat-card-label">Receita (Kz)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-card-icone" style="background:rgba(106,90,205,0.12)"><i class="ph-fill ph-star" style="color:#6a5acd"></i></div>
+                            <span class="stat-card-tag tag-down">-0.1</span>
+                        </div>
+                        <div class="stat-card-valor">4.8⭐</div>
+                        <div class="stat-card-label">Avaliação média</div>
+                    </div>
+                </div>
+
+                <div class="content-grid">
+                    <div>
+                        <div class="secao-titulo">
+                            Meus Guias <span class="count" id="countMeusGuias">0</span>
+                        </div>
+                        <div id="listaMeusGuiasDash" class="guias-lista">
+                            <div class="vazio">
+                                <i class="ph ph-users"></i>
+                                <p>Ainda não contrataste nenhum guia.<br>Vai a "Guias Disponíveis" para começar.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-direita">
+                        <div class="widget">
+                            <div class="widget-titulo"><i class="ph-fill ph-calendar"></i> Reservas Recentes</div>
+                            <div class="reserva-item">
+                                <div class="reserva-dot dot-verde"></div>
+                                <div class="reserva-info"><p>Tour Ilha Mussulo</p><span>Hoje, 09:00</span></div>
+                                <div class="reserva-valor">45.000 Kz</div>
+                            </div>
+                            <div class="reserva-item">
+                                <div class="reserva-dot dot-amarelo"></div>
+                                <div class="reserva-info"><p>Visita Calandula</p><span>Amanhã, 08:00</span></div>
+                                <div class="reserva-valor">80.000 Kz</div>
+                            </div>
+                            <div class="reserva-item">
+                                <div class="reserva-dot dot-cinza"></div>
+                                <div class="reserva-info"><p>Safari Parque Iona</p><span>12 Mai, 07:00</span></div>
+                                <div class="reserva-valor">120.000 Kz</div>
+                            </div>
+                        </div>
+
+                        <div class="widget">
+                            <div class="widget-titulo"><i class="ph-fill ph-crown"></i> Plano Actual</div>
+                            <div style="font-family:var(--fonte-t); font-size:24px; font-weight:900; color:var(--ouro); margin-bottom:6px;" id="widgetPlanoNome">—</div>
+                            <div style="font-size:12px; color:var(--cinza); margin-bottom:14px;" id="widgetPlanoDesc">Nenhum plano activo</div>
+                            <button style="width:100%; padding:10px; background:var(--grad-o); color:var(--negro); border:none; border-radius:10px; font-weight:800; font-size:13px; cursor:pointer; font-family:var(--fonte-c);" onclick="irPara('planos')">
+                                Gerir Plano
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══ PÁGINA: GUIAS DISPONÍVEIS ══ -->
+            <div class="tela" id="telaGuias">
+                <div class="secao-titulo">
+                    Guias Disponíveis <span class="count" id="countGuiasDisp">0</span>
+                </div>
+
+                <div class="guias-filtros">
+                    <button class="filtro-chip ativo" onclick="filtrarGuias('todos', this)">Todos</button>
+                    <button class="filtro-chip" onclick="filtrarGuias('Praias e Costa', this)">🏖️ Praias</button>
+                    <button class="filtro-chip" onclick="filtrarGuias('Cultura e História', this)">🏛️ Cultura</button>
+                    <button class="filtro-chip" onclick="filtrarGuias('Natureza e Parques', this)">🌿 Natureza</button>
+                    <button class="filtro-chip" onclick="filtrarGuias('Gastronomia', this)">🍽️ Gastronomia</button>
+                    <button class="filtro-chip" onclick="filtrarGuias('Aventura e Desporto', this)">⛺ Aventura</button>
+                </div>
+
+                <div class="guias-lista" id="listaGuiasDisp"></div>
+            </div>
+
+            <!-- ══ PÁGINA: MEUS GUIAS ══ -->
+            <div class="tela" id="telaMeusGuias">
+                <div class="secao-titulo">
+                    Meus Guias <span class="count" id="countMeusGuias2">0</span>
+                </div>
+                <div class="guias-lista" id="listaMeusGuias">
+                    <div class="vazio">
+                        <i class="ph ph-user-check"></i>
+                        <p>Ainda não contrataste nenhum guia.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══ PÁGINA: RESERVAS ══ -->
+            <div class="tela" id="telaReservas">
+                <div class="secao-titulo">Gestão de Reservas</div>
+                <div class="vazio">
+                    <i class="ph ph-calendar-check"></i>
+                    <p>As reservas dos teus guias aparecerão aqui.</p>
+                </div>
+            </div>
+
+            <!-- ══ PÁGINA: PERFIL ══ -->
+            <div class="tela" id="telaPerfil">
+                <div class="secao-titulo">Perfil da Empresa</div>
+                <div class="widget" style="max-width:600px;">
+                    <div id="perfilEmpInfo">
+                        <p style="color:var(--cinza); font-size:14px;">A carregar informações...</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<!-- Modal detalhe do guia -->
+<div class="modal-overlay-g" id="modalGuiaDetalhe" onclick="fecharDetalhes(event)">
+    <div class="modal-guia-detalhe">
+        <div class="modal-guia-header">
+            <div class="modal-guia-foto">
+                <div class="avatar-placeholder" id="detAvatar">G</div>
+            </div>
+            <div class="modal-guia-nome">
+                <h2 id="detNome">Guia</h2>
+                <p id="detEsp">Especialidade</p>
+            </div>
+        </div>
+        <div class="modal-guia-info-grid">
+            <div class="info-item"><label>📍 Província</label><p id="detProv">—</p></div>
+            <div class="info-item"><label>💰 Preço/dia</label><p id="detPreco">—</p></div>
+            <div class="info-item"><label>🌐 Idiomas</label><p id="detIdiomas">—</p></div>
+            <div class="info-item"><label>📅 Idade</label><p id="detIdade">—</p></div>
+            <div class="info-item" style="grid-column:span 2;"><label>📝 Sobre</label><p id="detBio" style="color:var(--cinza); font-size:13px; line-height:1.6;">—</p></div>
+        </div>
+        <div class="modal-guia-btns">
+            <button class="btn-fechar-modal" onclick="document.getElementById('modalGuiaDetalhe').classList.remove('aberto')">Fechar</button>
+            <button class="btn-contratar-modal" id="btnContratarModal" onclick="contratarDoModal()">
+                <i class="ph-fill ph-user-plus"></i> Contratar Guia
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ── Estado ──
+    let planoAtual = null;
+    let guiasContratados = [];
+    let guiaAtualModal = null;
+    let periodoAnual = false;
+
+    // Preços base (trimestral)
+    const precos = { p10: 10000, p20: 20000, p30: 30000, p50: 50000 };
+
+    // ── Verificar sessão ──
+    const sessao = JSON.parse(localStorage.getItem('angomovel_studio_sessao') || '{}');
+    const empresa = JSON.parse(localStorage.getItem('angomovel_empresa') || '{}');
+
+    if (!sessao.tipo || sessao.tipo !== 'empresa') {
+        window.location.href = 'studio.html';
+    }
+
+    // Preencher dados da empresa
+    document.getElementById('sideEmpNome').textContent  = empresa.nome || 'Empresa';
+    document.getElementById('sideEmpEmail').textContent = empresa.email || '';
+    document.getElementById('sideEmpAvatar').textContent = (empresa.nome || 'E')[0].toUpperCase();
+    document.getElementById('topbarEmp').textContent = empresa.nome || 'Empresa';
+
+    // Carregar plano guardado
+    const planoGuardado = JSON.parse(localStorage.getItem('angomovel_emp_plano') || 'null');
+    if (planoGuardado) {
+        planoAtual = planoGuardado;
+        document.getElementById('planoBadgeNome').textContent = planoGuardado.nome;
+        document.getElementById('widgetPlanoNome').textContent = planoGuardado.nome;
+        document.getElementById('widgetPlanoDesc').textContent = `${formatKz(planoGuardado.preco)}/trimestre`;
+    }
+
+    // Carregar guias contratados
+    guiasContratados = JSON.parse(localStorage.getItem('angomovel_guias_contratados') || '[]');
+
+    // ── Toggle período ──
+    function togglePeriodo() {
+        periodoAnual = !periodoAnual;
+        const btn = document.getElementById('togglePeriodo');
+        btn.classList.toggle('ativo', periodoAnual);
+        document.getElementById('labelAnual').classList.toggle('ativo', periodoAnual);
+        document.querySelector('.planos-toggle .toggle-label').classList.toggle('ativo', !periodoAnual);
+
+        const mult = periodoAnual ? 3.2 : 1; // anual = 4x trimestres - 20%
+        const sufixo = periodoAnual ? '/ano' : '/trimestre';
+
+        document.getElementById('p10').textContent = formatKz(precos.p10 * mult);
+        document.getElementById('p20').textContent = formatKz(precos.p20 * mult);
+        document.getElementById('p30').textContent = formatKz(precos.p30 * mult);
+        document.getElementById('p50').textContent = formatKz(precos.p50 * mult);
+        ['per10','per20','per30','per50'].forEach(id => document.getElementById(id).textContent = sufixo);
+    }
+
+    function formatKz(n) {
+        return new Intl.NumberFormat('pt-AO').format(Math.round(n));
+    }
+
+    // ── Escolher plano ──
+    function escolherPlano(nome, preco) {
+        planoAtual = { nome, preco };
+        localStorage.setItem('angomovel_emp_plano', JSON.stringify(planoAtual));
+        document.getElementById('planoBadgeNome').textContent = nome;
+        document.getElementById('widgetPlanoNome').textContent = nome;
+        document.getElementById('widgetPlanoDesc').textContent = `${formatKz(preco)} Kz/trimestre`;
+
+        mostrarToast(`✅ Plano ${nome} activado com sucesso!`);
+
+        setTimeout(() => irPara('dashboard'), 1200);
+    }
+
+    // ── Navegar entre páginas ──
+    function irPara(pagina) {
+        document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('ativo'));
+
+        const mapa = {
+            planos:    { tela: 'telaPlanos',    nav: 'navPlanos',    titulo: 'Planos de Membro' },
+            dashboard: { tela: 'telaDashboard', nav: 'navDash',      titulo: 'Dashboard' },
+            guias:     { tela: 'telaGuias',     nav: 'navGuias',     titulo: 'Guias Disponíveis' },
+            meusguias: { tela: 'telaMeusGuias', nav: 'navMeusGuias', titulo: 'Meus Guias' },
+            reservas:  { tela: 'telaReservas',  nav: 'navReservas',  titulo: 'Reservas' },
+            perfil:    { tela: 'telaPerfil',    nav: 'navPerfil',    titulo: 'Perfil Empresa' },
+        };
+
+        const cfg = mapa[pagina];
+        if (!cfg) return;
+
+        document.getElementById(cfg.tela).classList.add('ativa');
+        document.getElementById(cfg.nav).classList.add('ativo');
+        document.getElementById('topbarTitulo').textContent = cfg.titulo;
+
+        if (pagina === 'guias')     carregarGuiasDisp();
+        if (pagina === 'meusguias') carregarMeusGuias();
+        if (pagina === 'dashboard') carregarDashboard();
+        if (pagina === 'perfil')    carregarPerfil();
+    }
+
+    // ── Carregar guias disponíveis ──
+    function carregarGuiasDisp(filtro = 'todos') {
+        const guia = JSON.parse(localStorage.getItem('angomovel_guia') || 'null');
+        const container = document.getElementById('listaGuiasDisp');
+
+        const todos = guia ? [guia] : [];
+
+        // Guias de demonstração
+        const demo = [
+            { nome:'Carlos Mbemba', idade:32, esp:'Cultura e História', prov:'Luanda', preco:25000, idiomas:['PT','EN','FR'], bio:'Guia cultural com 8 anos de experiência em Luanda.' },
+            { nome:'Filomena Neto', idade:27, esp:'Praias e Costa', prov:'Benguela', preco:18000, idiomas:['PT','ES'], bio:'Especialista em turismo de praias e actividades aquáticas.' },
+            { nome:'Agostinho Lopes', idade:35, esp:'Natureza e Parques', prov:'Namibe', preco:30000, idiomas:['PT','EN'], bio:'Guia do Parque Nacional da Iona há 10 anos.' },
+            { nome:'Maria Kianda', idade:29, esp:'Gastronomia', prov:'Luanda', preco:20000, idiomas:['PT','FR','EN'], bio:'Apaixonada pela culinária angolana e seus sabores únicos.' },
+            { nome:'João Dala', idade:31, esp:'Aventura e Desporto', prov:'Huíla', preco:22000, idiomas:['PT','EN'], bio:'Especialista em trekking na Serra da Leba e Tundavala.' },
+        ];
+
+        const listaCompleta = [...todos, ...demo];
+        const lista = filtro === 'todos' ? listaCompleta : listaCompleta.filter(g => g.esp === filtro);
+
+        document.getElementById('countGuiasDisp').textContent = lista.length;
+
+        if (lista.length === 0) {
+            container.innerHTML = '<div class="vazio"><i class="ph ph-users"></i><p>Nenhum guia encontrado nesta categoria.</p></div>';
+            return;
+        }
+
+        container.innerHTML = lista.map((g, i) => {
+            const contratado = guiasContratados.some(c => c.nome === g.nome);
+            return `
+            <div class="guia-row" id="row-${i}">
+                <div class="guia-avatar-w">
+                    <div class="avatar-placeholder">${g.nome[0]}</div>
+                </div>
+                <div class="guia-info-w">
+                    <h4>${g.nome}</h4>
+                    <div class="meta">
+                        <span><i class="ph ph-map-pin"></i> ${g.prov}</span>
+                        <span><i class="ph ph-currency-circle-dollar"></i> ${formatKz(g.preco)} Kz/dia</span>
+                        <span><i class="ph ph-calendar"></i> ${g.idade} anos</span>
+                    </div>
+                    <div class="guia-badges">
+                        <span class="badge-esp">${g.esp}</span>
+                        ${(g.idiomas||[]).map(l => `<span class="badge-idioma">${l}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="guia-acoes">
+                    <button class="btn-ver" onclick="verDetalhes(${i}, ${JSON.stringify(lista).replace(/"/g,'&quot;')})">
+                        <i class="ph ph-eye"></i> Ver
+                    </button>
+                    ${contratado
+                        ? `<button class="btn-contratado" onclick="dispensar('${g.nome}')"><i class="ph-fill ph-check-circle"></i> Contratado</button>`
+                        : `<button class="btn-contratar" onclick="contratar(${JSON.stringify(g).replace(/"/g,'&quot;')})"><i class="ph-fill ph-user-plus"></i> Contratar</button>`
+                    }
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // ── Filtrar guias ──
+    function filtrarGuias(filtro, btn) {
+        document.querySelectorAll('.filtro-chip').forEach(b => b.classList.remove('ativo'));
+        btn.classList.add('ativo');
+        carregarGuiasDisp(filtro);
+    }
+
+    // ── Ver detalhes do guia ──
+    function verDetalhes(i, lista) {
+        const g = lista[i];
+        guiaAtualModal = g;
+        document.getElementById('detAvatar').textContent = g.nome[0];
+        document.getElementById('detNome').textContent   = g.nome;
+        document.getElementById('detEsp').textContent    = g.esp;
+        document.getElementById('detProv').textContent   = g.prov;
+        document.getElementById('detPreco').textContent  = formatKz(g.preco) + ' Kz';
+        document.getElementById('detIdade').textContent  = g.idade + ' anos';
+        document.getElementById('detIdiomas').textContent = (g.idiomas||[]).join(', ');
+        document.getElementById('detBio').textContent    = g.bio || '—';
+
+        const contratado = guiasContratados.some(c => c.nome === g.nome);
+        const btnM = document.getElementById('btnContratarModal');
+        if (contratado) {
+            btnM.innerHTML = '<i class="ph-fill ph-check-circle"></i> Já Contratado';
+            btnM.style.background = 'rgba(76,175,80,0.2)';
+            btnM.style.color = '#4CAF50';
+        } else {
+            btnM.innerHTML = '<i class="ph-fill ph-user-plus"></i> Contratar Guia';
+            btnM.style.background = 'var(--vivo)';
+            btnM.style.color = '#fff';
+        }
+
+        document.getElementById('modalGuiaDetalhe').classList.add('aberto');
+    }
+
+    function fecharDetalhes(e) {
+        if (e.target === document.getElementById('modalGuiaDetalhe'))
+            document.getElementById('modalGuiaDetalhe').classList.remove('aberto');
+    }
+
+    // ── Contratar ──
+    function contratar(g) {
+        if (!planoAtual) {
+            mostrarToast('⚠️ Escolhe um plano primeiro!');
+            irPara('planos');
+            return;
+        }
+        if (!guiasContratados.some(c => c.nome === g.nome)) {
+            guiasContratados.push(g);
+            localStorage.setItem('angomovel_guias_contratados', JSON.stringify(guiasContratados));
+        }
+        mostrarToast(`✅ ${g.nome} contratado com sucesso!`);
+        carregarGuiasDisp();
+        carregarDashboard();
+    }
+
+    function contratarDoModal() {
+        if (guiaAtualModal) contratar(guiaAtualModal);
+        document.getElementById('modalGuiaDetalhe').classList.remove('aberto');
+    }
+
+    // ── Dispensar guia ──
+    function dispensar(nome) {
+        guiasContratados = guiasContratados.filter(g => g.nome !== nome);
+        localStorage.setItem('angomovel_guias_contratados', JSON.stringify(guiasContratados));
+        mostrarToast(`❌ ${nome} removido dos teus guias.`);
+        carregarGuiasDisp();
+        carregarDashboard();
+    }
+
+    // ── Carregar meus guias ──
+    function carregarMeusGuias() {
+        const container = document.getElementById('listaMeusGuias');
+        document.getElementById('countMeusGuias2').textContent = guiasContratados.length;
+
+        if (guiasContratados.length === 0) {
+            container.innerHTML = '<div class="vazio"><i class="ph ph-user-check"></i><p>Ainda não contrataste nenhum guia.</p></div>';
+            return;
+        }
+
+        container.innerHTML = guiasContratados.map(g => `
+            <div class="guia-row">
+                <div class="guia-avatar-w">
+                    <div class="avatar-placeholder">${g.nome[0]}</div>
+                </div>
+                <div class="guia-info-w">
+                    <h4>${g.nome}</h4>
+                    <div class="meta">
+                        <span><i class="ph ph-map-pin"></i> ${g.prov}</span>
+                        <span><i class="ph ph-currency-circle-dollar"></i> ${formatKz(g.preco)} Kz/dia</span>
+                    </div>
+                    <div class="guia-badges">
+                        <span class="badge-esp">${g.esp}</span>
+                    </div>
+                </div>
+                <div class="guia-acoes">
+                    <button class="btn-contratado" onclick="dispensar('${g.nome}')">
+                        <i class="ph-fill ph-check-circle"></i> Dispensar
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ── Dashboard ──
+    function carregarDashboard() {
+        document.getElementById('statGuias').textContent = guiasContratados.length;
+        document.getElementById('countMeusGuias').textContent = guiasContratados.length;
+
+        if (planoAtual) {
+            document.getElementById('widgetPlanoNome').textContent = planoAtual.nome;
+            document.getElementById('widgetPlanoDesc').textContent = `${formatKz(planoAtual.preco)} Kz/trimestre`;
+        }
+
+        const container = document.getElementById('listaMeusGuiasDash');
+        if (guiasContratados.length === 0) {
+            container.innerHTML = '<div class="vazio"><i class="ph ph-users"></i><p>Vai a "Guias Disponíveis" para contratar.</p></div>';
+            return;
+        }
+
+        container.innerHTML = guiasContratados.slice(0, 3).map(g => `
+            <div class="guia-row">
+                <div class="guia-avatar-w"><div class="avatar-placeholder">${g.nome[0]}</div></div>
+                <div class="guia-info-w">
+                    <h4>${g.nome}</h4>
+                    <div class="meta">
+                        <span><i class="ph ph-map-pin"></i> ${g.prov}</span>
+                        <span><i class="ph ph-currency-circle-dollar"></i> ${formatKz(g.preco)} Kz/dia</span>
+                    </div>
+                </div>
+                <div class="guia-acoes">
+                    <span class="btn-contratado" style="cursor:default;"><i class="ph-fill ph-check-circle"></i> Activo</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ── Perfil ──
+    function carregarPerfil() {
+        document.getElementById('perfilEmpInfo').innerHTML = `
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div><label style="font-size:11px;color:var(--cinza);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;">Nome</label><p style="font-size:15px;font-weight:700;">${empresa.nome||'—'}</p></div>
+                <div><label style="font-size:11px;color:var(--cinza);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;">NIF</label><p style="font-size:15px;font-weight:700;">${empresa.nif||'—'}</p></div>
+                <div><label style="font-size:11px;color:var(--cinza);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;">Email</label><p style="font-size:15px;font-weight:700;">${empresa.email||'—'}</p></div>
+                <div><label style="font-size:11px;color:var(--cinza);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;">Telefone</label><p style="font-size:15px;font-weight:700;">${empresa.tel||'—'}</p></div>
+                <div><label style="font-size:11px;color:var(--cinza);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;">Província</label><p style="font-size:15px;font-weight:700;">${empresa.prov||'—'}</p></div>
+                <div><label style="font-size:11px;color:var(--cinza);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;">Tipo</label><p style="font-size:15px;font-weight:700;">${empresa.tipo||'—'}</p></div>
+            </div>
+        `;
+    }
+
+    // ── Toast ──
+    function mostrarToast(msg) {
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+    }
+
+    // ── Sair ──
+    function sair() {
+        localStorage.removeItem('angomovel_studio_sessao');
+        window.location.href = 'studio.html';
+    }
+
+    // ── Iniciar ──
+    if (!planoAtual) {
+        irPara('planos');
+        document.getElementById('navPlanos').classList.add('ativo');
+        document.getElementById('navDash').classList.remove('ativo');
+    } else {
+        irPara('dashboard');
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-ao">
+<head>
+    <meta charset="UTF-8">
+    <title>AngoMovel - Painel da Empresa</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        .setup-container { max-width: 900px; margin: 40px auto; padding: 20px; }
+        .step-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .upload-box { border: 2px dashed #ccc; padding: 30px; text-align: center; border-radius: 15px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .upload-box:hover { border-color: #FFD700; background: #FFFDF5; }
+        
+        /* Grid de Planos */
+        .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
+        .plan-card { border: 2px solid #eee; padding: 20px; border-radius: 15px; text-align: center; transition: 0.3s; cursor: pointer; }
+        .plan-card.selected { border-color: #FFD700; background: rgba(255, 215, 0, 0.05); }
+        .plan-card h3 { color: #1a1a1a; margin-bottom: 10px; }
+        .plan-price { font-size: 24px; font-weight: bold; color: #E61C2E; }
+        
+        /* Toggle Ferramenta ✌ */
+        .toggle-tool { display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; padding: 20px; border-radius: 15px; }
+        .switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #4CAF50; }
+        input:checked + .slider:before { transform: translateX(26px); }
+    </style>
+</head>
+<body>
+
+<div class="setup-container">
+    <header style="margin-bottom: 40px;">
+        <h1>Configuração de Empresa 🇦🇴</h1>
+        <p>Complete o seu perfil para começar a operar no AngoMovel.</p>
+    </header>
+
+    <section class="step-card">
+        <h3><i class="ph ph-file-text"></i> 1. Verificação Legal</h3>
+        <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Carregue os documentos obrigatórios para validação da sua conta.</p>
+        
+        <div class="input-group">
+            <label>Certificado de Registo Comercial</label>
+            <div class="upload-box" onclick="simulateUpload('Certificado')">
+                <i class="ph ph-cloud-arrow-up" style="font-size: 30px;"></i>
+                <p id="file-cert">Clique para carregar PDF ou Imagem</p>
+            </div>
+        </div>
+
+        <div class="input-group" style="margin-top: 20px;">
+            <label>Comprovativo de Fundos / Investimento</label>
+            <div class="upload-box" onclick="simulateUpload('Fundos')">
+                <i class="ph ph-bank" style="font-size: 30px;"></i>
+                <p id="file-fundos">Clique para carregar comprovativo</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="step-card">
+        <h3><i class="ph ph-users-three"></i> 2. Escolha o seu Plano de Guias</h3>
+        <p style="font-size: 14px; color: #666;">Quantos membros a sua empresa pretende cadastrar?</p>
+        
+        <div class="plans-grid">
+            <div class="plan-card" onclick="selectPlan(this, 10)">
+                <h3>Plano Inicial</h3>
+                <p>Até 10 Membros</p>
+                <div class="plan-price">15.000 Kz<small>/mês</small></div>
+            </div>
+            <div class="plan-card" onclick="selectPlan(this, 20)">
+                <h3>Plano Pro</h3>
+                <p>Até 20 Membros</p>
+                <div class="plan-price">25.000 Kz<small>/mês</small></div>
+            </div>
+            <div class="plan-card" onclick="selectPlan(this, 'Ilimitado')">
+                <h3>Plano Elite</h3>
+                <p>Membros Ilimitados</p>
+                <div class="plan-price">45.000 Kz<small>/mês</small></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="step-card">
+        <h3><i class="ph ph-hand-peace"></i> 3. Configuração de Receção</h3>
+        <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Defina como os pedidos dos turistas chegam até si.</p>
+        
+        <div class="toggle-tool">
+            <div>
+                <strong>Ativar Reencaminhamento de Pedidos</strong>
+                <p style="font-size: 12px; color: #888;">Se ligado, a empresa recebe o pedido e delega ao guia.</p>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="toolToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </section>
+
+    <button class="btn-primary" style="height: 60px; font-size: 18px;" onclick="finalizarSetup()">Gravar e Abrir Comércio</button>
+</div>
+
+<script>
+    function simulateUpload(type) {
+        const p = type === 'Certificado' ? document.getElementById('file-cert') : document.getElementById('file-fundos');
+        p.innerHTML = "<span style='color: green;'>✅ Arquivo carregado com sucesso!</span>";
+    }
+
+    function selectPlan(element, membros) {
+        document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+        element.classList.add('selected');
+        console.log("Plano selecionado para " + membros + " membros.");
+    }
+
+    function finalizarSetup() {
+        const isChecked = document.getElementById('toolToggle').checked;
+        alert("Configuração Salva!\nModo Reencaminhamento: " + (isChecked ? "ATIVO" : "DESATIVO"));
+        window.location.href = 'index.html';
+    }
+</script>
+
+</body>
+</html>

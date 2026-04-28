@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-ao">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANGOMOVEL — Cultura de Angola</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" href="../../css/categoriacss/subcategoria.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <a href="../../angomovel.html" class="logo">
+            <span class="icon-aviao">✈</span>
+            <h1>ANGOMOVEL</h1>
+        </a>
+        <nav class="nav">
+            <a href="../../angomovel.html">Início</a>
+            <a href="../categorias.html" class="ativo">Categorias</a>
+            <a href="../guia.html">Guias</a>
+            <a href="../destino.html">Destinos</a>
+        </nav>
+        <a href="../cadastroAngo.html">
+            <button class="btn-entrar">Entrar</button>
+        </a>
+    </div>
+</header>
+
+<section class="hero-categoria" style="background-image: url('https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=1400&q=85')">
+    <div class="hero-overlay">
+        <div class="hero-breadcrumb">
+            <a href="../categorias.html">Categorias</a> / <span>Cultura</span>
+        </div>
+        <h1>🏛️ Cultura de Angola</h1>
+        <p>Mergulhe na rica história e tradições angolanas. Museus, fortalezas, igrejas históricas e manifestações culturais únicas que contam a história de um povo resiliente.</p>
+        <div class="hero-stats">
+            <span>🏛️ 20 Pontos Culturais</span>
+            <span>📍 7 Províncias</span>
+            <span>⭐ 4.7 Avaliação</span>
+        </div>
+    </div>
+</section>
+
+<div class="filtros-bar">
+    <div class="container">
+        <div class="filtros-inner">
+            <button class="filtro-chip ativo" onclick="filtrar('todos')">Todos</button>
+            <button class="filtro-chip" onclick="filtrar('luanda')">Luanda</button>
+            <button class="filtro-chip" onclick="filtrar('mbanza')">Mbanza Kongo</button>
+            <button class="filtro-chip" onclick="filtrar('malanje')">Malanje</button>
+            <button class="filtro-chip" onclick="filtrar('huila')">Huíla</button>
+        </div>
+    </div>
+</div>
+
+<main class="container secao">
+    <h2 class="titulo-secao">Pontos Culturais em Destaque</h2>
+    <div class="destinos-grid-sub" id="gridDestinos">
+
+        <div class="destino-card-sub" data-provincia="luanda">
+            <div class="card-imagem">
+                <img src="https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=600&q=80" alt="Fortaleza de São Miguel">
+                <span class="card-badge">⭐ 4.9</span>
+                <div class="fav-btns card-favs">
+                    <button class="btn-fav tipo-favorito" data-tooltip="Favorito" onclick="toggleFav(this, 1, 'favorito')">❤️</button>
+                    <button class="btn-fav tipo-visitar" data-tooltip="Quero Visitar" onclick="toggleFav(this, 1, 'visitar')">📍</button>
+                    <button class="btn-fav tipo-guia" data-tooltip="Para o Guia" onclick="toggleFav(this, 1, 'guia')">🧭</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-provincia">📍 Luanda</div>
+                <h3>Fortaleza de São Miguel</h3>
+                <p>Construída em 1576, é o símbolo histórico de Luanda e um dos monumentos mais importantes de Angola. Alberga o Museu das Forças Armadas com artefactos históricos únicos.</p>
+                <div class="card-info">
+                    <span>🏰 Século XVI</span>
+                    <span>🏛️ Museu</span>
+                    <span>📸 Vista panorâmica</span>
+                </div>
+                <button class="btn-primario card-btn" onclick="verDetalhes('Fortaleza de São Miguel')">Ver Detalhes</button>
+            </div>
+        </div>
+
+        <div class="destino-card-sub" data-provincia="luanda">
+            <div class="card-imagem">
+                <img src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?w=600&q=80" alt="Museu Nacional de Angola">
+                <span class="card-badge">⭐ 4.7</span>
+                <div class="fav-btns card-favs">
+                    <button class="btn-fav tipo-favorito" data-tooltip="Favorito" onclick="toggleFav(this, 2, 'favorito')">❤️</button>
+                    <button class="btn-fav tipo-visitar" data-tooltip="Quero Visitar" onclick="toggleFav(this, 2, 'visitar')">📍</button>
+                    <button class="btn-fav tipo-guia" data-tooltip="Para o Guia" onclick="toggleFav(this, 2, 'guia')">🧭</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-provincia">📍 Luanda</div>
+                <h3>Museu Nacional de Angola</h3>
+                <p>O maior museu de Angola com colecções de arte, etnografia e história natural. Peças únicas que documentam a história e diversidade cultural das 18 províncias angolanas.</p>
+                <div class="card-info">
+                    <span>🎨 Arte</span>
+                    <span>🏺 Etnografia</span>
+                    <span>📚 História</span>
+                </div>
+                <button class="btn-primario card-btn" onclick="verDetalhes('Museu Nacional de Angola')">Ver Detalhes</button>
+            </div>
+        </div>
+
+        <div class="destino-card-sub" data-provincia="luanda">
+            <div class="card-imagem">
+                <img src="https://images.unsplash.com/photo-1548263594-a71ea65a8598?w=600&q=80" alt="Igreja de Nossa Senhora da Nazaré">
+                <span class="card-badge">⭐ 4.6</span>
+                <div class="fav-btns card-favs">
+                    <button class="btn-fav tipo-favorito" data-tooltip="Favorito" onclick="toggleFav(this, 3, 'favorito')">❤️</button>
+                    <button class="btn-fav tipo-visitar" data-tooltip="Quero Visitar" onclick="toggleFav(this, 3, 'visitar')">📍</button>
+                    <button class="btn-fav tipo-guia" data-tooltip="Para o Guia" onclick="toggleFav(this, 3, 'guia')">🧭</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-provincia">📍 Luanda</div>
+                <h3>Igreja da Nazaré</h3>
+                <p>Uma das igrejas mais antigas de Luanda, construída no século XVII. Arquitectura colonial portuguesa preservada, com azulejos históricos e um órgão de tubos raro em África.</p>
+                <div class="card-info">
+                    <span>⛪ Século XVII</span>
+                    <span>🎼 Órgão histórico</span>
+                    <span>🏛️ Arquitectura colonial</span>
+                </div>
+                <button class="btn-primario card-btn" onclick="verDetalhes('Igreja da Nazaré')">Ver Detalhes</button>
+            </div>
+        </div>
+
+        <div class="destino-card-sub" data-provincia="mbanza">
+            <div class="card-imagem">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80" alt="Mbanza Kongo">
+                <span class="card-badge">⭐ 4.9</span>
+                <div class="fav-btns card-favs">
+                    <button class="btn-fav tipo-favorito" data-tooltip="Favorito" onclick="toggleFav(this, 4, 'favorito')">❤️</button>
+                    <button class="btn-fav tipo-visitar" data-tooltip="Quero Visitar" onclick="toggleFav(this, 4, 'visitar')">📍</button>
+                    <button class="btn-fav tipo-guia" data-tooltip="Para o Guia" onclick="toggleFav(this, 4, 'guia')">🧭</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-provincia">📍 Mbanza Kongo, Zaire</div>
+                <h3>Mbanza Kongo — Património UNESCO</h3>
+                <p>Antiga capital do Reino do Kongo, reconhecida como Património Mundial da UNESCO em 2017. Um tesouro histórico único com ruínas, igrejas e tradições do poderoso Reino do Kongo.</p>
+                <div class="card-info">
+                    <span>🌍 UNESCO</span>
+                    <span>👑 Reino do Kongo</span>
+                    <span>🏚️ Ruínas históricas</span>
+                </div>
+                <button class="btn-primario card-btn" onclick="verDetalhes('Mbanza Kongo')">Ver Detalhes</button>
+            </div>
+        </div>
+
+        <div class="destino-card-sub" data-provincia="malanje">
+            <div class="card-imagem">
+                <img src="https://images.unsplash.com/photo-1531219572328-a0171b4448a3?w=600&q=80" alt="Pedras Negras de Pungo Andongo">
+                <span class="card-badge">⭐ 4.8</span>
+                <div class="fav-btns card-favs">
+                    <button class="btn-fav tipo-favorito" data-tooltip="Favorito" onclick="toggleFav(this, 5, 'favorito')">❤️</button>
+                    <button class="btn-fav tipo-visitar" data-tooltip="Quero Visitar" onclick="toggleFav(this, 5, 'visitar')">📍</button>
+                    <button class="btn-fav tipo-guia" data-tooltip="Para o Guia" onclick="toggleFav(this, 5, 'guia')">🧭</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-provincia">📍 Malanje</div>
+                <h3>Pedras Negras de Pungo Andongo</h3>
+                <p>Formações rochosas gigantescas de origem vulcânica com enorme significado histórico e cultural. Local sagrado do povo Mbundo onde a rainha Nzinga resistiu aos portugueses.</p>
+                <div class="card-info">
+                    <span>🪨 Formações rochosas</span>
+                    <span>👸 Rainha Nzinga</span>
+                    <span>🌿 Natureza</span>
+                </div>
+                <button class="btn-primario card-btn" onclick="verDetalhes('Pedras Negras de Pungo Andongo')">Ver Detalhes</button>
+            </div>
+        </div>
+
+        <div class="destino-card-sub" data-provincia="huila">
+            <div class="card-imagem">
+                <img src="https://images.unsplash.com/photo-1489493585363-d69421e0edd3?w=600&q=80" alt="Comunidades Himba">
+                <span class="card-badge">⭐ 4.8</span>
+                <div class="fav-btns card-favs">
+                    <button class="btn-fav tipo-favorito" data-tooltip="Favorito" onclick="toggleFav(this, 6, 'favorito')">❤️</button>
+                    <button class="btn-fav tipo-visitar" data-tooltip="Quero Visitar" onclick="toggleFav(this, 6, 'visitar')">📍</button>
+                    <button class="btn-fav tipo-guia" data-tooltip="Para o Guia" onclick="toggleFav(this, 6, 'guia')">🧭</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-provincia">📍 Cunene, Huíla</div>
+                <h3>Comunidades Himba e Mucubal</h3>
+                <p>Visita cultural às comunidades tradicionais do sul de Angola. Os Himba e Mucubal mantêm tradições milenares, com rituais, artesanato e formas de vida únicas no mundo.</p>
+                <div class="card-info">
+                    <span>👥 Etnografia</span>
+                    <span>🎨 Artesanato</span>
+                    <span>🌍 Tradições</span>
+                </div>
+                <button class="btn-primario card-btn" onclick="verDetalhes('Comunidades Himba e Mucubal')">Ver Detalhes</button>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<div id="modal" class="modal-sub" onclick="fecharModal(event)">
+    <div class="modal-sub-content">
+        <button class="modal-fechar" onclick="fecharModal()">✕</button>
+        <div id="modalConteudo"></div>
+    </div>
+</div>
+
+<footer class="main-footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <h2>ANGOMOVEL<span>.</span></h2>
+            <p>A tua porta de entrada para o turismo autêntico em Angola.</p>
+            <div class="social-icons">
+                <a href="#"><i class="ph ph-instagram-logo"></i></a>
+                <a href="#"><i class="ph ph-facebook-logo"></i></a>
+                <a href="#"><i class="ph ph-whatsapp-logo"></i></a>
+            </div>
+        </div>
+        <div class="footer-nav">
+            <h3>Explorar</h3>
+            <ul>
+                <li><a href="../../angomovel.html">Início</a></li>
+                <li><a href="../guia.html">Guias</a></li>
+                <li><a href="../categorias.html">Categorias</a></li>
+                <li><a href="../destino.html">Destinos</a></li>
+            </ul>
+        </div>
+        <div class="footer-contact">
+            <h3>Contacto</h3>
+            <p><i class="ph ph-envelope"></i> info@angomovel.ao</p>
+            <p><i class="ph ph-phone"></i> +244 9xx xxx xxx</p>
+            <p><i class="ph ph-map-pin"></i> Luanda, Angola</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 AngoMovel - Todos os direitos reservados 🇦🇴</p>
+    </div>
+</footer>
+
+<script>
+function filtrar(provincia) { document.querySelectorAll('.filtro-chip').forEach(b => b.classList.remove('ativo')); event.target.classList.add('ativo'); document.querySelectorAll('.destino-card-sub').forEach(card => { card.style.display = (provincia === 'todos' || card.dataset.provincia === provincia) ? 'flex' : 'none'; }); }
+function toggleFav(btn, id, tipo) { event.stopPropagation(); btn.classList.toggle('ativo'); const favs = JSON.parse(localStorage.getItem('angomovel_favoritos') || '{}'); if (!favs[id]) favs[id] = {}; if (btn.classList.contains('ativo')) { favs[id][tipo] = true; mostrarToast(tipo === 'favorito' ? '❤️ Adicionado aos Favoritos' : tipo === 'visitar' ? '📍 Adicionado a Visitar' : '🧭 Enviado para o Guia'); } else { delete favs[id][tipo]; } localStorage.setItem('angomovel_favoritos', JSON.stringify(favs)); }
+function mostrarToast(msg) { const t = document.createElement('div'); t.className = 'toast-fav'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
+function verDetalhes(nome) { document.getElementById('modalConteudo').innerHTML = `<h2>${nome}</h2><p style="color:#666;margin:16px 0;">Detalhes completos em breve!</p><div class="fav-btns" style="justify-content:center;gap:16px;margin-top:20px;"><button class="btn-primario" onclick="fecharModal()">Fechar</button><a href="../destino.html" class="btn-primario" style="background:#0E6BA8;">Ver no Mapa</a><a href="../guia.html" class="btn-primario" style="background:#1E7F43;">Contratar Guia</a></div>`; document.getElementById('modal').classList.add('aberto'); }
+function fecharModal(e) { if (!e || e.target === document.getElementById('modal')) document.getElementById('modal').classList.remove('aberto'); }
+</script>
+</body>
+</html>

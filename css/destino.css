@@ -1,0 +1,306 @@
+/* ============================================================
+   DESTINO.CSS — Apenas estilos exclusivos da página Destinos.
+   Header, footer, botões, spinner, reset → global.css
+   ============================================================ */
+
+/* ── Layout principal: sidebar + mapa ── */
+.destino-wrapper {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    height: calc(100vh - 57px); /* altura total menos o header */
+    overflow: hidden;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+    background: linen;
+    padding: 18px;
+    border-right: 1px solid #e0d8cc;
+    overflow-y: auto;
+    height: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: #C29D5B transparent;
+}
+
+.sidebar::-webkit-scrollbar { width: 5px; }
+.sidebar::-webkit-scrollbar-thumb { background: #C29D5B; border-radius: 4px; }
+
+.sidebar-titulo {
+    color: #C29D5B;
+    font-size: 1.3rem;
+    font-weight: 800;
+    border-bottom: 2px solid #C29D5B;
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+}
+
+.sidebar-subtitulo {
+    color: #6B8E23;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 20px 0 10px;
+}
+
+/* ── Transporte ── */
+.transporte-opcoes {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.transporte-btn {
+    padding: 7px 12px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: 0.3s;
+    font-family: inherit;
+}
+
+.transporte-btn.ativo {
+    background: #ffcc00;
+    border-color: #ffcc00;
+    color: #1a1a1a;
+    box-shadow: 0 2px 8px rgba(255,204,0,0.4);
+}
+
+.transporte-btn:hover:not(.ativo) { background: #f5f5f5; }
+
+/* ── Filtros de rota ── */
+.filtros-rota {
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.filtros-rota h4 {
+    color: #483D8B;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.select-rota {
+    width: 100%;
+    padding: 9px 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: inherit;
+    background: #fafafa;
+    transition: 0.2s;
+}
+
+.select-rota:focus {
+    border-color: #E61C2E;
+    background: #fff;
+    outline: none;
+}
+
+.btn-rota {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+    font-family: inherit;
+    transition: 0.3s;
+}
+
+.btn-rota:hover { transform: scale(1.02); opacity: 0.95; }
+
+.btn-limpar {
+    width: 100%;
+    padding: 8px;
+    margin-top: 8px;
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: inherit;
+    transition: 0.3s;
+}
+
+.btn-limpar:hover { background: #b02a37; }
+
+/* ── Info da rota ── */
+.rota-info {
+    background: #2a5298;
+    color: #fff;
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin-top: 10px;
+    display: none;
+    font-size: 13px;
+}
+
+.rota-info.mostrar { display: block; }
+
+.rota-info h4 {
+    font-size: 13px;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.rota-info p { margin: 4px 0; }
+
+/* ── Lista de destinos ── */
+.destinos-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.destino-item {
+    background: #fff;
+    border-radius: 10px;
+    padding: 13px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+    cursor: pointer;
+    transition: all 0.3s;
+    border-left: 4px solid transparent;
+}
+
+.destino-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 5px 16px rgba(0,0,0,0.12);
+    border-left-color: #C29D5B;
+}
+
+.destino-item.ativo {
+    border-left-color: #E61C2E;
+    background: #fff5f5;
+}
+
+.destino-item h4 {
+    color: #808000;
+    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.destino-item .cidade {
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.destino-item .cidade::before { content: "📍 "; }
+
+.destino-item .descricao {
+    color: #555;
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.destino-item .coordenadas {
+    font-size: 10px;
+    color: #aaa;
+    margin-top: 6px;
+    font-family: monospace;
+}
+
+/* Botões de favorito dentro do item */
+.destino-item .fav-btns {
+    margin-top: 10px;
+    justify-content: flex-start;
+}
+
+/* ── Mapa ── */
+.mapa-wrapper {
+    position: relative;
+    height: 100%;
+}
+
+#mapa {
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+}
+
+/* Popup do mapa */
+.popup-conteudo { max-width: 200px; }
+.popup-conteudo h4 { color: #1e3c72; margin-bottom: 5px; font-size: 14px; }
+.popup-conteudo p  { color: #555; font-size: 12px; line-height: 1.4; }
+
+/* ── Destaques flutuantes sobre o mapa ── */
+.mapa-destaques {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 500;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    max-width: 200px;
+}
+
+.destaque-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: #C29D5B;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.destaques-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.destaque-item {
+    font-size: 12px;
+    color: #333;
+    padding: 5px 8px;
+    background: #f9f5ef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    border-left: 3px solid #C29D5B;
+}
+
+.destaque-item:hover { background: #f0e8d8; }
+
+/* ── Responsividade ── */
+@media (max-width: 968px) {
+    .destino-wrapper {
+        grid-template-columns: 1fr;
+        grid-template-rows: 300px 1fr;
+        height: auto;
+    }
+
+    .sidebar {
+        height: 300px;
+        border-right: none;
+        border-bottom: 1px solid #e0d8cc;
+    }
+
+    .mapa-wrapper { height: 60vh; }
+    .mapa-destaques { display: none; }
+}
+
+@media (max-width: 480px) {
+    .transporte-opcoes { justify-content: center; }
+    .sidebar { padding: 14px; }
+}

@@ -1,0 +1,304 @@
+
+/*menu ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+/*menu ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+/* CONTEÚDO */
+.container {
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.container a {
+  text-decoration: none;
+  color: #E61C2E;
+  font-weight: 600;
+  transition: 0.3s all ease;
+  display: inline-block;
+  padding: 5px 0;
+  border-bottom: 2px solid transparent;
+}
+
+.container a:hover {
+  color: #C29D5B;
+  border-bottom: 2px solid #C29D5B;
+  transform: translateX(5px);
+}
+
+
+.container h1 {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 38px;
+    color: #1a1a1a;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* CARDS */
+.categorias-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card-categoria {
+    height: 250px;
+    border-radius: 25px;
+    padding: 25px;
+    color: #fff;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.card-categoria:hover {
+    transform: translateY(-10px);
+}
+
+.card-categoria .icon {
+    position: absolute;
+    top: 25px;
+    font-size: 38px;
+}
+
+.card-categoria h3 {
+    font-size: 26px;
+    margin-bottom: 6px;
+}
+
+.card-categoria span {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* CORES */
+.cat-praias {
+    background: linear-gradient(rgba(14,107,168,0.9), rgba(14,107,168,0.9)),
+                url("praias.jpg") center/cover;
+}
+
+.cat-hotel {
+    background: linear-gradient(rgb(106, 90, 205), rgb(106, 90, 205)),
+                url("hotel.jpg") center/cover;
+}
+
+.cat-resort {
+    background: linear-gradient(rgb(238, 130, 238), rgb(238, 130, 238)),
+                url("resort.jpg") center/cover;
+}
+
+.cat-parques {
+    background: linear-gradient(rgba(30,127,67,0.9), rgba(30,127,67,0.9)),
+                url("parques.jpg") center/cover;
+}
+
+.cat-cultura {
+    background: linear-gradient(rgba(200,16,46,0.9), rgba(200,16,46,0.9)),
+                url("cultura.jpg") center/cover;
+}
+
+.cat-gastronomia {
+    background: linear-gradient(rgba(250,196,48,0.9), rgba(250,196,48,0.9)),
+                url("gastronomia.jpg") center/cover;
+    color: #222;
+}
+
+
+
+/* Footer ///////////////////////////////////////////////////////////////////////////*/
+ 
+  /* footer/////////////////////////////////////////////////////////////////////////////////*/
+
+  /* texto decorativo //////////////////////////////////////////////////////////////////////////////*/
+.motivacional-horizontal {
+    padding: 80px 5%;
+    background: #fff;
+    text-align: center;
+}
+
+.titulo-motivacional {
+    font-size: 2.8rem;
+    margin-bottom: 60px;
+    color: #1a1a1a;
+}
+
+.titulo-motivacional .destaque {
+    color: #E61C2E; /* Vermelho do AngoMovel */
+}
+
+/* O Segredo do Alinhamento Horizontal */
+.flex-row-container {
+    display: flex;
+    flex-direction: row; /* Força a linha horizontal */
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.coluna-motivacional {
+    flex: 1; /* Distribui o espaço igualmente */
+    padding: 20px;
+    text-align: center;
+    border-radius: 15px;
+    transition: 0.3s;
+}
+
+.coluna-motivacional:hover {
+    background: #fdfdfd;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.icon-box {
+    width: 60px;
+    height: 60px;
+    background: #fde8e9; /* Fundo suave vermelho */
+    color: #E61C2E;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 30px;
+}
+
+.coluna-motivacional h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #1a1a1a;
+    font-weight: 700;
+}
+
+.coluna-motivacional p {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Responsividade: Apenas quebra em ecrãs muito pequenos (Telemóvel) */
+
+
+/*///////////////////////////////////////////////////////////////////////////////////////////////////////*/
+.categorias-texto {
+  max-width: 1100px;
+  margin: 80px auto;
+  padding: 20px;
+}
+
+.categorias-texto h1 {
+  text-align: center;
+  font-size: 40px;
+  color: #C29D5B;
+  margin-bottom: 40px;
+}
+
+.colunas {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.colunas p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #444;
+}
+
+/* Responsivo (telemóvel) */
+
+   /* texto decorativo //////////////////////////////////////////////////////////////////////////////*/
+
+
+
+
+
+   /* card texto com imagem//////////////////////////////////////////////////////////////////////////// */
+/* CONTAINER */
+.carrosselada {
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 20px;
+}
+
+.carrosselada h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+/* SLIDER */
+.sliderman {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+}
+
+.sliderman::-webkit-scrollbar {
+  display: none;
+}
+
+/* CARD */
+.cardee {
+  min-width: 280px;
+  height: 380px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  flex: 0 0 auto;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+
+/* HOVER */
+.cardee:hover {
+  transform: scale(1.05);
+}
+
+/* IMAGEM */
+.cardee img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* OVERLAY (🔥 diferença principal) */
+.overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 20px;
+  color: white;
+
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.8),
+    rgba(0,0,0,0.2),
+    transparent
+  );
+}
+
+/* TEXTO */
+.overlay h3 {
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+.overlay p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+  /* card texto com imagem//////////////////////////////////////////////////////////////////////////// */
+

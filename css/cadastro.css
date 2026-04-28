@@ -1,0 +1,80 @@
+/* Estilos para a página de Autenticação/Cadastro */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #F0F2F5;
+}
+
+.auth-card {
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    width: 100%;
+    max-width: 500px;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-header i {
+    font-size: 40px;
+    color: #FFD700;
+    margin-bottom: 10px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.input-group label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #444;
+}
+
+.input-group input, .input-group select, .input-group textarea {
+    padding: 12px;
+    border: 1px solid #DDD;
+    border-radius: 10px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #FFD700;
+}
+
+.btn-primary {
+    width: 100%;
+    background: #E61C2E;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+}

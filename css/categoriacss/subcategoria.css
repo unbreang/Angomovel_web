@@ -1,0 +1,300 @@
+/* ============================================================
+   SUBCATEGORIA.CSS — Partilhado por todas as subcategorias
+   (praias, parques, hotéis, resort, cultura, gastronomia)
+   ============================================================ */
+
+/* ── Hero da categoria ── */
+.hero-categoria {
+    height: 420px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+}
+
+.hero-overlay {
+    width: 100%;
+    padding: 50px 60px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.85));
+    color: #fff;
+}
+
+.hero-breadcrumb {
+    font-size: 13px;
+    margin-bottom: 12px;
+    opacity: 0.8;
+}
+
+.hero-breadcrumb a {
+    color: #ffcc00;
+    text-decoration: none;
+}
+
+.hero-breadcrumb a:hover { text-decoration: underline; }
+
+.hero-overlay h1 {
+    font-size: 46px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    line-height: 1.1;
+}
+
+.hero-overlay p {
+    font-size: 16px;
+    opacity: 0.9;
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.hero-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.hero-stats span {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(6px);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ── Barra de filtros ── */
+.filtros-bar {
+    background: #fff;
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 57px;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.filtros-inner {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filtro-chip {
+    padding: 8px 18px;
+    border: 1.5px solid #ddd;
+    border-radius: 50px;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    font-family: inherit;
+    color: #555;
+}
+
+.filtro-chip:hover { border-color: #E61C2E; color: #E61C2E; }
+
+.filtro-chip.ativo {
+    background: #E61C2E;
+    border-color: #E61C2E;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(230,28,46,0.3);
+}
+
+/* ── Grid de destinos ── */
+.destinos-grid-sub {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 10px;
+}
+
+/* ── Card de destino ── */
+.destino-card-sub {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.09);
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.destino-card-sub:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.14);
+}
+
+/* Imagem do card */
+.card-imagem {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+
+.card-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.destino-card-sub:hover .card-imagem img {
+    transform: scale(1.06);
+}
+
+/* Badge de avaliação */
+.card-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(0,0,0,0.65);
+    color: #ffcc00;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+}
+
+/* Botões de favorito no card */
+.card-favs {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    flex-direction: column;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.destino-card-sub:hover .card-favs { opacity: 1; }
+
+/* Corpo do card */
+.card-body {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.card-provincia {
+    font-size: 12px;
+    color: #E61C2E;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.card-body h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #1a1a1a;
+    line-height: 1.2;
+}
+
+.card-body p {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+    flex: 1;
+}
+
+.card-info {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.card-info span {
+    background: #f5f5f7;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #444;
+}
+
+.card-btn {
+    width: 100%;
+    margin-top: 8px;
+    padding: 11px;
+    font-size: 14px;
+    border-radius: 12px;
+}
+
+/* ── Modal ── */
+.modal-sub {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.modal-sub.aberto {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-sub-content {
+    background: #fff;
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 560px;
+    width: 90%;
+    position: relative;
+    animation: modalIn 0.3s ease;
+}
+
+@keyframes modalIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+}
+
+.modal-fechar {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 50%;
+    width: 32px; height: 32px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.modal-fechar:hover { background: #E61C2E; color: #fff; }
+
+.modal-sub-content h2 {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+/* ── Responsividade ── */
+@media (max-width: 1024px) {
+    .destinos-grid-sub { grid-template-columns: repeat(2, 1fr); }
+    .hero-overlay { padding: 40px 30px; }
+    .hero-overlay h1 { font-size: 36px; }
+}
+
+@media (max-width: 640px) {
+    .destinos-grid-sub { grid-template-columns: 1fr; }
+    .hero-categoria { height: 320px; }
+    .hero-overlay h1 { font-size: 28px; }
+    .filtros-inner { gap: 8px; }
+    .filtro-chip { font-size: 12px; padding: 6px 14px; }
+    .card-favs { opacity: 1; }
+}

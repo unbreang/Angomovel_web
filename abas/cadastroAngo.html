@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="pt-ao">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngoMovel — Cadastro & Login</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="../css/global.css">
+    <style>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--fonte-corpo);
+            background: #F7F4F0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── TOPO VERMELHO ── */
+        .topo {
+            background: linear-gradient(90deg, #CC0000, #E8192C);
+            padding: 0 40px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+        }
+
+        .topo::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #D4A017, #F0B429, #D4A017);
+        }
+
+        .topo-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .topo-logo span { font-size: 20px; color: #F0B429; }
+
+        .topo-logo h1 {
+            font-family: var(--fonte-titulo);
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+
+        .topo-voltar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .topo-voltar:hover { color: #F0B429; }
+
+        /* ── WRAPPER PRINCIPAL ── */
+        .page-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* ── CARD PRINCIPAL ── */
+        .auth-card {
+            background: #fff;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 900px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+
+        /* ── HEADER DO CARD ── */
+        .card-header {
+            background: linear-gradient(135deg, #CC0000, #E8192C);
+            padding: 20px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-header-esq {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+        }
+
+        .card-header-esq i { font-size: 26px; color: #F0B429; }
+
+        .card-header-esq h2 {
+            font-family: var(--fonte-titulo);
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .card-header-esq p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.75);
+            margin-top: 2px;
+        }
+
+        /* Tabs no header */
+        .card-tabs {
+            display: flex;
+            gap: 6px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        .card-tab {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: rgba(255,255,255,0.65);
+            font-family: var(--fonte-corpo);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .card-tab.ativo {
+            background: #F0B429;
+            color: #0a0a0a;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+        }
+
+        /* ── CORPO DO CARD ── */
+        .card-body {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+        }
+
+        /* ── COLUNA ESQUERDA — FOTO ── */
+        .coluna-foto {
+            background: linear-gradient(160deg, #0a0a0a 0%, #1a0000 50%, #CC0000 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+            gap: 20px;
+        }
+
+        .foto-circulo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            border: 3px dashed rgba(240,180,41,0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .foto-circulo:hover {
+            border-color: #F0B429;
+            background: rgba(255,255,255,0.12);
+            transform: scale(1.04);
+        }
+
+        .foto-circulo i {
+            font-size: 34px;
+            color: rgba(240,180,41,0.7);
+            transition: 0.3s;
+        }
+
+        .foto-circulo:hover i { color: #F0B429; }
+
+        .foto-circulo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            position: absolute;
+            inset: 0;
+        }
+
+        .foto-hint {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .foto-hint strong {
+            display: block;
+            color: rgba(255,255,255,0.8);
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        /* Separador */
+        .foto-sep {
+            width: 40px;
+            height: 1px;
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* Info lateral */
+        .foto-info {
+            text-align: center;
+        }
+
+        .foto-info p {
+            font-size: 12px;
+            color: rgba(255,255,255,0.45);
+            line-height: 1.6;
+        }
+
+        .foto-info strong {
+            color: #F0B429;
+            font-size: 20px;
+            font-family: var(--fonte-titulo);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* ── COLUNA DIREITA — FORMULÁRIO ── */
+        .coluna-form {
+            padding: 32px;
+            overflow-y: auto;
+            max-height: 600px;
+        }
+
+        /* Telas */
+        .tela { display: none; }
+        .tela.ativa { display: block; }
+
+        /* ── CAMPOS ── */
+        .campos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 0;
+        }
+
+        .campo {
+            margin-bottom: 14px;
+        }
+
+        .campo.full { grid-column: span 2; }
+
+        .campo label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #3d3830;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .campo label i {
+            font-size: 15px;
+            color: #E8192C;
+        }
+
+        .campo label .obrig { color: #E8192C; margin-left: 1px; }
+
+        /* Input base */
+        .campo input,
+        .campo select,
+        .campo textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #e8e4e0;
+            border-radius: 10px;
+            font-family: var(--fonte-corpo);
+            font-size: 14px;
+            color: #1a1a1a;
+            background: #faf8f5;
+            transition: 0.25s;
+            appearance: none;
+        }
+
+        .campo input:focus,
+        .campo select:focus,
+        .campo textarea:focus {
+            outline: none;
+            border-color: #E8192C;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(232,25,44,0.08);
+        }
+
+        .campo textarea {
+            resize: none;
+            height: 80px;
+        }
+
+        /* Input com ícone direito (senha) */
+        .input-wrap { position: relative; }
+
+        .input-wrap input {
+            padding-right: 42px;
+        }
+
+        .toggle-olho {
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #9a9590;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .toggle-olho:hover { color: #E8192C; }
+
+        /* Género — botões */
+        .genero-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .genero-btn {
+            flex: 1;
+            padding: 11px 6px;
+            border: 1.5px solid #e8e4e0;
+            border-radius: 10px;
+            background: #faf8f5;
+            font-family: var(--fonte-corpo);
+            font-size: 12px;
+            font-weight: 700;
+            color: #6b6560;
+            cursor: pointer;
+            transition: 0.25s;
+            text-align: center;
+        }
+
+        .genero-btn:hover { border-color: #D4A017; color: #D4A017; background: #fffdf0; }
+
+        .genero-btn.sel {
+            border-color: #E8192C;
+            background: rgba(232,25,44,0.06);
+            color: #E8192C;
+        }
+
+        /* Força da senha */
+        .forca { margin-top: 6px; display: none; }
+        .forca.vis { display: block; }
+        .forca-barra { height: 4px; border-radius: 4px; background: #e8e4e0; overflow: hidden; margin-bottom: 3px; }
+        .forca-fill  { height: 100%; border-radius: 4px; transition: 0.4s; width: 0%; }
+        .forca-label { font-size: 11px; font-weight: 600; }
+
+        /* Erro */
+        .erro {
+            font-size: 11px;
+            color: #E8192C;
+            margin-top: 4px;
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+        .erro.vis { display: flex; }
+
+        /* Checkbox termos */
+        .termos-linha {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 16px 0;
+        }
+
+        .termos-linha input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            accent-color: #E8192C;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .termos-linha label {
+            font-size: 12px;
+            color: #6b6560;
+            line-height: 1.55;
+            cursor: pointer;
+        }
+
+        .termos-linha label a { color: #E8192C; font-weight: 700; }
+
+        /* ── BOTÃO PRINCIPAL ── */
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #D4A017, #F0B429);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 12px;
+            font-family: var(--fonte-corpo);
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 6px 24px rgba(212,160,23,0.35);
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            filter: brightness(1.08);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 32px rgba(212,160,23,0.45);
+        }
+
+        .btn-submit:active { transform: scale(0.98); }
+
+        /* Link de troca */
+        .troca {
+            text-align: center;
+            font-size: 12px;
+            color: #6b6560;
+            margin-top: 14px;
+        }
+
+        .troca button {
+            background: none;
+            border: none;
+            color: #E8192C;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: var(--fonte-corpo);
+            font-size: 12px;
+        }
+
+        /* Sucesso */
+        .sucesso-box {
+            background: #e8fff0;
+            border: 1px solid #1a7a3f;
+            border-radius: 10px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sucesso-box i { color: #1a7a3f; font-size: 20px; flex-shrink: 0; }
+        .sucesso-box p { font-size: 13px; color: #0a3d1e; font-weight: 600; margin: 0; }
+
+        /* Erro login global */
+        .erro-login {
+            background: #fff0f0;
+            border: 1px solid #E8192C;
+            border-radius: 10px;
+            padding: 12px 16px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .erro-login.vis { display: flex; }
+        .erro-login i { color: #E8192C; font-size: 18px; }
+        .erro-login p { font-size: 13px; color: #E8192C; font-weight: 600; margin: 0; }
+
+        /* ── TELA LOGIN — layout mais espaçado ── */
+        .login-wrap {
+            max-width: 360px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        .login-titulo {
+            font-family: var(--fonte-titulo);
+            font-size: 24px;
+            font-weight: 900;
+            color: #0a0a0a;
+            margin-bottom: 4px;
+        }
+
+        .login-sub {
+            font-size: 13px;
+            color: #6b6560;
+            margin-bottom: 28px;
+        }
+
+        /* ── RESPONSIVIDADE ── */
+        @media (max-width: 700px) {
+            .card-body { grid-template-columns: 1fr; }
+            .coluna-foto { flex-direction: row; padding: 20px; gap: 16px; }
+            .foto-info { display: none; }
+            .campos-grid { grid-template-columns: 1fr; }
+            .campo.full { grid-column: span 1; }
+            .card-header { flex-direction: column; gap: 14px; }
+            .coluna-form { max-height: none; }
+        }
+
+        @media (max-width: 480px) {
+            .topo { padding: 0 20px; }
+            .page-wrapper { padding: 20px 12px; }
+            .coluna-form { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── TOPO ── -->
+<div class="topo">
+    <a href="../angomovel.html" class="topo-logo">
+        <span>✈</span>
+        <h1>ANGOMOVEL</h1>
+    </a>
+    <a href="../angomovel.html" class="topo-voltar">
+        <i class="ph ph-arrow-left"></i> Voltar ao início
+    </a>
+</div>
+
+<!-- ── PÁGINA ── -->
+<div class="page-wrapper">
+    <div class="auth-card">
+
+        <!-- Header vermelho -->
+        <div class="card-header">
+            <div class="card-header-esq">
+                <i class="ph-fill ph-user-circle-plus" id="headerIcon"></i>
+                <div>
+                    <h2 id="headerTitulo">CADASTRO</h2>
+                    <p id="headerSub">Cria a tua conta gratuitamente</p>
+                </div>
+            </div>
+            <div class="card-tabs">
+                <button class="card-tab ativo" id="tabCad" onclick="mudarTela('cadastro')">Cadastrar</button>
+                <button class="card-tab" id="tabLog" onclick="mudarTela('login')">Entrar</button>
+            </div>
+        </div>
+
+        <!-- Corpo -->
+        <div class="card-body">
+
+            <!-- Coluna esquerda — foto -->
+            <div class="coluna-foto">
+                <div class="foto-circulo" id="fotoCirculo" onclick="document.getElementById('inputFoto').click()" title="Clica para adicionar foto">
+                    <i class="ph ph-camera-plus"></i>
+                    <img id="previewFoto" alt="Foto de perfil">
+                </div>
+                <input type="file" id="inputFoto" accept="image/*" style="display:none" onchange="carregarFoto(event)">
+
+                <div class="foto-hint">
+                    <strong>Foto de Perfil</strong>
+                    Clica no círculo para adicionar a tua foto
+                </div>
+
+                <div class="foto-sep"></div>
+
+                <div class="foto-info">
+                    <strong>🇦🇴</strong>
+                    <p>Explora Angola com o AngoMovel</p>
+                </div>
+            </div>
+
+            <!-- Coluna direita — formulários -->
+            <div class="coluna-form">
+
+                <!-- ════ TELA CADASTRO ════ -->
+                <div class="tela ativa" id="telaCadastro">
+                    <div class="campos-grid">
+
+                        <!-- Nome -->
+                        <div class="campo">
+                            <label><i class="ph ph-user"></i> Nome Completo <span class="obrig">*</span></label>
+                            <input type="text" id="nome" placeholder="Digite o nome completo">
+                            <div class="erro" id="erroNome"><i class="ph ph-warning-circle"></i> Insere o teu nome</div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="campo">
+                            <label><i class="ph ph-envelope"></i> E-mail <span class="obrig">*</span></label>
+                            <input type="email" id="email" placeholder="usuario@email.com">
+                            <div class="erro" id="erroEmail"><i class="ph ph-warning-circle"></i> Email inválido</div>
+                        </div>
+
+                        <!-- Senha -->
+                        <div class="campo">
+                            <label><i class="ph ph-lock"></i> Senha <span class="obrig">*</span></label>
+                            <div class="input-wrap">
+                                <input type="password" id="senha" placeholder="Digite uma senha forte" oninput="calcForca()">
+                                <i class="ph ph-eye toggle-olho" onclick="verSenha('senha', this)"></i>
+                            </div>
+                            <div class="forca" id="forca">
+                                <div class="forca-barra"><div class="forca-fill" id="forcaFill"></div></div>
+                                <span class="forca-label" id="forcaLabel"></span>
+                            </div>
+                            <div class="erro" id="erroSenha"><i class="ph ph-warning-circle"></i> Mínimo 6 caracteres</div>
+                        </div>
+
+                        <!-- Confirmar senha -->
+                        <div class="campo">
+                            <label><i class="ph ph-lock-key"></i> Confirmar Senha <span class="obrig">*</span></label>
+                            <div class="input-wrap">
+                                <input type="password" id="confirmar" placeholder="Confirme a senha">
+                                <i class="ph ph-eye toggle-olho" onclick="verSenha('confirmar', this)"></i>
+                            </div>
+                            <div class="erro" id="erroConfirmar"><i class="ph ph-warning-circle"></i> As senhas não coincidem</div>
+                        </div>
+
+                        <!-- Telefone -->
+                        <div class="campo">
+                            <label><i class="ph ph-phone"></i> Telefone <span class="obrig">*</span></label>
+                            <input type="tel" id="telefone" placeholder="+244 9xx xxx xxx">
+                            <div class="erro" id="erroTelefone"><i class="ph ph-warning-circle"></i> Telefone inválido</div>
+                        </div>
+
+                        <!-- Idade -->
+                        <div class="campo">
+                            <label><i class="ph ph-calendar"></i> Idade <span class="obrig">*</span> 🔞</label>
+                            <input type="number" id="idade" placeholder="Ex: 25" min="18" max="100">
+                            <div class="erro" id="erroIdade"><i class="ph ph-warning-circle"></i> Tens de ter 18+ anos</div>
+                        </div>
+
+                        <!-- Sexo/Género -->
+                        <div class="campo full">
+                            <label><i class="ph ph-gender-intersex"></i> Sexo / Género <span class="obrig">*</span></label>
+                            <div class="genero-row">
+                                <button type="button" class="genero-btn" onclick="selGenero('masculino', this)">♂ Masculino</button>
+                                <button type="button" class="genero-btn" onclick="selGenero('feminino', this)">♀ Feminino</button>
+                                <button type="button" class="genero-btn" onclick="selGenero('nao-binario', this)">⚧ Não-binário</button>
+                                <button type="button" class="genero-btn" onclick="selGenero('prefiro-nao-dizer', this)">🔒 Prefiro não dizer</button>
+                            </div>
+                            <input type="hidden" id="genero">
+                            <div class="erro" id="erroGenero"><i class="ph ph-warning-circle"></i> Seleciona o teu género</div>
+                        </div>
+
+                    </div>
+
+                    <!-- Termos -->
+                    <div class="termos-linha">
+                        <input type="checkbox" id="termos">
+                        <label for="termos">
+                            Aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a> do AngoMovel. Confirmo que tenho 18 ou mais anos.
+                        </label>
+                    </div>
+
+                    <button class="btn-submit" onclick="cadastrar()">
+                        <i class="ph-fill ph-user-circle-plus"></i> Confirmar Cadastro
+                    </button>
+
+                    <div class="troca">
+                        Já tens conta? <button onclick="mudarTela('login')">Faz login aqui</button>
+                    </div>
+                </div>
+
+                <!-- ════ TELA LOGIN ════ -->
+                <div class="tela" id="telaLogin">
+                    <div class="login-wrap">
+
+                        <div class="sucesso-box" id="boxSucesso" style="display:none">
+                            <i class="ph-fill ph-check-circle"></i>
+                            <p>Conta criada! Agora faz login para entrar. 🎉</p>
+                        </div>
+
+                        <h2 class="login-titulo">Bem-vindo de volta!</h2>
+                        <p class="login-sub">Entra na tua conta para explorar Angola 🇦🇴</p>
+
+                        <div class="erro-login" id="erroLoginBox">
+                            <i class="ph-fill ph-warning-circle"></i>
+                            <p>Email ou senha incorrectos. Tenta novamente.</p>
+                        </div>
+
+                        <div class="campo">
+                            <label><i class="ph ph-envelope"></i> E-mail <span class="obrig">*</span></label>
+                            <input type="email" id="loginEmail" placeholder="usuario@email.com">
+                            <div class="erro" id="erroLoginEmail"><i class="ph ph-warning-circle"></i> Insere o teu email</div>
+                        </div>
+
+                        <div class="campo">
+                            <label><i class="ph ph-lock"></i> Senha <span class="obrig">*</span></label>
+                            <div class="input-wrap">
+                                <input type="password" id="loginSenha" placeholder="A tua senha">
+                                <i class="ph ph-eye toggle-olho" onclick="verSenha('loginSenha', this)"></i>
+                            </div>
+                            <div class="erro" id="erroLoginSenha"><i class="ph ph-warning-circle"></i> Insere a tua senha</div>
+                        </div>
+
+                        <div style="text-align:right; margin-bottom: 20px; margin-top: -6px;">
+                            <a href="#" style="font-size:12px; color:#E8192C; font-weight:600;">Esqueci a senha</a>
+                        </div>
+
+                        <button class="btn-submit" onclick="login()">
+                            <i class="ph-fill ph-sign-in"></i> Entrar na minha conta
+                        </button>
+
+                        <div class="troca">
+                            Não tens conta? <button onclick="mudarTela('cadastro')">Cria uma grátis</button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let generoVal = '';
+
+    // ── Mudar tela ──
+    function mudarTela(tela) {
+        document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
+        document.querySelectorAll('.card-tab').forEach(t => t.classList.remove('ativo'));
+
+        if (tela === 'cadastro') {
+            document.getElementById('telaCadastro').classList.add('ativa');
+            document.getElementById('tabCad').classList.add('ativo');
+            document.getElementById('headerIcon').className = 'ph-fill ph-user-circle-plus';
+            document.getElementById('headerTitulo').textContent = 'CADASTRO';
+            document.getElementById('headerSub').textContent = 'Cria a tua conta gratuitamente';
+        } else {
+            document.getElementById('telaLogin').classList.add('ativa');
+            document.getElementById('tabLog').classList.add('ativo');
+            document.getElementById('headerIcon').className = 'ph-fill ph-sign-in';
+            document.getElementById('headerTitulo').textContent = 'LOGIN';
+            document.getElementById('headerSub').textContent = 'Entra na tua conta';
+        }
+    }
+
+    // ── Foto ──
+    function carregarFoto(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+            const img = document.getElementById('previewFoto');
+            const icon = document.querySelector('.foto-circulo i');
+            img.src = ev.target.result;
+            img.style.display = 'block';
+            icon.style.display = 'none';
+            localStorage.setItem('angomovel_foto', ev.target.result);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // ── Ver senha ──
+    function verSenha(id, el) {
+        const inp = document.getElementById(id);
+        inp.type = inp.type === 'password' ? 'text' : 'password';
+        el.classList.toggle('ph-eye');
+        el.classList.toggle('ph-eye-slash');
+    }
+
+    // ── Género ──
+    function selGenero(val, btn) {
+        generoVal = val;
+        document.getElementById('genero').value = val;
+        document.querySelectorAll('.genero-btn').forEach(b => b.classList.remove('sel'));
+        btn.classList.add('sel');
+        mostrarErro('erroGenero', false);
+    }
+
+    // ── Força da senha ──
+    function calcForca() {
+        const s = document.getElementById('senha').value;
+        const cont = document.getElementById('forca');
+        const fill = document.getElementById('forcaFill');
+        const label = document.getElementById('forcaLabel');
+        if (!s) { cont.classList.remove('vis'); return; }
+        cont.classList.add('vis');
+        let p = 0;
+        if (s.length >= 6) p++;
+        if (s.length >= 10) p++;
+        if (/[A-Z]/.test(s)) p++;
+        if (/[0-9]/.test(s)) p++;
+        if (/[^A-Za-z0-9]/.test(s)) p++;
+        const niveis = [
+            { txt: 'Muito fraca', cor: '#E8192C', w: '20%' },
+            { txt: 'Fraca', cor: '#ff6b35', w: '40%' },
+            { txt: 'Razoável', cor: '#F0B429', w: '60%' },
+            { txt: 'Boa', cor: '#4CAF50', w: '80%' },
+            { txt: 'Excelente ✓', cor: '#1a7a3f', w: '100%' },
+        ];
+        const n = niveis[Math.max(0, Math.min(p - 1, 4))];
+        fill.style.width = n.w;
+        fill.style.background = n.cor;
+        label.textContent = n.txt;
+        label.style.color = n.cor;
+    }
+
+    // ── Mostrar/esconder erro ──
+    function mostrarErro(id, show) {
+        const el = document.getElementById(id);
+        if (show) el.classList.add('vis');
+        else el.classList.remove('vis');
+    }
+
+    // ── Cadastrar ──
+    function cadastrar() {
+        const nome     = document.getElementById('nome').value.trim();
+        const email    = document.getElementById('email').value.trim();
+        const senha    = document.getElementById('senha').value;
+        const confirmar= document.getElementById('confirmar').value;
+        const telefone = document.getElementById('telefone').value.trim();
+        const idade    = parseInt(document.getElementById('idade').value);
+        const genero   = document.getElementById('genero').value;
+        const termos   = document.getElementById('termos').checked;
+
+        let ok = true;
+
+        mostrarErro('erroNome', !nome); if (!nome) ok = false;
+        const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        mostrarErro('erroEmail', !emailOk); if (!emailOk) ok = false;
+        mostrarErro('erroSenha', senha.length < 6); if (senha.length < 6) ok = false;
+        mostrarErro('erroConfirmar', senha !== confirmar); if (senha !== confirmar) ok = false;
+        mostrarErro('erroTelefone', telefone.length < 9); if (telefone.length < 9) ok = false;
+        mostrarErro('erroIdade', isNaN(idade) || idade < 18); if (isNaN(idade) || idade < 18) ok = false;
+        mostrarErro('erroGenero', !genero); if (!genero) ok = false;
+
+        if (!termos) { alert('⚠️ Aceita os termos de uso para continuar.'); ok = false; }
+        if (!ok) return;
+
+        // Guardar utilizador
+        localStorage.setItem('angomovel_user', JSON.stringify({ nome, email, senha, telefone, idade, genero }));
+
+        // Ir para login
+        mudarTela('login');
+        document.getElementById('boxSucesso').style.display = 'flex';
+        document.getElementById('loginEmail').value = email;
+    }
+
+    // ── Login ──
+    function login() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const senha = document.getElementById('loginSenha').value;
+        let ok = true;
+
+        mostrarErro('erroLoginEmail', !email); if (!email) ok = false;
+        mostrarErro('erroLoginSenha', !senha); if (!senha) ok = false;
+        if (!ok) return;
+
+        const user = JSON.parse(localStorage.getItem('angomovel_user') || '{}');
+        const erroBox = document.getElementById('erroLoginBox');
+
+        if (user.email === email && user.senha === senha) {
+            erroBox.classList.remove('vis');
+            localStorage.setItem('angomovel_logado', JSON.stringify({
+                nome: user.nome,
+                email: user.email,
+                foto: localStorage.getItem('angomovel_foto') || ''
+            }));
+
+            // Botão feedback
+            const btn = document.querySelector('#telaLogin .btn-submit');
+            btn.innerHTML = '<i class="ph-fill ph-check-circle"></i> A entrar...';
+            btn.style.background = 'linear-gradient(135deg, #1a7a3f, #4CAF50)';
+            btn.style.color = '#fff';
+            setTimeout(() => { window.location.href = '../angomovel.html'; }, 1200);
+        } else {
+            erroBox.classList.add('vis');
+            // Vibração visual
+            const card = document.querySelector('.auth-card');
+            card.style.transform = 'translateX(-6px)';
+            setTimeout(() => { card.style.transform = 'translateX(6px)'; }, 80);
+            setTimeout(() => { card.style.transform = 'translateX(0)'; card.style.transition = '0.3s'; }, 160);
+        }
+    }
+
+    // ── Verificar sessão ──
+    if (localStorage.getItem('angomovel_logado')) {
+        window.location.href = '../angomovel.html';
+    }
+
+    // ── Enter para submeter ──
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+            const tela = document.querySelector('.tela.ativa').id;
+            if (tela === 'telaCadastro') cadastrar();
+            else login();
+        }
+    });
+</script>
+
+</body>
+</html>
