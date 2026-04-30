@@ -1,10 +1,38 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { User } from './users/entities/user.entity';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    // ── Configuração de variáveis de ambiente ──
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
+
+    // ── Base de dados PostgreSQL ──
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres',
+        host:     config.get<string>('DB_HOST', 'localhost'),
+        port:     config.get<number>('DB_PORT', 5432),
+        username: config.get<string>('DB_USERNAME', 'postgres'),
+        password: config.get<string>('DB_PASSWORD', 'postgres'),
+        database: config.get<string>('DB_NAME', 'angomovel_db'),
+        entities: [User],
+        synchronize: true,  // ⚠️ apenas em desenvolvimento
+        logging: false,
+      }),
+    }),
+
+    // ── Módulos da aplicação ──
+    AuthModule,
+    UsersModule,
+  ],
 })
 export class AppModule {}
