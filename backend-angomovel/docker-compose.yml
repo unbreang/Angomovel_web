@@ -1,47 +1,31 @@
-version: '3.9'
+version: '3.8'
 
 services:
-  backend:
-    build: ./backend-angomovel  # Ajustado para a tua pasta específica
-    container_name: angomovel_backend
-    ports:
-      - "3000:3000"
-    environment:
-      - DATABASE_URL=postgresql://admin:password123@db:5432/angomovel_db
-      - REDIS_URL=redis://redis:6379
-    depends_on:
-      - db
-      - redis
-    volumes:
-      - ./backend-angomovel:/app
-      - /app/node_modules
 
-  db:
-    image: postgres:15
-    container_name: angomovel_db
+  # ── PostgreSQL ──
+  postgres:
+    image: postgres:15-alpine
+    container_name: angomovel_postgres
+    restart: always
     environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=password123
-      - POSTGRES_DB=angomovel_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: angomovel_db
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  # ── Redis ──
   redis:
-    image: redis:7
+    image: redis:7-alpine
     container_name: angomovel_redis
+    restart: always
     ports:
-      - "6379:6379"
-
-  # ADICIONADO: O "Rosto" do projeto (Frontend)
-  frontend:
-    image: nginx:alpine
-    container_name: angomovel_frontend
-    ports:
-      - "80:80"
+      - '6379:6379'
     volumes:
-      - .:/usr/share/nginx/html # Mapeia tudo: angomovel.html, abas, css, js, assets
+      - redis_data:/data
 
 volumes:
   postgres_data:
+  redis_data:
