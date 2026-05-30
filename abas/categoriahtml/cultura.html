@@ -246,5 +246,7 @@ function mostrarToast(msg) { const t = document.createElement('div'); t.classNam
 function verDetalhes(nome) { document.getElementById('modalConteudo').innerHTML = `<h2>${nome}</h2><p style="color:#666;margin:16px 0;">Detalhes completos em breve!</p><div class="fav-btns" style="justify-content:center;gap:16px;margin-top:20px;"><button class="btn-primario" onclick="fecharModal()">Fechar</button><a href="../destino.html" class="btn-primario" style="background:#0E6BA8;">Ver no Mapa</a><a href="../guia.html" class="btn-primario" style="background:#1E7F43;">Contratar Guia</a></div>`; document.getElementById('modal').classList.add('aberto'); }
 function fecharModal(e) { if (!e || e.target === document.getElementById('modal')) document.getElementById('modal').classList.remove('aberto'); }
 </script>
+
+<script src="../../js/auth.js"></script>
 </body>
 </html>

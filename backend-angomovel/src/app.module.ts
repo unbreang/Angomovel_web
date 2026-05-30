@@ -3,17 +3,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { ReservasModule } from './reservas/reservas.module';
 import { User } from './users/entities/user.entity';
+import { Reserva } from './reservas/entities/reservas.entity';
 
 @Module({
   imports: [
-    // ── Configuração de variáveis de ambiente ──
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
 
-    // ── Base de dados PostgreSQL ──
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -21,18 +21,18 @@ import { User } from './users/entities/user.entity';
         type: 'postgres',
         host:     config.get<string>('DB_HOST', 'localhost'),
         port:     config.get<number>('DB_PORT', 5432),
-        username: config.get<string>('DB_USERNAME', 'postgres'),
-        password: config.get<string>('DB_PASSWORD', 'postgres'),
-        database: config.get<string>('DB_NAME', 'angomovel_db'),
-        entities: [User],
-        synchronize: true,  // ⚠️ apenas em desenvolvimento
+        username: config.get<string>('DB_USERNAME', 'admin'),
+        password: config.get<string>('DB_PASSWORD', 'password123'),
+        database: config.get<string>('DB_NAME', 'angomovel'),
+        entities: [User, Reserva],
+        synchronize: true,
         logging: false,
       }),
     }),
 
-    // ── Módulos da aplicação ──
     AuthModule,
     UsersModule,
+    ReservasModule,
   ],
 })
 export class AppModule {}

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt-ao">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngoMovel — O meu Perfil</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/global.css">
+    <style>
+        body { background: #F5F0E8; color: #111; }
+
+        /* ── HERO DO PERFIL ── */
+        .perfil-hero {
+            background: linear-gradient(135deg, #0A0A0A 0%, #1a0505 50%, #CC0000 100%);
+            padding: 120px 24px 60px;
+            position: relative; overflow: hidden;
+        }
+
+        .perfil-hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .perfil-hero-inner {
+            max-width: 900px; margin: 0 auto;
+            display: flex; align-items: center; gap: 32px;
+            position: relative; z-index: 1;
+        }
+
+        .perfil-avatar-grande {
+            width: 120px; height: 120px;
+            border-radius: 50%; overflow: hidden;
+            border: 4px solid #F0B429;
+            flex-shrink: 0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        .perfil-avatar-grande img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        .perfil-avatar-inicial {
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #E8192C, #A00000);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 48px; font-weight: 900; color: #fff;
+        }
+
+        .perfil-hero-info h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px; font-weight: 900; color: #fff;
+            letter-spacing: -1px; margin-bottom: 6px;
+        }
+
+        .perfil-hero-info p {
+            font-size: 15px; color: rgba(255,255,255,0.6); margin-bottom: 16px;
+        }
+
+        .perfil-badges { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        .perfil-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 5px 14px; border-radius: 999px;
+            font-size: 12px; font-weight: 700;
+        }
+
+        .perfil-badge.role {
+            background: rgba(240,180,41,0.15);
+            border: 1px solid rgba(240,180,41,0.3);
+            color: #F0B429;
+        }
+
+        .perfil-badge.ativo {
+            background: rgba(76,175,80,0.15);
+            border: 1px solid rgba(76,175,80,0.3);
+            color: #4CAF50;
+        }
+
+        /* ── TABS ── */
+        .perfil-tabs {
+            background: #fff;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            position: sticky; top: 68px; z-index: 50;
+        }
+
+        .perfil-tabs-inner {
+            max-width: 900px; margin: 0 auto;
+            padding: 0 24px;
+            display: flex; gap: 0;
+        }
+
+        .perfil-tab {
+            padding: 16px 20px;
+            border: none; border-bottom: 3px solid transparent;
+            background: transparent;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px; font-weight: 600; color: #888;
+            cursor: pointer; transition: 0.25s;
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: -1px;
+        }
+
+        .perfil-tab:hover { color: #111; }
+        .perfil-tab.ativo { color: #E8192C; border-bottom-color: #E8192C; }
+        .perfil-tab i { font-size: 16px; }
+
+        /* ── CONTEÚDO TABS ── */
+        .perfil-body {
+            max-width: 900px; margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.ativo { display: block; }
+
+        /* ── INFO DO UTILIZADOR ── */
+        .info-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 16px; margin-bottom: 32px;
+        }
+
+        .info-item {
+            background: #fff;
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 16px; padding: 20px;
+            transition: 0.25s;
+        }
+
+        .info-item:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); transform: translateY(-2px); }
+
+        .info-item label {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 11px; font-weight: 700;
+            color: #888; letter-spacing: 1px;
+            text-transform: uppercase; margin-bottom: 6px;
+        }
+
+        .info-item label i { font-size: 14px; color: #E8192C; }
+
+        .info-item p { font-size: 15px; font-weight: 600; color: #111; }
+
+        /* Editar perfil */
+        .btn-editar {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #111; color: #fff;
+            padding: 11px 24px; border-radius: 999px;
+            font-size: 13px; font-weight: 700;
+            border: none; cursor: pointer; transition: 0.25s;
+            margin-bottom: 32px;
+        }
+
+        .btn-editar:hover { background: #E8192C; transform: translateY(-2px); }
+
+        /* ── FAVORITOS ── */
+        .favs-titulo {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px; font-weight: 800;
+            color: #111; margin-bottom: 20px;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .favs-titulo .count {
+            background: rgba(232,25,44,0.1);
+            color: #E8192C; font-size: 12px; font-weight: 700;
+            padding: 3px 10px; border-radius: 999px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .favs-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .fav-card {
+            position: relative; border-radius: 16px;
+            overflow: hidden; cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: 0.35s; aspect-ratio: 4/3;
+        }
+
+        .fav-card:hover { transform: translateY(-4px); box-shadow: 0 14px 40px rgba(0,0,0,0.18); }
+
+        .fav-card img {
+            width: 100%; height: 100%;
+            object-fit: cover; display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .fav-card:hover img { transform: scale(1.06); }
+
+        .fav-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.88));
+            padding: 20px 16px 14px; color: #fff;
+        }
+
+        .fav-nome { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 800; }
+        .fav-local { font-size: 12px; opacity: 0.75; }
+
+        .btn-remover-fav {
+            position: absolute; top: 10px; right: 10px;
+            width: 34px; height: 34px; border-radius: 50%;
+            background: rgba(232,25,44,0.85);
+            border: none; color: #fff; font-size: 16px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.2s;
+        }
+
+        .btn-remover-fav:hover { background: #E8192C; transform: scale(1.1); }
+
+        /* Vazio */
+        .vazio {
+            text-align: center; padding: 60px 20px;
+            color: #888;
+        }
+
+        .vazio i { font-size: 52px; opacity: 0.3; display: block; margin-bottom: 14px; }
+        .vazio h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #555; margin-bottom: 8px; }
+        .vazio p { font-size: 14px; }
+        .vazio a { color: #E8192C; font-weight: 700; }
+
+        /* ── MODAL EDITAR ── */
+        .modal-ov {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
+            z-index: 500;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px; opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+
+        .modal-ov.aberto { opacity: 1; pointer-events: all; }
+
+        .modal-edit {
+            background: #fff; border-radius: 24px;
+            width: 100%; max-width: 500px; padding: 32px;
+            transform: scale(0.9); transition: 0.3s;
+            max-height: 90vh; overflow-y: auto;
+        }
+
+        .modal-ov.aberto .modal-edit { transform: scale(1); }
+
+        .modal-edit h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px; font-weight: 900;
+            margin-bottom: 24px; color: #111;
+        }
+
+        .campo-edit { margin-bottom: 14px; }
+        .campo-edit label { font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px; }
+        .campo-edit input {
+            width: 100%; padding: 11px 14px;
+            border: 1.5px solid #e8e4e0; border-radius: 10px;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: #111;
+            background: #faf8f5; transition: 0.25s;
+        }
+        .campo-edit input:focus { outline: none; border-color: #E8192C; background: #fff; }
+
+        .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
+
+        .btn-guardar {
+            flex: 2; padding: 13px;
+            background: #E8192C; color: #fff;
+            border: none; border-radius: 12px;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800;
+            cursor: pointer; transition: 0.25s;
+        }
+        .btn-guardar:hover { background: #A00000; }
+
+        .btn-cancelar {
+            flex: 1; padding: 13px;
+            background: transparent; color: #555;
+            border: 1px solid #e8e4e0; border-radius: 12px;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: 0.25s;
+        }
+        .btn-cancelar:hover { background: #f5f0e8; }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .perfil-hero-inner { flex-direction: column; text-align: center; }
+            .perfil-badges { justify-content: center; }
+            .info-grid { grid-template-columns: 1fr; }
+            .favs-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .favs-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <div class="header-inner">
+        <a href="../angomovel.html" class="logo">
+            <span class="icon-aviao">✈</span>
+            <h1>ANGOMOVEL</h1>
+        </a>
+        <nav class="nav">
+            <a href="../abas/categorias.html">Categorias</a>
+            <a href="../abas/guia.html">Guias</a>
+            <a href="../abas/destino.html">Destinos</a>
+        </nav>
+    </div>
+</header>
+
+<!-- Hero do perfil -->
+<div class="perfil-hero">
+    <div class="perfil-hero-inner">
+        <div class="perfil-avatar-grande">
+            <div class="perfil-avatar-inicial" id="avatarGrande">U</div>
+        </div>
+        <div class="perfil-hero-info">
+            <h1 id="perfilNome">A carregar...</h1>
+            <p id="perfilEmail">email@exemplo.com</p>
+            <div class="perfil-badges">
+                <span class="perfil-badge role" id="perfilRole">👤 Cliente</span>
+                <span class="perfil-badge ativo">✅ Conta activa</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabs -->
+<div class="perfil-tabs">
+    <div class="perfil-tabs-inner">
+        <button class="perfil-tab ativo" onclick="mudarTab('info')">
+            <i class="ph ph-user-circle"></i> Informações
+        </button>
+        <button class="perfil-tab" onclick="mudarTab('favoritos')" id="tabFavs">
+            <i class="ph ph-heart"></i> Favoritos
+        </button>
+    </div>
+</div>
+
+<!-- Corpo -->
+<div class="perfil-body">
+
+    <!-- Tab Informações -->
+    <div class="tab-content ativo" id="tabInfo">
+        <button class="btn-editar" onclick="abrirEditar()">
+            <i class="ph ph-pencil-simple"></i> Editar Perfil
+        </button>
+
+        <div class="info-grid" id="infoGrid">
+            <div class="info-item">
+                <label><i class="ph ph-user"></i> Nome Completo</label>
+                <p id="infoNome">—</p>
+            </div>
+            <div class="info-item">
+                <label><i class="ph ph-envelope"></i> Email</label>
+                <p id="infoEmail">—</p>
+            </div>
+            <div class="info-item">
+                <label><i class="ph ph-phone"></i> Telefone</label>
+                <p id="infoTel">—</p>
+            </div>
+            <div class="info-item">
+                <label><i class="ph ph-calendar"></i> Idade</label>
+                <p id="infoIdade">—</p>
+            </div>
+            <div class="info-item">
+                <label><i class="ph ph-gender-intersex"></i> Género</label>
+                <p id="infoGenero">—</p>
+            </div>
+            <div class="info-item">
+                <label><i class="ph ph-crown"></i> Tipo de conta</label>
+                <p id="infoRole">—</p>
+            </div>
+        </div>
+
+        <!-- Botão sair -->
+        <button onclick="sair()" style="display:flex;align-items:center;gap:8px;background:rgba(232,25,44,0.08);border:1px solid rgba(232,25,44,0.2);color:#E8192C;padding:11px 24px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;transition:0.25s;margin-top:20px;" onmouseover="this.style.background='rgba(232,25,44,0.15)'" onmouseout="this.style.background='rgba(232,25,44,0.08)'">
+            <i class="ph ph-sign-out"></i> Terminar sessão
+        </button>
+    </div>
+
+    <!-- Tab Favoritos -->
+    <div class="tab-content" id="tabFavoritos">
+        <h2 class="favs-titulo">
+            Os meus Favoritos <span class="count" id="countFavs">0</span>
+        </h2>
+        <div class="favs-grid" id="favsGrid">
+            <div class="vazio" style="grid-column:span 3;">
+                <i class="ph ph-heart"></i>
+                <h3>Ainda sem favoritos</h3>
+                <p>Explora os <a href="abas/destino.html">destinos</a> e guarda os que mais gostas!</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal Editar -->
+<div class="modal-ov" id="modalEditar" onclick="fecharSeOverlay(event)">
+    <div class="modal-edit">
+        <h2>✏️ Editar Perfil</h2>
+        <div class="campo-edit"><label>Nome Completo</label><input type="text" id="editNome"></div>
+        <div class="campo-edit"><label>Telefone</label><input type="tel" id="editTel"></div>
+        <div class="campo-edit"><label>Idade</label><input type="number" id="editIdade" min="18"></div>
+        <div class="modal-btns">
+            <button class="btn-cancelar" onclick="fecharEditar()">Cancelar</button>
+            <button class="btn-guardar" onclick="guardarEdicao()">
+                <i class="ph ph-check"></i> Guardar
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="../js/auth.js"></script>
+<script>
+    // Verificar sessão
+    if (!estaLogado()) {
+        window.location.href = '../abas/cadastroAngo.html';
+    }
+
+    const user = obterUtilizador();
+    const foto = localStorage.getItem('angomovel_foto');
+
+    // Preencher hero
+    document.getElementById('perfilNome').textContent  = user?.nome  || 'Utilizador';
+    document.getElementById('perfilEmail').textContent = user?.email || '—';
+    document.getElementById('avatarGrande').textContent = (user?.nome || 'U')[0].toUpperCase();
+
+    if (foto) {
+        document.getElementById('avatarGrande').innerHTML =
+            `<img src="${foto}" style="width:100%;height:100%;object-fit:cover;">`;
+    }
+
+    // Preencher informações
+    document.getElementById('infoNome').textContent   = user?.nome     || '—';
+    document.getElementById('infoEmail').textContent  = user?.email    || '—';
+    document.getElementById('infoTel').textContent    = user?.telefone || '—';
+    document.getElementById('infoIdade').textContent  = user?.idade    ? `${user.idade} anos` : '—';
+    document.getElementById('infoGenero').textContent = user?.genero   || '—';
+    document.getElementById('infoRole').textContent   = user?.role     || '—';
+
+    // Tabs
+    function mudarTab(tab) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('ativo'));
+        document.querySelectorAll('.perfil-tab').forEach(t => t.classList.remove('ativo'));
+        document.getElementById(tab === 'info' ? 'tabInfo' : 'tabFavoritos').classList.add('ativo');
+        document.querySelectorAll('.perfil-tab')[tab === 'info' ? 0 : 1].classList.add('ativo');
+        if (tab === 'favoritos') carregarFavoritos();
+    }
+
+    if (window.location.hash === '#favoritos') mudarTab('favoritos');
+
+    // Favoritos
+    function carregarFavoritos() {
+        const favs  = obterFavoritos();
+        const grid  = document.getElementById('favsGrid');
+        const count = document.getElementById('countFavs');
+        if (count) count.textContent = favs.length;
+
+        if (favs.length === 0) {
+            grid.innerHTML = `
+                <div class="vazio" style="grid-column:span 3; text-align:center; padding:60px 20px; color:#888;">
+                    <i class="ph ph-heart" style="font-size:48px; opacity:0.2; display:block; margin-bottom:12px;"></i>
+                    <h3>Ainda sem favoritos</h3>
+                    <p>Explora os <a href="../abas/destino.html">destinos</a> e guarda os que mais gostas!</p>
+                </div>`;
+            return;
+        }
+
+        grid.innerHTML = favs.map((f, i) => `
+            <div class="fav-card">
+                <img src="${f.imagem || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80'}"
+                     alt="${f.nome}" loading="lazy"
+                     onerror="this.src='https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80'">
+                <div class="fav-overlay">
+                    <div class="fav-nome">${f.nome}</div>
+                    <div class="fav-local">📍 ${f.localizacao || f.local || ''}</div>
+                </div>
+                <button class="btn-remover-fav" onclick="removerFav(${i})">
+                    <i class="ph-fill ph-heart-break"></i>
+                </button>
+            </div>
+        `).join('');
+    }
+
+    function removerFav(idx) {
+        const favs = obterFavoritos();
+        const nome = favs[idx]?.nome;
+        favs.splice(idx, 1);
+        localStorage.setItem('angomovel_favoritos', JSON.stringify(favs));
+        mostrarToastGlobal(`❌ ${nome} removido dos favoritos`);
+        carregarFavoritos();
+    }
+
+    // Editar perfil
+    function abrirEditar() {
+        document.getElementById('editNome').value  = user?.nome     || '';
+        document.getElementById('editTel').value   = user?.telefone || '';
+        document.getElementById('editIdade').value = user?.idade    || '';
+        document.getElementById('modalEditar').classList.add('aberto');
+    }
+
+    function fecharEditar() {
+        document.getElementById('modalEditar').classList.remove('aberto');
+    }
+
+    function fecharSeOverlay(e) {
+        if (e.target === document.getElementById('modalEditar')) fecharEditar();
+    }
+
+    function guardarEdicao() {
+        const userActual = obterUtilizador();
+        userActual.nome     = document.getElementById('editNome').value.trim()  || userActual.nome;
+        userActual.telefone = document.getElementById('editTel').value.trim()   || userActual.telefone;
+        userActual.idade    = parseInt(document.getElementById('editIdade').value) || userActual.idade;
+
+        localStorage.setItem('angomovel_user', JSON.stringify(userActual));
+
+        document.getElementById('perfilNome').textContent  = userActual.nome;
+        document.getElementById('infoNome').textContent    = userActual.nome;
+        document.getElementById('infoTel').textContent     = userActual.telefone || '—';
+        document.getElementById('infoIdade').textContent   = userActual.idade ? `${userActual.idade} anos` : '—';
+
+        fecharEditar();
+        mostrarToastGlobal('✅ Perfil actualizado com sucesso!');
+    }
+</script>
+
+</body>
+</html>

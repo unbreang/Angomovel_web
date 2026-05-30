@@ -57,4 +57,27 @@ export class UsersController {
   async desativar(@Param('id') id: string) {
     return this.usersService.desativar(id);
   }
+  // ── PATCH /api/v1/users/:id/ativar ── empresa activa guia
+@Patch(':id/ativar')
+async ativarGuia(@Param('id') id: string, @Request() req) {
+    return this.usersService.ativarGuia(id, req.user.id);
+}
+
+// ── PATCH /api/v1/users/:id/desativar ── empresa desactiva guia
+@Patch(':id/desativar')
+async desativarGuia(@Param('id') id: string, @Request() req) {
+    return this.usersService.desativarGuia(id, req.user.id);
+}
+
+// ── GET /api/v1/users/guias/todos ── todos os guias (para empresa)
+@Get('guias/todos')
+async todosGuias() {
+    return this.usersService.listarTodosGuias();
+}
+
+// ── GET /api/v1/users/guias/empresa ── guias da minha empresa
+@Get('guias/empresa')
+async guiasDaEmpresa(@Request() req) {
+    return this.usersService.listarGuiasDaEmpresa(req.user.id);
+}
 }

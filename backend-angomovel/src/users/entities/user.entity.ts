@@ -8,19 +8,25 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 
-// ── Tipos de utilizador ──
 export enum UserRole {
   CLIENTE  = 'cliente',
   GUIA     = 'guia',
   EMPRESA  = 'empresa',
 }
 
-// ── Género ──
 export enum Genero {
-  MASCULINO       = 'masculino',
-  FEMININO        = 'feminino',
-  NAO_BINARIO     = 'nao-binario',
-  NAO_DIZER       = 'prefiro-nao-dizer',
+  MASCULINO   = 'masculino',
+  FEMININO    = 'feminino',
+  NAO_BINARIO = 'nao-binario',
+  NAO_DIZER   = 'prefiro-nao-dizer',
+}
+
+export enum EstadoGuia {
+  PENDENTE     = 'pendente',     // cadastrado, aguarda activação
+  ACTIVO       = 'activo',       // empresa activou, aparece no app
+  INACTIVO     = 'inactivo',     // empresa desactivou
+  DISPONIVEL   = 'disponivel',   // activo e sem reservas em curso
+  INDISPONIVEL = 'indisponivel', // em actividade com cliente
 }
 
 @Entity('users')
@@ -35,7 +41,7 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column({ select: false }) // nunca retorna a senha nas queries
+  @Column({ select: false })
   senha: string;
 
   @Column({ nullable: true, length: 20 })
@@ -44,18 +50,10 @@ export class User {
   @Column({ nullable: true })
   idade: number;
 
-  @Column({
-    type: 'enum',
-    enum: Genero,
-    nullable: true,
-  })
+  @Column({ type: 'enum', enum: Genero, nullable: true })
   genero: Genero;
 
-  @Column({
-    type: 'enum',
-    enum: UserRole,
-    default: UserRole.CLIENTE,
-  })
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.CLIENTE })
   role: UserRole;
 
   @Column({ nullable: true })
@@ -64,7 +62,7 @@ export class User {
   @Column({ default: true })
   ativo: boolean;
 
-  // ── Campos específicos do GUIA ──
+  // ── Campos do GUIA ──
   @Column({ nullable: true })
   especialidade: string;
 
@@ -80,10 +78,28 @@ export class User {
   @Column({ nullable: true, type: 'text' })
   bio: string;
 
-  @Column({ nullable: true, default: 0 })
+  @Column({ nullable: true, default: 0, type: 'float' })
   avaliacao: number;
 
-  // ── Campos específicos da EMPRESA ──
+  @Column({ nullable: true, default: 0 })
+  total_avaliacoes: number;
+
+  @Column({
+    type: 'enum',
+    enum: EstadoGuia,
+    default: EstadoGuia.PENDENTE,
+    nullable: true,
+  })
+  estado_guia: EstadoGuia;
+
+  // Empresa que activou este guia
+  @Column({ nullable: true })
+  empresa_id: string;
+
+  @Column({ nullable: true })
+  empresa_nome: string;
+
+  // ── Campos da EMPRESA ──
   @Column({ nullable: true })
   nome_empresa: string;
 
@@ -105,7 +121,6 @@ export class User {
   @UpdateDateColumn()
   atualizado_em: Date;
 
-  // ── Hash da senha antes de guardar ──
   @BeforeInsert()
   async hashSenha() {
     if (this.senha) {
@@ -113,7 +128,6 @@ export class User {
     }
   }
 
-  // ── Verificar senha ──
   async verificarSenha(senhaPlana: string): Promise<boolean> {
     return bcrypt.compare(senhaPlana, this.senha);
   }

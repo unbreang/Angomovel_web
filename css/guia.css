@@ -33,6 +33,14 @@
     padding: 0 30px 60px;
 }
 
+.guia-preco{
+    color:black;
+}
+
+.guia-item{
+    background-color:#666;
+}
+
 .hero-texto h1 {
     font-size: 46px;
     font-weight: 800;
