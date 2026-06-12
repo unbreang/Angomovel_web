@@ -9,35 +9,40 @@ const destinos = [
         id: 1,
         nome: "Ilha do Mussulo",
         localizacao: "Luanda",
-        imagem: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80",
+        tipo: "video",
+        media: "assets/stock-footage-mussulo-beach-pier-island-luanda-angola.webm",
         visitas: 12450
     },
     {
         id: 2,
         nome: "Quedas de Calandula",
         localizacao: "Malanje",
-        imagem: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=600&q=80",
+        tipo: "imagem",
+        media: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=600&q=80",
         visitas: 8750
     },
     {
         id: 3,
         nome: "Parque Nacional da Iona",
         localizacao: "Namibe",
-        imagem: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=600&q=80",
+        tipo: "imagem",
+        media: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=600&q=80",
         visitas: 5430
     },
     {
         id: 4,
         nome: "Fenda da Tundavala",
         localizacao: "Huíla",
-        imagem: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80",
+        tipo: "imagem",
+        media: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80",
         visitas: 3210
     },
     {
         id: 5,
         nome: "Epic Sana Luanda",
         localizacao: "Luanda",
-        imagem: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600&q=80",
+        tipo: "imagem", 
+        media: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600&q=80",
         visitas: 4003
     }
 ];
@@ -108,15 +113,25 @@ function carregarDestinos() {
 
     container.innerHTML = destinos.map((d, i) => `
         <div class="destino-card" onclick="window.location.href='abas/destino.html'">
-            <img
-                src="${d.imagem}"
-                alt="${d.nome}"
-                loading="lazy"
-                onerror="this.src='https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80'"
-            >
+             ${
+                d.tipo === "video"
+                ? `
+                    <video autoplay muted loop playsinline>
+                        <source src="${d.media}" type="video/mp4">
+                    </video>
+                `
+                : `
+                    <img
+                        src="${d.media}"
+                        alt="${d.nome}"
+                        loading="lazy"
+                    >
+                `
+            }
             <div class="destino-overlay">
                 <h3 class="destino-nome">${d.nome}</h3>
-                <p class="destino-local">📍 ${d.localizacao}</p>
+                <p class="destino-local"> ${d.localizacao}</p>
+
                 <div class="destino-stats">
                     <span>👁️ ${formatarVisitas(d.visitas)} visitas</span>
                     <span>❤️ ${formatarVisitas(Math.floor(d.visitas * 0.3))} favoritos</span>
@@ -152,7 +167,7 @@ function carregarGuias() {
                     ${formatarPreco(g.preco)} <span>/dia</span>
                 </div>
                 <button class="btn-hire" onclick="event.stopPropagation(); window.location.href='abas/guia.html'">
-                    📅 Agendar Agora
+                     Agendar Agora
                 </button>
             </div>
         </div>

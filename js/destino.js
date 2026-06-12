@@ -1,392 +1,485 @@
 // ============================================================
-// DESTINO.JS — Mapa interativo de Angola com sistema de
-// favoritos linkado com a aba Destinos
+// DESTINO.JS — Mapa Dinâmico AngoMovel
+// Leaflet + OpenStreetMap + Nominatim + OSRM
 // ============================================================
 
-// ── Dados dos destinos ──
-const destinos = [
-    {
-        id: 1,
-        nome: "Ilha de Luanda",
-        cidade: "Luanda",
-        coordenadas: [-8.7833, 13.2833],
-        descricao: "Principal ponto turístico da capital, com praias, restaurantes e vida noturna",
-        tipo: "praia",
-        icone: "🏖️",
-        info: "Acesso por ponte, muitos quiosques e hotéis"
-    },
-    {
-        id: 2,
-        nome: "Praia Morena",
-        cidade: "Benguela",
-        coordenadas: [-12.5833, 13.4167],
-        descricao: "Águas claras e tranquilas, ideal para famílias",
-        tipo: "praia",
-        icone: "🏝️",
-        info: "Boa infraestrutura, estacionamento disponível"
-    },
-    {
-        id: 3,
-        nome: "Serra da Leba",
-        cidade: "Namibe",
-        coordenadas: [-15.0833, 13.2667],
-        descricao: "Estrada montanhosa com paisagens deslumbrantes",
-        tipo: "montanha",
-        icone: "⛰️",
-        info: "Vista panorâmica, ótimo para fotos"
-    },
-    {
-        id: 4,
-        nome: "Praia do Sonho",
-        cidade: "Namibe",
-        coordenadas: [-15.1667, 12.1500],
-        descricao: "Uma das mais belas praias de Angola",
-        tipo: "praia",
-        icone: "🌊",
-        info: "Natureza preservada, águas cristalinas"
-    },
-    {
-        id: 5,
-        nome: "Restinga",
-        cidade: "Lobito",
-        coordenadas: [-12.3500, 13.5500],
-        descricao: "Península com praias urbanas e calçadão",
-        tipo: "praia",
-        icone: "🌅",
-        info: "Por do sol espetacular, bares e restaurantes"
-    },
-    {
-        id: 6,
-        nome: "Sangano",
-        cidade: "Luanda",
-        coordenadas: [-9.5833, 13.1500],
-        descricao: "Praia famosa para surf e esportes aquáticos",
-        tipo: "praia",
-        icone: "🏄",
-        info: "Ondas fortes, escola de surf disponível"
-    },
-    {
-        id: 7,
-        nome: "Fenda da Tundavala",
-        cidade: "Huíla",
-        coordenadas: [-14.8167, 13.2333],
-        descricao: "Desfiladeiro com vista impressionante",
-        tipo: "natureza",
-        icone: "🏞️",
-        info: "Mirante natural, trekking e fotografia"
-    },
-    {
-        id: 8,
-        nome: "Caota",
-        cidade: "Namibe",
-        coordenadas: [-15.0333, 12.2167],
-        descricao: "Praia selvagem cercada por falésias",
-        tipo: "praia",
-        icone: "🏜️",
-        info: "Acesso 4x4 recomendado, natureza intocada"
-    }
+// ── Destinos turísticos de Angola ──
+const destinosAngola = [
+    { id: 1,  nome: 'Ilha do Mussulo',                lat: -9.0,    lng: 13.1667, cidade: 'Luanda',   desc: 'Península paradisíaca com praias deslumbrantes e águas cristalinas.', emoji: '🏖️', categoria: 'praia' },
+    { id: 2,  nome: 'Quedas de Calandula',            lat: -9.0856, lng: 15.9533, cidade: 'Malanje',  desc: 'Uma das maiores cataratas de África com 105m de altura.', emoji: '💧', categoria: 'natureza' },
+    { id: 3,  nome: 'Parque Nacional da Iona',        lat: -16.633, lng: 12.383,  cidade: 'Namibe',   desc: 'Maior parque nacional de Angola com paisagens desérticas únicas.', emoji: '🦁', categoria: 'parque' },
+    { id: 4,  nome: 'Fenda da Tundavala',             lat: -14.916, lng: 13.5,    cidade: 'Huíla',    desc: 'Vista deslumbrante da Serra da Leba a 2.300m de altitude.', emoji: '🏔️', categoria: 'natureza' },
+    { id: 5,  nome: 'Pedras Negras de Pungo Andongo', lat: -9.683,  lng: 15.716,  cidade: 'Malanje',  desc: 'Maravilha geológica com rochas de granito gigantes.', emoji: '🗿', categoria: 'cultura' },
+    { id: 6,  nome: 'Lagoa Carumbo',                  lat: -8.333,  lng: 19.666,  cidade: 'Lunda Norte', desc: 'Lagoa paradisíaca no coração do Leste angolano.', emoji: '💎', categoria: 'natureza' },
+    { id: 7,  nome: 'Luanda',                         lat: -8.836,  lng: 13.234,  cidade: 'Luanda',   desc: 'Capital vibrante com baía, fortaleza e cultura única.', emoji: '🏙️', categoria: 'cidade' },
+    { id: 8,  nome: 'Benguela',                       lat: -12.576, lng: 13.405,  cidade: 'Benguela', desc: 'Cidade histórica do litoral com belas praias.', emoji: '🌊', categoria: 'praia' },
+    { id: 9,  nome: 'Namibe',                         lat: -15.196, lng: 12.152,  cidade: 'Namibe',   desc: 'Portal do deserto com paisagens lunares únicas.', emoji: '🏜️', categoria: 'natureza' },
+    { id: 10, nome: 'Malanje',                        lat: -9.540,  lng: 16.341,  cidade: 'Malanje',  desc: 'Cidade histórica próxima das Pedras Negras.', emoji: '🪨', categoria: 'cidade' },
+    { id: 11, nome: 'Huambo',                         lat: -12.775, lng: 15.736,  cidade: 'Huambo',   desc: 'Cidade do planalto central com clima fresco.', emoji: '🚂', categoria: 'cidade' },
+    { id: 12, nome: 'Cabinda',                        lat: -5.547,  lng: 12.188,  cidade: 'Cabinda',  desc: 'Enclave com floresta tropical rica em biodiversidade.', emoji: '🌴', categoria: 'natureza' },
+    { id: 13, nome: 'Morro do Môco',                  lat: -11.366, lng: 14.866,  cidade: 'Huambo',   desc: 'Ponto mais alto de Angola com 2.620 metros.', emoji: '⛰️', categoria: 'natureza' },
+    { id: 14, nome: 'Floresta do Mayombe',            lat: -4.9,    lng: 12.5,    cidade: 'Cabinda',  desc: 'Floresta tropical densa com fauna e flora ricas.', emoji: '🌿', categoria: 'natureza' },
+    { id: 15, nome: 'Mbanza Kongo',                   lat: -6.266,  lng: 14.25,   cidade: 'Zaire',    desc: 'Antiga capital do Reino do Kongo, Património UNESCO.', emoji: '🏛️', categoria: 'cultura' },
 ];
 
-// ── Variáveis globais ──
-let mapa;
-let marcadores = [];
-let rotaAtual = null;
-let transporteAtual = 'car';
-let destinoSelecionado = null;
+// ── Estado ──
+let mapa, routingControl, marcadorUser;
+let tipoTransporte = 'car';
+let timeoutPesq    = null;
+let destinoActivo  = null;
+let marcadores     = [];
 
-// ── Sistema de Favoritos (3 tipos) ──
-// favorito: ❤️ | visitar: 📍 | guia: 🧭
-const TIPOS_FAV = { favorito: 'favorito', visitar: 'visitar', guia: 'guia' };
+// ── Inicializar mapa ──
+document.addEventListener('DOMContentLoaded', () => {
+    inicializarMapa();
+    carregarDestinos();
+    carregarDestaques();
+    carregarFavoritos();
+    preencherDatalist();
+});
 
-function carregarFavoritosStorage() {
-    try {
-        return JSON.parse(localStorage.getItem('angomovel_favoritos')) || {};
-    } catch { return {}; }
+function inicializarMapa() {
+    mapa = L.map('mapa', {
+        center: [-11.2027, 17.8739],
+        zoom: 6,
+        zoomControl: false,
+    });
+
+    // Controlo de zoom à direita
+    L.control.zoom({ position: 'bottomright' }).addTo(mapa);
+
+    // Tiles OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19,
+    }).addTo(mapa);
+
+    // Adicionar marcadores
+    destinosAngola.forEach(d => adicionarMarcador(d));
 }
 
-function salvarFavoritosStorage(favs) {
-    localStorage.setItem('angomovel_favoritos', JSON.stringify(favs));
+// ── Ícones ──
+function criarIcone(cor = '#E8192C') {
+    return L.divIcon({
+        html: `<div style="
+            width:26px;height:26px;
+            background:${cor};
+            border-radius:50% 50% 50% 0;
+            transform:rotate(-45deg);
+            border:2px solid #fff;
+            box-shadow:0 2px 8px rgba(0,0,0,0.35);
+        "></div>`,
+        iconSize: [26, 26], iconAnchor: [13, 26], popupAnchor: [0, -28],
+        className: '',
+    });
 }
 
-function toggleFavorito(destinoId, tipo) {
-    const favs = carregarFavoritosStorage();
-    if (!favs[destinoId]) favs[destinoId] = {};
+const iconeUser = L.divIcon({
+    html: `<div style="
+        width:22px;height:22px;
+        background:#4CAF50;border-radius:50%;
+        border:3px solid #fff;
+        box-shadow:0 2px 8px rgba(0,0,0,0.3);
+    "></div>`,
+    iconSize: [22, 22], iconAnchor: [11, 11],
+    className: '',
+});
 
-    if (favs[destinoId][tipo]) {
-        delete favs[destinoId][tipo];
-        if (Object.keys(favs[destinoId]).length === 0) delete favs[destinoId];
-        mostrarToast(mensagemToast(tipo, false));
-    } else {
-        favs[destinoId][tipo] = true;
-        mostrarToast(mensagemToast(tipo, true));
+// ── Adicionar marcador no mapa ──
+function adicionarMarcador(d) {
+    const m = L.marker([d.lat, d.lng], { icon: criarIcone() })
+        .addTo(mapa)
+        .bindPopup(criarPopup(d), { maxWidth: 240 });
 
-        // Se marcou como "visitar" → adiciona à rota automática
-        if (tipo === TIPOS_FAV.visitar) {
-            adicionarAosDestaques(destinoId);
+    m.on('click', () => destacarItem(d.id));
+    marcadores.push({ id: d.id, marcador: m });
+}
+
+function criarPopup(d) {
+    const favs = obterFavoritos();
+    const isFav = favs.some(f => f.id === d.id);
+    return `
+        <div style="font-family:sans-serif;min-width:200px;">
+            <div style="font-size:22px;margin-bottom:4px;">${d.emoji}</div>
+            <strong style="font-size:14px;color:#E8192C;">${d.nome}</strong><br>
+            <span style="font-size:11px;color:#888;">📍 ${d.cidade}</span><br>
+            <p style="font-size:12px;color:#555;margin:6px 0;line-height:1.5;">${d.desc}</p>
+            <div style="display:flex;gap:6px;margin-top:8px;">
+                <button onclick="usarComoDestino('${d.nome}')"
+                    style="flex:1;background:#E8192C;color:#fff;border:none;padding:7px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;">
+                    🧭 Ir para aqui
+                </button>
+                <button onclick="toggleFavMapa(${d.id}, '${d.nome}', '${d.cidade}')"
+                    id="favBtn${d.id}"
+                    style="background:${isFav ? '#E8192C' : '#f5f5f5'};color:${isFav ? '#fff' : '#333'};border:none;padding:7px 10px;border-radius:6px;cursor:pointer;font-size:14px;">
+                    ${isFav ? '❤️' : '🤍'}
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+// ── Carregar lista de destinos na sidebar ──
+function carregarDestinos() {
+    const lista = document.getElementById('destinosLista');
+    lista.innerHTML = destinosAngola.map(d => `
+        <div class="destino-item" id="item-${d.id}" onclick="focarDestino(${d.id})">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span style="font-size:20px;">${d.emoji}</span>
+                <h4>${d.nome}</h4>
+            </div>
+            <div class="cidade">${d.cidade}</div>
+            <div class="descricao">${d.desc}</div>
+            <div style="display:flex;gap:6px;margin-top:8px;">
+                <button onclick="event.stopPropagation(); usarComoDestino('${d.nome}')"
+                    style="flex:1;padding:6px;background:#E8192C;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;">
+                    🧭 Usar como destino
+                </button>
+                <button onclick="event.stopPropagation(); toggleFavMapa(${d.id}, '${d.nome}', '${d.cidade}')"
+                    id="favSide${d.id}"
+                    style="padding:6px 10px;background:#f5f5f5;border:none;border-radius:6px;cursor:pointer;font-size:13px;">
+                    ${obterFavoritos().some(f => f.id === d.id) ? '❤️' : '🤍'}
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ── Focar num destino ──
+function focarDestino(id) {
+    const d = destinosAngola.find(d => d.id === id);
+    if (!d) return;
+
+    destinoActivo = id;
+
+    // Ir para o marcador
+    mapa.setView([d.lat, d.lng], 12, { animate: true });
+
+    // Abrir popup
+    const m = marcadores.find(m => m.id === id);
+    if (m) m.marcador.openPopup();
+
+    // Destacar item na sidebar
+    document.querySelectorAll('.destino-item').forEach(el => el.classList.remove('ativo'));
+    document.getElementById(`item-${id}`)?.classList.add('ativo');
+    document.getElementById(`item-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function destacarItem(id) {
+    document.querySelectorAll('.destino-item').forEach(el => el.classList.remove('ativo'));
+    document.getElementById(`item-${id}`)?.classList.add('ativo');
+    document.getElementById(`item-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ── Destaques no mapa ──
+function carregarDestaques() {
+    const destaques = destinosAngola.slice(0, 5);
+    document.getElementById('destaquesList').innerHTML = destaques.map(d => `
+        <div class="destaque-item" onclick="focarDestino(${d.id})">
+            ${d.emoji} ${d.nome}
+        </div>
+    `).join('');
+}
+
+// ── Preenchimento dos datalists ──
+function preencherDatalist() {
+    const nomes = destinosAngola.map(d => `<option value="${d.nome}">`).join('');
+    document.getElementById('origemSugestoes').innerHTML  = nomes;
+    document.getElementById('destinoSugestoes').innerHTML = nomes;
+}
+
+// ── Pesquisa dinâmica (Nominatim) ──
+function pesquisar() {
+    const texto = document.getElementById('inputPesquisa').value.trim();
+    const sugestoesEl = document.getElementById('sugestoes');
+    const btnLimpar = document.getElementById('btnLimparPesq');
+
+    btnLimpar.style.display = texto ? 'flex' : 'none';
+    clearTimeout(timeoutPesq);
+
+    // Primeiro filtra localmente
+    if (texto.length >= 2) {
+        const local = destinosAngola.filter(d =>
+            d.nome.toLowerCase().includes(texto.toLowerCase()) ||
+            d.cidade.toLowerCase().includes(texto.toLowerCase())
+        );
+
+        if (local.length > 0) {
+            sugestoesEl.style.display = 'block';
+            sugestoesEl.innerHTML = local.map(d => `
+                <div class="sugestao-item" onclick="focarDestino(${d.id})">
+                    ${d.emoji} <strong>${d.nome}</strong> — ${d.cidade}
+                </div>
+            `).join('');
+            return;
         }
     }
 
-    salvarFavoritosStorage(favs);
-    atualizarBotoesFav(destinoId);
-    atualizarDestaques();
+    // Depois pesquisa online (Nominatim)
+    if (texto.length >= 3) {
+        timeoutPesq = setTimeout(async () => {
+            try {
+                const res  = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(texto + ' Angola')}&format=json&limit=5&accept-language=pt`);
+                const data = await res.json();
+
+                if (!data.length) { sugestoesEl.style.display = 'none'; return; }
+
+                sugestoesEl.style.display = 'block';
+                sugestoesEl.innerHTML = data.map(item => `
+                    <div class="sugestao-item" onclick="irParaCoordenadas(${item.lat}, ${item.lon}, '${item.display_name.split(',')[0].replace(/'/g, "\\'")}')">
+                        📍 ${item.display_name.split(',').slice(0,2).join(',')}
+                    </div>
+                `).join('');
+            } catch (e) { sugestoesEl.style.display = 'none'; }
+        }, 500);
+    } else {
+        sugestoesEl.style.display = 'none';
+    }
 }
 
-function isFavorito(destinoId, tipo) {
-    const favs = carregarFavoritosStorage();
-    return !!(favs[destinoId] && favs[destinoId][tipo]);
+function irParaCoordenadas(lat, lng, nome) {
+    mapa.setView([lat, lng], 13, { animate: true });
+    document.getElementById('sugestoes').style.display = 'none';
+    document.getElementById('inputPesquisa').value = nome;
+
+    L.marker([lat, lng], { icon: criarIcone('#D4A017') })
+        .addTo(mapa)
+        .bindPopup(`<strong>${nome}</strong>`)
+        .openPopup();
 }
 
-function mensagemToast(tipo, adicionado) {
-    const emojis = { favorito: '❤️', visitar: '📍', guia: '🧭' };
-    const labels = { favorito: 'Favorito', visitar: 'Visitar', guia: 'Para o Guia' };
-    return adicionado
-        ? `${emojis[tipo]} Adicionado a "${labels[tipo]}"`
-        : `${emojis[tipo]} Removido de "${labels[tipo]}"`;
+function limparPesquisa() {
+    document.getElementById('inputPesquisa').value = '';
+    document.getElementById('sugestoes').style.display = 'none';
+    document.getElementById('btnLimparPesq').style.display = 'none';
 }
 
-function mostrarToast(msg) {
-    const existing = document.querySelector('.toast-fav');
-    if (existing) existing.remove();
-
-    const toast = document.createElement('div');
-    toast.className = 'toast-fav';
-    toast.textContent = msg;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 2200);
+// ── Usar como destino ──
+function usarComoDestino(nome) {
+    document.getElementById('destinoInput').value = nome;
+    mostrarStatus(`🏁 Destino definido: ${nome}`, 'ok');
 }
 
-function atualizarBotoesFav(destinoId) {
-    const btns = document.querySelectorAll(`[data-fav-id="${destinoId}"]`);
-    btns.forEach(btn => {
-        const tipo = btn.dataset.favTipo;
-        btn.classList.toggle('ativo', isFavorito(destinoId, tipo));
-    });
+// ── Selecionar transporte ──
+function selTransporte(tipo, btn) {
+    tipoTransporte = tipo;
+    document.querySelectorAll('.transporte-btn').forEach(b => b.classList.remove('ativo'));
+    btn.classList.add('ativo');
+    if (routingControl) calcularRota(); // recalcular se já existe rota
 }
 
-// ── Destaques (lugares marcados como "Visitar") ──
-function adicionarAosDestaques(destinoId) {
-    atualizarDestaques();
-}
+// ── Calcular rota ──
+async function calcularRota() {
+    const origemTexto  = document.getElementById('origemInput').value.trim();
+    const destinoTexto = document.getElementById('destinoInput').value.trim();
 
-function atualizarDestaques() {
-    const favs = carregarFavoritosStorage();
-    const container = document.getElementById('destaquesList');
-    if (!container) return;
-
-    const paraVisitar = Object.keys(favs).filter(id => favs[id][TIPOS_FAV.visitar]);
-
-    if (paraVisitar.length === 0) {
-        container.innerHTML = '<span style="font-size:11px;color:#999;">Marque destinos para visitar</span>';
+    if (!origemTexto || !destinoTexto) {
+        mostrarStatus('⚠️ Preenche a origem e o destino!', 'erro');
         return;
     }
 
-    container.innerHTML = paraVisitar.map(id => {
-        const d = destinos.find(dest => dest.id === parseInt(id));
-        if (!d) return '';
-        return `<div class="destaque-item" onclick="selecionarDestino(${d.id})">
-            ${d.icone} ${d.nome}
-        </div>`;
-    }).join('');
-}
+    mostrarStatus('🔄 A calcular rota...', '');
 
-// ── Inicializar mapa ──
-function initMap() {
-    mapa = L.map('mapa').setView([-12.5, 17.5], 6);
+    try {
+        // Geocodificar os dois pontos
+        const [resO, resD] = await Promise.all([
+            fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(origemTexto + ' Angola')}&format=json&limit=1`),
+            fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(destinoTexto + ' Angola')}&format=json&limit=1`),
+        ]);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-        maxZoom: 18
-    }).addTo(mapa);
+        const [dataO, dataD] = await Promise.all([resO.json(), resD.json()]);
 
-    L.control.zoom({ position: 'topright' }).addTo(mapa);
-    L.control.scale({ imperial: false, metric: true, position: 'bottomleft' }).addTo(mapa);
+        if (!dataO.length) { mostrarStatus(`❌ "${origemTexto}" não encontrado`, 'erro'); return; }
+        if (!dataD.length) { mostrarStatus(`❌ "${destinoTexto}" não encontrado`, 'erro'); return; }
 
-    carregarDestinos();
-    preencherSelects();
-    atualizarDestaques();
-}
+        const ptO = L.latLng(parseFloat(dataO[0].lat), parseFloat(dataO[0].lon));
+        const ptD = L.latLng(parseFloat(dataD[0].lat), parseFloat(dataD[0].lon));
 
-// ── Carregar destinos no mapa e na lista ──
-function carregarDestinos() {
-    const listaContainer = document.getElementById('destinosLista');
-    listaContainer.innerHTML = '';
+        // Perfil de transporte
+        const perfis = { car: 'car', bike: 'bike', foot: 'foot' };
+        const perfil = perfis[tipoTransporte] || 'car';
 
-    destinos.forEach(destino => {
-        // Marcador personalizado
-        const iconePersonalizado = L.divIcon({
-            html: `<div style="
-                background: white;
-                border-radius: 50%;
-                width: 34px; height: 34px;
-                display: flex; align-items: center; justify-content: center;
-                border: 2px solid #E61C2E;
-                box-shadow: 0 3px 8px rgba(0,0,0,0.25);
-                font-size: 16px;
-            ">${destino.icone}</div>`,
-            className: '',
-            iconSize: [34, 34],
-            iconAnchor: [17, 17]
-        });
+        // Remover rota anterior
+        if (routingControl) mapa.removeControl(routingControl);
 
-        const marcador = L.marker(destino.coordenadas, {
-            icon: iconePersonalizado
+        // Criar rota
+        routingControl = L.Routing.control({
+            waypoints: [ptO, ptD],
+            routeWhileDragging: true,
+            showAlternatives: true,
+            router: L.Routing.osrmv1({
+                serviceUrl: `https://router.project-osrm.org/route/v1`,
+                profile: perfil,
+            }),
+            lineOptions: {
+                styles: [{ color: '#E8192C', weight: 5, opacity: 0.85 }],
+            },
+            altLineOptions: {
+                styles: [{ color: '#F0B429', weight: 3, opacity: 0.6 }],
+            },
+            createMarker: (i, wp) => {
+                return L.marker(wp.latLng, {
+                    icon: L.divIcon({
+                        html: `<div style="
+                            width:32px;height:32px;
+                            background:${i === 0 ? '#4CAF50' : '#E8192C'};
+                            border-radius:50%;border:3px solid #fff;
+                            display:flex;align-items:center;justify-content:center;
+                            color:#fff;font-weight:900;font-size:15px;
+                            box-shadow:0 2px 10px rgba(0,0,0,0.3);
+                        ">${i === 0 ? 'A' : 'B'}</div>`,
+                        iconSize: [32,32], iconAnchor: [16,16], className: '',
+                    })
+                });
+            },
+            collapsible: true,
         }).addTo(mapa);
 
-        marcador.bindPopup(`
-            <div class="popup-conteudo">
-                <h4>${destino.icone} ${destino.nome}</h4>
-                <p><strong>📍 ${destino.cidade}</strong></p>
-                <p>${destino.descricao}</p>
-                <p><small>${destino.info}</small></p>
-            </div>
-        `);
+        // Quando a rota for calculada
+        routingControl.on('routesfound', e => {
+            const rota  = e.routes[0].summary;
+            const dist  = (rota.totalDistance / 1000).toFixed(1);
+            const mins  = Math.round(rota.totalTime / 60);
+            const horas = Math.floor(mins / 60);
+            const minR  = mins % 60;
+            const tempo = horas > 0 ? `${horas}h ${minR}min` : `${minR} min`;
 
-        marcador.on('click', () => selecionarDestino(destino.id));
-        marcadores.push({ id: destino.id, marcador, dados: destino });
+            // Mostrar info
+            document.getElementById('rotaOrigem').textContent   = origemTexto;
+            document.getElementById('rotaDestino').textContent  = destinoTexto;
+            document.getElementById('rotaDistancia').textContent = `${dist} km`;
+            document.getElementById('rotaTempo').textContent    = tempo;
+            document.getElementById('rotaInfo').classList.add('mostrar');
 
-        // Item na lista lateral
-        const el = document.createElement('div');
-        el.className = 'destino-item';
-        el.dataset.id = destino.id;
-        el.onclick = () => selecionarDestino(destino.id);
+            mostrarStatus(`✅ Rota calculada: ${dist} km • ${tempo}`, 'ok');
+        });
 
-        el.innerHTML = `
-            <h4>${destino.icone} ${destino.nome}</h4>
-            <div class="cidade">${destino.cidade}</div>
-            <div class="descricao">${destino.descricao}</div>
-            <div class="coordenadas">Lat: ${destino.coordenadas[0].toFixed(4)}, Long: ${destino.coordenadas[1].toFixed(4)}</div>
-            <div class="fav-btns" onclick="event.stopPropagation()">
-                <button class="btn-fav tipo-favorito ${isFavorito(destino.id, 'favorito') ? 'ativo' : ''}"
-                    data-fav-id="${destino.id}" data-fav-tipo="favorito"
-                    data-tooltip="Favorito"
-                    onclick="toggleFavorito(${destino.id}, 'favorito')">❤️</button>
-                <button class="btn-fav tipo-visitar ${isFavorito(destino.id, 'visitar') ? 'ativo' : ''}"
-                    data-fav-id="${destino.id}" data-fav-tipo="visitar"
-                    data-tooltip="Quero Visitar"
-                    onclick="toggleFavorito(${destino.id}, 'visitar')">📍</button>
-                <button class="btn-fav tipo-guia ${isFavorito(destino.id, 'guia') ? 'ativo' : ''}"
-                    data-fav-id="${destino.id}" data-fav-tipo="guia"
-                    data-tooltip="Para o Guia"
-                    onclick="toggleFavorito(${destino.id}, 'guia')">🧭</button>
-            </div>
-        `;
+        routingControl.on('routingerror', () => {
+            mostrarStatus('❌ Não foi possível calcular a rota', 'erro');
+        });
 
-        listaContainer.appendChild(el);
-    });
-}
-
-// ── Preencher selects de rota ──
-function preencherSelects() {
-    const origemSelect = document.getElementById('origem');
-    const destinoSelect = document.getElementById('destino');
-
-    origemSelect.innerHTML = '<option value="">📍 Selecione a origem</option>';
-    destinoSelect.innerHTML = '<option value="">🏁 Selecione o destino</option>';
-
-    destinos.forEach(d => {
-        const opt = `<option value="${d.id}">${d.icone} ${d.nome} — ${d.cidade}</option>`;
-        origemSelect.innerHTML += opt;
-        destinoSelect.innerHTML += opt;
-    });
-}
-
-// ── Selecionar destino ──
-function selecionarDestino(id) {
-    document.querySelectorAll('.destino-item').forEach(i => i.classList.remove('ativo'));
-    const item = document.querySelector(`.destino-item[data-id="${id}"]`);
-    if (item) {
-        item.classList.add('ativo');
-        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } catch (e) {
+        mostrarStatus(`❌ Erro: ${e.message}`, 'erro');
     }
-
-    const marcadorInfo = marcadores.find(m => m.id === id);
-    if (marcadorInfo) {
-        mapa.setView(marcadorInfo.dados.coordenadas, 10);
-        marcadorInfo.marcador.openPopup();
-        destinoSelecionado = marcadorInfo.dados;
-    }
-}
-
-// ── Traçar rota ──
-function tracarRota(origemId, destinoId) {
-    limparRota();
-
-    const origem = destinos.find(d => d.id === parseInt(origemId));
-    const destino = destinos.find(d => d.id === parseInt(destinoId));
-
-    if (!origem || !destino) {
-        mostrarToast('⚠️ Selecione origem e destino válidos');
-        return;
-    }
-
-    rotaAtual = L.Routing.control({
-        waypoints: [
-            L.latLng(origem.coordenadas[0], origem.coordenadas[1]),
-            L.latLng(destino.coordenadas[0], destino.coordenadas[1])
-        ],
-        router: L.Routing.osrmv1({
-            serviceUrl: 'https://router.project-osrm.org/route/v1',
-            profile: transporteAtual
-        }),
-        lineOptions: {
-            styles: [{ color: '#E61C2E', opacity: 0.85, weight: 6 }]
-        },
-        showAlternatives: true,
-        fitSelectedRoutes: true,
-        show: false
-    }).addTo(mapa);
-
-    rotaAtual.on('routesfound', function(e) {
-        const route = e.routes[0];
-        const tempoSeg = route.summary.totalTime;
-        const horas = Math.floor(tempoSeg / 3600);
-        const minutos = Math.floor((tempoSeg % 3600) / 60);
-        let tempoStr = horas > 0 ? `${horas}h ` : '';
-        tempoStr += minutos > 0 ? `${minutos}min` : '< 1min';
-
-        document.getElementById('rotaOrigem').textContent    = `Origem: ${origem.icone} ${origem.nome}`;
-        document.getElementById('rotaDestino').textContent   = `Destino: ${destino.icone} ${destino.nome}`;
-        document.getElementById('rotaDistancia').textContent = `Distância: ${(route.summary.totalDistance / 1000).toFixed(1)} km`;
-        document.getElementById('rotaTempo').textContent     = `Tempo estimado: ${tempoStr}`;
-        document.getElementById('rotaInfo').classList.add('mostrar');
-    });
 }
 
 // ── Limpar rota ──
 function limparRota() {
-    if (rotaAtual) {
-        mapa.removeControl(rotaAtual);
-        rotaAtual = null;
-    }
+    if (routingControl) { mapa.removeControl(routingControl); routingControl = null; }
     document.getElementById('rotaInfo').classList.remove('mostrar');
+    document.getElementById('origemInput').value  = '';
+    document.getElementById('destinoInput').value = '';
+    mostrarStatus('🗑️ Rota removida', '');
 }
 
-// ── Event Listeners ──
-document.addEventListener('DOMContentLoaded', function () {
-    initMap();
+// ── Minha localização ──
+function minhaLocalizacao() {
+    if (!navigator.geolocation) {
+        mostrarStatus('❌ O teu browser não suporta geolocalização', 'erro');
+        return;
+    }
 
-    document.getElementById('traçarRota').addEventListener('click', function () {
-        const origem  = document.getElementById('origem').value;
-        const destino = document.getElementById('destino').value;
-        if (origem && destino) {
-            tracarRota(origem, destino);
-        } else {
-            mostrarToast('⚠️ Selecione origem e destino');
-        }
+    mostrarStatus('📡 A obter localização...', '');
+
+    navigator.geolocation.getCurrentPosition(pos => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+
+        if (marcadorUser) mapa.removeLayer(marcadorUser);
+        marcadorUser = L.marker([lat, lng], { icon: iconeUser })
+            .addTo(mapa)
+            .bindPopup('<strong>📍 A tua localização</strong>')
+            .openPopup();
+
+        mapa.setView([lat, lng], 12, { animate: true });
+        document.getElementById('origemInput').value = 'A minha localização';
+        mostrarStatus('✅ Localização obtida com sucesso!', 'ok');
+
+    }, () => {
+        mostrarStatus('❌ Não foi possível obter a localização', 'erro');
     });
+}
 
-    document.getElementById('limparRota').addEventListener('click', limparRota);
+// ── Favoritos ──
+function obterFavoritos() {
+    return JSON.parse(localStorage.getItem('angomovel_favoritos') || '[]');
+}
 
-    document.querySelectorAll('.transporte-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('.transporte-btn').forEach(b => b.classList.remove('ativo'));
-            this.classList.add('ativo');
-            transporteAtual = this.dataset.transporte;
-            if (rotaAtual) {
-                const origem  = document.getElementById('origem').value;
-                const destino = document.getElementById('destino').value;
-                if (origem && destino) { limparRota(); tracarRota(origem, destino); }
-            }
+function toggleFavMapa(id, nome, cidade) {
+    const token = localStorage.getItem('angomovel_token');
+    if (!token) {
+        mostrarStatus('👤 Faz login para guardar favoritos!', 'erro');
+        return;
+    }
+
+    let favs = obterFavoritos();
+    const idx = favs.findIndex(f => f.id === id);
+    const adicionado = idx < 0;
+
+    if (adicionado) {
+        favs.push({
+            id, nome,
+            local: cidade,
+            imagem: `https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80`,
+            data: new Date().toISOString()
         });
-    });
+        mostrarStatus(`❤️ ${nome} adicionado aos favoritos!`, 'ok');
+    } else {
+        favs.splice(idx, 1);
+        mostrarStatus(`💔 ${nome} removido dos favoritos`, '');
+    }
+
+    localStorage.setItem('angomovel_favoritos', JSON.stringify(favs));
+
+    // Actualizar botões
+    const emoji = adicionado ? '❤️' : '🤍';
+    const btnMapa = document.getElementById(`favBtn${id}`);
+    const btnSide = document.getElementById(`favSide${id}`);
+    if (btnMapa) { btnMapa.textContent = emoji; btnMapa.style.background = adicionado ? '#E8192C' : '#f5f5f5'; btnMapa.style.color = adicionado ? '#fff' : '#333'; }
+    if (btnSide) btnSide.textContent = emoji;
+
+    carregarFavoritos();
+}
+
+function carregarFavoritos() {
+    const favs = obterFavoritos();
+    const secao = document.getElementById('secaoFavoritos');
+    const lista = document.getElementById('listaFavoritos');
+
+    if (favs.length === 0) {
+        secao.style.display = 'none';
+        return;
+    }
+
+    secao.style.display = 'block';
+    lista.innerHTML = favs.map(f => {
+        const d = destinosAngola.find(d => d.id === f.id);
+        return `
+            <div class="destino-item" onclick="${d ? `focarDestino(${d.id})` : ''}">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                    <span style="font-size:18px;">${d?.emoji || '📍'}</span>
+                    <h4>${f.nome}</h4>
+                    <button onclick="event.stopPropagation(); toggleFavMapa(${f.id}, '${f.nome}', '${f.local}')"
+                        style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:14px;">❤️</button>
+                </div>
+                <div class="cidade">${f.local}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+// ── Status ──
+function mostrarStatus(msg, tipo) {
+    const el = document.getElementById('mapaStatus');
+    el.textContent = msg;
+    el.className = `mapa-status ${tipo}`;
+    el.style.display = 'block';
+    if (tipo === 'ok') setTimeout(() => { el.style.display = 'none'; }, 3000);
+}
+
+// Fechar sugestões ao clicar fora
+document.addEventListener('click', e => {
+    if (!e.target.closest('.pesquisa-box')) {
+        document.getElementById('sugestoes').style.display = 'none';
+    }
 });

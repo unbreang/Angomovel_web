@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="pt-ao">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngoMovel Studio — Dashboard Guia</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dourado:  #D4A017;
+            --ouro:     #F0B429;
+            --vivo:     #E8192C;
+            --negro:    #0A0A0A;
+            --negro2:   #161616;
+            --branco:   #FFFFFF;
+            --cinza:    rgba(255,255,255,0.5);
+            --borda:    rgba(255,255,255,0.07);
+            --verde:    #4CAF50;
+            --grad-o:   linear-gradient(135deg,#D4A017,#F0B429);
+            --grad-r:   linear-gradient(135deg,#CC0000,#E8192C);
+            --fonte-t:  'Playfair Display', serif;
+            --fonte-c:  'Plus Jakarta Sans', sans-serif;
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: var(--fonte-c); background: var(--negro); color: var(--branco); min-height: 100vh; }
+
+        .app-layout { display: flex; min-height: 100vh; }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: 240px; background: var(--negro2);
+            border-right: 1px solid var(--borda);
+            display: flex; flex-direction: column;
+            position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
+        }
+
+        .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid var(--borda); }
+        .sidebar-logo a { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .sidebar-logo span { font-size: 18px; color: var(--ouro); }
+        .sidebar-logo h1 {
+            font-family: var(--fonte-t); font-size: 15px; font-weight: 900; letter-spacing: 1.5px;
+            background: linear-gradient(90deg, #fff, var(--ouro));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .sidebar-logo .badge { display: block; font-size: 8px; font-weight: 800; letter-spacing: 3px; color: var(--ouro); text-transform: uppercase; }
+
+        /* Guia info */
+        .sidebar-guia { padding: 16px 20px; border-bottom: 1px solid var(--borda); display: flex; align-items: center; gap: 10px; }
+        .guia-avatar-side {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: var(--grad-o);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; font-weight: 900; color: var(--negro);
+            flex-shrink: 0; font-family: var(--fonte-t);
+            overflow: hidden;
+        }
+        .guia-avatar-side img { width: 100%; height: 100%; object-fit: cover; }
+        .guia-info-side h3 { font-size: 13px; font-weight: 700; color: #fff; }
+        .guia-info-side p  { font-size: 11px; color: var(--cinza); margin-top: 2px; }
+
+        /* Estado badge */
+        .estado-side {
+            margin: 0 20px 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 12px; font-weight: 700;
+            cursor: pointer; transition: 0.2s;
+        }
+
+        .estado-disponivel   { background: rgba(76,175,80,0.12);  border: 1px solid rgba(76,175,80,0.3);  color: var(--verde); }
+        .estado-indisponivel { background: rgba(232,25,44,0.12);  border: 1px solid rgba(232,25,44,0.3);  color: var(--vivo); }
+        .estado-inactivo     { background: rgba(255,255,255,0.05); border: 1px solid var(--borda);         color: var(--cinza); }
+
+        /* Nav */
+        .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; }
+
+        .nav-item {
+            display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+            border-radius: 10px; color: var(--cinza); font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: 0.2s; border: none; background: transparent;
+            font-family: var(--fonte-c); width: 100%; text-align: left;
+        }
+        .nav-item i { font-size: 18px; flex-shrink: 0; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .nav-item.ativo { background: rgba(212,160,23,0.12); color: var(--ouro); border: 1px solid rgba(212,160,23,0.2); }
+
+        .nav-sep   { height: 1px; background: var(--borda); margin: 8px 0; }
+        .nav-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.2); padding: 4px 12px; }
+
+        .sidebar-footer { padding: 12px; border-top: 1px solid var(--borda); }
+        .btn-logout { width: 100%; display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 10px; background: rgba(232,25,44,0.08); border: 1px solid rgba(232,25,44,0.15); color: var(--vivo); font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; font-family: var(--fonte-c); }
+        .btn-logout:hover { background: rgba(232,25,44,0.15); }
+
+        /* ── MAIN ── */
+        .main { margin-left: 240px; flex: 1; display: flex; flex-direction: column; }
+
+        .topbar { height: 64px; background: var(--negro2); border-bottom: 1px solid var(--borda); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+        .topbar-titulo { font-family: var(--fonte-t); font-size: 20px; font-weight: 800; }
+        .topbar-acoes { display: flex; align-items: center; gap: 12px; }
+
+        .btn-estado {
+            padding: 8px 20px; border: none; border-radius: 999px;
+            font-family: var(--fonte-c); font-size: 13px; font-weight: 700;
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px;
+        }
+
+        .btn-estado.disponivel   { background: rgba(76,175,80,0.15);  color: var(--verde);  border: 1px solid rgba(76,175,80,0.3); }
+        .btn-estado.indisponivel { background: rgba(232,25,44,0.15);  color: var(--vivo);   border: 1px solid rgba(232,25,44,0.3); }
+        .btn-estado:hover { filter: brightness(1.2); }
+
+        .page-content { padding: 32px; flex: 1; }
+
+        .tela { display: none; }
+        .tela.ativa { display: block; }
+
+        /* ── STATS ── */
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+
+        .stat-card { background: var(--negro2); border: 1px solid var(--borda); border-radius: 16px; padding: 20px; transition: 0.3s; }
+        .stat-card:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-3px); }
+        .stat-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .stat-card-icone { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .stat-card-valor { font-family: var(--fonte-t); font-size: 32px; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 4px; }
+        .stat-card-label { font-size: 12px; color: var(--cinza); }
+
+        /* ── RESERVAS ── */
+        .reservas-lista { display: flex; flex-direction: column; gap: 12px; }
+
+        .reserva-card {
+            background: var(--negro2); border: 1px solid var(--borda);
+            border-radius: 14px; padding: 20px;
+            display: grid; grid-template-columns: 1fr auto;
+            gap: 16px; align-items: center;
+            transition: 0.25s;
+        }
+
+        .reserva-card:hover { border-color: rgba(255,255,255,0.12); }
+
+        .reserva-card.pendente     { border-left: 4px solid var(--ouro); }
+        .reserva-card.aceite       { border-left: 4px solid var(--verde); }
+        .reserva-card.em_curso     { border-left: 4px solid #2196F3; }
+        .reserva-card.concluida    { border-left: 4px solid var(--cinza); }
+        .reserva-card.recusada,
+        .reserva-card.cancelada    { border-left: 4px solid var(--vivo); opacity: 0.6; }
+
+        .reserva-cliente { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .reserva-avatar  { width: 42px; height: 42px; border-radius: 50%; background: var(--grad-r); display: flex; align-items: center; justify-content: center; font-family: var(--fonte-t); font-size: 18px; font-weight: 900; color: #fff; flex-shrink: 0; }
+        .reserva-nome    { font-size: 15px; font-weight: 700; color: #fff; }
+        .reserva-email   { font-size: 12px; color: var(--cinza); }
+
+        .reserva-detalhes { display: flex; gap: 20px; flex-wrap: wrap; }
+        .reserva-det      { font-size: 12px; color: var(--cinza); display: flex; align-items: center; gap: 5px; }
+        .reserva-det i    { font-size: 14px; color: var(--ouro); }
+
+        .reserva-rotas { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+        .rota-tag { background: rgba(212,160,23,0.1); border: 1px solid rgba(212,160,23,0.2); color: var(--ouro); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+
+        .reserva-acoes { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+
+        .badge-estado { font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 999px; white-space: nowrap; }
+        .badge-pendente     { background: rgba(212,160,23,0.15); color: var(--ouro);  border: 1px solid rgba(212,160,23,0.3); }
+        .badge-aceite       { background: rgba(76,175,80,0.15);  color: var(--verde); border: 1px solid rgba(76,175,80,0.3); }
+        .badge-em_curso     { background: rgba(33,150,243,0.15); color: #64B5F6;      border: 1px solid rgba(33,150,243,0.3); }
+        .badge-concluida    { background: rgba(255,255,255,0.06); color: var(--cinza); border: 1px solid var(--borda); }
+        .badge-recusada,
+        .badge-cancelada    { background: rgba(232,25,44,0.15);  color: var(--vivo);  border: 1px solid rgba(232,25,44,0.3); }
+
+        .btn-aceitar {
+            padding: 8px 16px; border: none; border-radius: 8px;
+            background: var(--verde); color: #fff;
+            font-family: var(--fonte-c); font-size: 12px; font-weight: 800;
+            cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px;
+        }
+        .btn-aceitar:hover { filter: brightness(1.1); }
+
+        .btn-recusar {
+            padding: 8px 16px; border: 1px solid rgba(232,25,44,0.3); border-radius: 8px;
+            background: rgba(232,25,44,0.1); color: var(--vivo);
+            font-family: var(--fonte-c); font-size: 12px; font-weight: 800;
+            cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px;
+        }
+        .btn-recusar:hover { background: rgba(232,25,44,0.2); }
+
+        .btn-iniciar {
+            padding: 8px 16px; border: none; border-radius: 8px;
+            background: #2196F3; color: #fff;
+            font-family: var(--fonte-c); font-size: 12px; font-weight: 800;
+            cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px;
+        }
+
+        .btn-concluir {
+            padding: 8px 16px; border: none; border-radius: 8px;
+            background: var(--grad-o); color: var(--negro);
+            font-family: var(--fonte-c); font-size: 12px; font-weight: 800;
+            cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px;
+        }
+
+        /* ── PERFIL ── */
+        .perfil-grid { display: grid; grid-template-columns: 280px 1fr; gap: 24px; }
+
+        .perfil-card { background: var(--negro2); border: 1px solid var(--borda); border-radius: 20px; padding: 28px; }
+
+        .perfil-avatar-grande {
+            width: 100px; height: 100px; border-radius: 50%;
+            background: var(--grad-o);
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--fonte-t); font-size: 40px; font-weight: 900; color: var(--negro);
+            margin: 0 auto 16px; overflow: hidden;
+            border: 3px solid rgba(212,160,23,0.3);
+        }
+
+        .perfil-avatar-grande img { width: 100%; height: 100%; object-fit: cover; }
+
+        .perfil-nome { text-align: center; font-family: var(--fonte-t); font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+        .perfil-esp  { text-align: center; font-size: 13px; color: var(--cinza); margin-bottom: 16px; }
+
+        .perfil-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .perfil-stat { background: rgba(255,255,255,0.04); border-radius: 10px; padding: 12px; text-align: center; }
+        .perfil-stat-val { font-family: var(--fonte-t); font-size: 24px; font-weight: 900; color: var(--ouro); }
+        .perfil-stat-label { font-size: 11px; color: var(--cinza); margin-top: 2px; }
+
+        .perfil-info-lista { display: flex; flex-direction: column; gap: 10px; }
+        .perfil-info-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--borda); }
+        .perfil-info-item:last-child { border-bottom: none; }
+        .perfil-info-item i { font-size: 18px; color: var(--ouro); width: 24px; flex-shrink: 0; }
+        .perfil-info-item label { font-size: 10px; color: var(--cinza); text-transform: uppercase; letter-spacing: 1px; display: block; }
+        .perfil-info-item p { font-size: 14px; font-weight: 600; color: #fff; margin-top: 1px; }
+
+        /* Form editar perfil */
+        .form-campo label { font-size: 11px; font-weight: 700; color: var(--cinza); letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 6px; }
+        .form-campo input, .form-campo select, .form-campo textarea { width: 100%; padding: 11px 14px; border: 1px solid var(--borda); border-radius: 10px; font-family: var(--fonte-c); font-size: 13px; color: #fff; background: rgba(255,255,255,0.05); transition: 0.25s; appearance: none; margin-bottom: 14px; }
+        .form-campo input:focus, .form-campo select:focus, .form-campo textarea:focus { outline: none; border-color: var(--ouro); background: rgba(255,255,255,0.08); box-shadow: 0 0 0 3px rgba(212,160,23,0.08); }
+        .form-campo input::placeholder, .form-campo textarea::placeholder { color: rgba(255,255,255,0.25); }
+        .form-campo select option { background: #222; }
+        .form-campo textarea { resize: none; height: 100px; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+        .btn-guardar { padding: 13px 28px; background: var(--grad-o); color: var(--negro); border: none; border-radius: 12px; font-family: var(--fonte-c); font-size: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+        .btn-guardar:hover { filter: brightness(1.08); transform: translateY(-2px); }
+
+        /* ── LOADING & VAZIO ── */
+        .loading-box { text-align: center; padding: 60px 20px; color: var(--cinza); }
+        .spinner { width: 32px; height: 32px; border: 3px solid var(--borda); border-top-color: var(--ouro); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .vazio { text-align: center; padding: 60px 20px; color: var(--cinza); }
+        .vazio i { font-size: 48px; opacity: 0.3; display: block; margin-bottom: 12px; }
+
+        /* ── TOAST ── */
+        .toast-guia { position: fixed; bottom: 28px; right: 28px; background: var(--negro2); border: 1px solid var(--borda); border-left: 4px solid var(--ouro); border-radius: 12px; padding: 14px 20px; font-size: 13px; font-weight: 600; color: #fff; z-index: 9999; box-shadow: 0 8px 40px rgba(0,0,0,0.4); animation: toastIn 0.3s ease; }
+        @keyframes toastIn { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+
+        /* ── RESPONSIVIDADE ── */
+        @media (max-width: 1024px) {
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .perfil-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { width: 60px; }
+            .sidebar-logo h1, .sidebar-logo .badge, .guia-info-side, .nav-item span, .nav-label, .estado-side span, .sidebar-footer span { display: none; }
+            .main { margin-left: 60px; }
+            .stats-row { grid-template-columns: 1fr 1fr; }
+            .page-content { padding: 16px; }
+            .reserva-card { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <a href="angomovelstudio.html">
+                <span>✈</span>
+                <div><h1>ANGOMOVEL</h1><span class="badge">Studio</span></div>
+            </a>
+        </div>
+
+        <div class="sidebar-guia">
+            <div class="guia-avatar-side" id="sideAvatar">G</div>
+            <div class="guia-info-side">
+                <h3 id="sideNome">Guia</h3>
+                <p id="sideEsp">Especialidade</p>
+            </div>
+        </div>
+
+        <div class="estado-side estado-inactivo" id="estadoSide" onclick="irPara('estado')">
+            <span id="estadoTexto">⚫ Inactivo</span>
+            <i class="ph ph-caret-right"></i>
+        </div>
+
+        <nav class="sidebar-nav">
+            <span class="nav-label">Principal</span>
+            <button class="nav-item ativo" onclick="irPara('dashboard')" id="navDash"><i class="ph-fill ph-gauge"></i><span>Dashboard</span></button>
+            <button class="nav-item" onclick="irPara('reservas')" id="navReservas"><i class="ph-fill ph-calendar-check"></i><span>Reservas</span></button>
+            <button class="nav-item" onclick="irPara('historico')" id="navHistorico"><i class="ph-fill ph-clock-clockwise"></i><span>Histórico</span></button>
+            <div class="nav-sep"></div>
+            <span class="nav-label">Conta</span>
+            <button class="nav-item" onclick="irPara('perfil')" id="navPerfil"><i class="ph-fill ph-user-circle"></i><span>Meu Perfil</span></button>
+            <button class="nav-item" onclick="irPara('estado')" id="navEstado"><i class="ph-fill ph-traffic-signal"></i><span>Meu Estado</span></button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="btn-logout" onclick="sair()">
+                <i class="ph ph-sign-out"></i><span>Terminar sessão</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+        <div class="topbar">
+            <h2 class="topbar-titulo" id="topbarTitulo">Dashboard</h2>
+            <div class="topbar-acoes">
+                <button class="btn-estado disponivel" id="btnEstadoTop" onclick="irPara('estado')">
+                    <i class="ph-fill ph-circle"></i>
+                    <span id="btnEstadoTexto">Disponível</span>
+                </button>
+                <div style="font-size:13px;padding:0 12px;color:#fff;font-weight:700;background:rgba(255,255,255,0.06);border:1px solid var(--borda);border-radius:8px;height:38px;display:flex;align-items:center;" id="topbarGuia">Guia</div>
+            </div>
+        </div>
+
+        <div class="page-content">
+
+            <!-- DASHBOARD -->
+            <div class="tela ativa" id="telaDashboard">
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-card-icone" style="background:rgba(212,160,23,0.12)"><i class="ph-fill ph-calendar-check" style="color:var(--ouro)"></i></div>
+                        </div>
+                        <div class="stat-card-valor" id="statPendentes">0</div>
+                        <div class="stat-card-label">Reservas pendentes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-card-icone" style="background:rgba(76,175,80,0.12)"><i class="ph-fill ph-check-circle" style="color:var(--verde)"></i></div>
+                        </div>
+                        <div class="stat-card-valor" id="statConcluidas">0</div>
+                        <div class="stat-card-label">Actividades concluídas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-card-icone" style="background:rgba(212,160,23,0.12)"><i class="ph-fill ph-star" style="color:var(--ouro)"></i></div>
+                        </div>
+                        <div class="stat-card-valor" id="statAvaliacao">—</div>
+                        <div class="stat-card-label">Avaliação média</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-card-icone" style="background:rgba(33,150,243,0.12)"><i class="ph-fill ph-currency-circle-dollar" style="color:#64B5F6"></i></div>
+                        </div>
+                        <div class="stat-card-valor" id="statGanhos">0 Kz</div>
+                        <div class="stat-card-label">Ganhos totais</div>
+                    </div>
+                </div>
+
+                <div style="font-family:var(--fonte-t);font-size:20px;font-weight:800;margin-bottom:16px;">
+                    Reservas Recentes
+                </div>
+                <div class="reservas-lista" id="reservasDash">
+                    <div class="loading-box"><div class="spinner"></div><p>A carregar...</p></div>
+                </div>
+            </div>
+
+            <!-- RESERVAS PENDENTES -->
+            <div class="tela" id="telaReservas">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                    <div style="font-family:var(--fonte-t);font-size:20px;font-weight:800;">
+                        Reservas <span style="font-size:13px;font-weight:700;background:rgba(212,160,23,0.15);color:var(--ouro);padding:3px 10px;border-radius:999px;font-family:var(--fonte-c);" id="countReservas">0</span>
+                    </div>
+                    <div style="display:flex;gap:8px;">
+                        <button onclick="filtrarReservas('todas')" class="filtro-btn ativo" id="fbTodas">Todas</button>
+                        <button onclick="filtrarReservas('pendente')" class="filtro-btn" id="fbPendente" style="padding:7px 14px;border:1px solid var(--borda);border-radius:999px;background:transparent;color:var(--cinza);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fonte-c);">⏳ Pendentes</button>
+                        <button onclick="filtrarReservas('aceite')" class="filtro-btn" id="fbAceite" style="padding:7px 14px;border:1px solid var(--borda);border-radius:999px;background:transparent;color:var(--cinza);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fonte-c);">✅ Aceites</button>
+                        <button onclick="filtrarReservas('em_curso')" class="filtro-btn" id="fbEmCurso" style="padding:7px 14px;border:1px solid var(--borda);border-radius:999px;background:transparent;color:var(--cinza);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fonte-c);">🔵 Em curso</button>
+                    </div>
+                </div>
+                <div class="reservas-lista" id="listaReservas">
+                    <div class="loading-box"><div class="spinner"></div><p>A carregar reservas...</p></div>
+                </div>
+            </div>
+
+            <!-- HISTÓRICO -->
+            <div class="tela" id="telaHistorico">
+                <div style="font-family:var(--fonte-t);font-size:20px;font-weight:800;margin-bottom:20px;">Histórico de Actividades</div>
+                <div class="reservas-lista" id="listaHistorico">
+                    <div class="loading-box"><div class="spinner"></div><p>A carregar histórico...</p></div>
+                </div>
+            </div>
+
+            <!-- PERFIL -->
+            <div class="tela" id="telaPerfil">
+                <div class="perfil-grid">
+                    <!-- Card info -->
+                    <div>
+                        <div class="perfil-card" style="margin-bottom:16px;">
+                            <div class="perfil-avatar-grande" id="perfilAvatar">G</div>
+                            <div class="perfil-nome" id="perfilNome">—</div>
+                            <div class="perfil-esp"  id="perfilEsp">—</div>
+
+                            <div class="perfil-stats">
+                                <div class="perfil-stat">
+                                    <div class="perfil-stat-val" id="perfilAval">—</div>
+                                    <div class="perfil-stat-label">Avaliação</div>
+                                </div>
+                                <div class="perfil-stat">
+                                    <div class="perfil-stat-val" id="perfilViagens">0</div>
+                                    <div class="perfil-stat-label">Viagens</div>
+                                </div>
+                            </div>
+
+                            <div class="perfil-info-lista">
+                                <div class="perfil-info-item">
+                                    <i class="ph ph-map-pin"></i>
+                                    <div><label>Província</label><p id="perfilProv">—</p></div>
+                                </div>
+                                <div class="perfil-info-item">
+                                    <i class="ph ph-translate"></i>
+                                    <div><label>Idiomas</label><p id="perfilIdiomas">—</p></div>
+                                </div>
+                                <div class="perfil-info-item">
+                                    <i class="ph ph-currency-circle-dollar"></i>
+                                    <div><label>Preço/dia</label><p id="perfilPreco">—</p></div>
+                                </div>
+                                <div class="perfil-info-item">
+                                    <i class="ph ph-buildings"></i>
+                                    <div><label>Empresa</label><p id="perfilEmpresa">—</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Editar perfil -->
+                    <div class="perfil-card">
+                        <div style="font-family:var(--fonte-t);font-size:18px;font-weight:800;margin-bottom:20px;display:flex;align-items:center;gap:8px;">
+                            <i class="ph-fill ph-pencil-simple" style="color:var(--ouro);"></i> Editar Perfil
+                        </div>
+
+                        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(76,175,80,0.2);border-radius:10px;padding:12px 16px;display:none;align-items:center;gap:8px;margin-bottom:16px;font-size:13px;color:#4CAF50;font-weight:600;" id="alertaSucesso">
+                            <i class="ph-fill ph-check-circle"></i> Perfil actualizado com sucesso!
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-campo">
+                                <label>Nome Completo</label>
+                                <input type="text" id="editNome" placeholder="O teu nome">
+                            </div>
+                            <div class="form-campo">
+                                <label>Especialidade</label>
+                                <select id="editEsp">
+                                    <option value="">Seleciona</option>
+                                    <option>Praias e Costa</option>
+                                    <option>Cultura e História</option>
+                                    <option>Gastronomia</option>
+                                    <option>Natureza e Parques</option>
+                                    <option>Aventura e Desporto</option>
+                                    <option>Negócios e Corporativo</option>
+                                </select>
+                            </div>
+                            <div class="form-campo">
+                                <label>Preço por dia (Kz)</label>
+                                <input type="number" id="editPreco" placeholder="Ex: 15000">
+                            </div>
+                            <div class="form-campo">
+                                <label>Província</label>
+                                <select id="editProv">
+                                    <option value="">Seleciona</option>
+                                    <option>Luanda</option><option>Benguela</option><option>Huíla</option>
+                                    <option>Huambo</option><option>Malanje</option><option>Namibe</option>
+                                    <option>Cabinda</option><option>Uíge</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-campo">
+                            <label>Sobre mim</label>
+                            <textarea id="editBio" placeholder="Descreve a tua experiência como guia turístico..."></textarea>
+                        </div>
+
+                        <button class="btn-guardar" onclick="guardarPerfil()">
+                            <i class="ph-fill ph-floppy-disk"></i> Guardar Alterações
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ESTADO -->
+            <div class="tela" id="telaEstado">
+                <div style="max-width:500px;margin:0 auto;">
+                    <div style="font-family:var(--fonte-t);font-size:28px;font-weight:900;margin-bottom:8px;text-align:center;">O meu Estado</div>
+                    <p style="color:var(--cinza);text-align:center;margin-bottom:32px;">Controla a tua disponibilidade para novos clientes</p>
+
+                    <div style="display:flex;flex-direction:column;gap:12px;">
+
+                        <div class="estado-opcao" id="opcaoDisponivel" onclick="alterarEstado('disponivel')">
+                            <div style="display:flex;align-items:center;gap:14px;">
+                                <div style="width:48px;height:48px;border-radius:50%;background:rgba(76,175,80,0.15);border:2px solid rgba(76,175,80,0.3);display:flex;align-items:center;justify-content:center;font-size:22px;">🟢</div>
+                                <div>
+                                    <div style="font-size:16px;font-weight:700;color:#fff;">Disponível</div>
+                                    <div style="font-size:12px;color:var(--cinza);">Apareces na lista de guias. Podes receber reservas.</div>
+                                </div>
+                            </div>
+                            <i class="ph ph-check-circle" id="checkDisponivel" style="font-size:22px;color:var(--verde);display:none;"></i>
+                        </div>
+
+                        <div class="estado-opcao" id="opcaoIndisponivel" onclick="alterarEstado('indisponivel')">
+                            <div style="display:flex;align-items:center;gap:14px;">
+                                <div style="width:48px;height:48px;border-radius:50%;background:rgba(232,25,44,0.15);border:2px solid rgba(232,25,44,0.3);display:flex;align-items:center;justify-content:center;font-size:22px;">🔴</div>
+                                <div>
+                                    <div style="font-size:16px;font-weight:700;color:#fff;">Em Actividade</div>
+                                    <div style="font-size:12px;color:var(--cinza);">Estás a trabalhar com um cliente. Não recebes novos pedidos.</div>
+                                </div>
+                            </div>
+                            <i class="ph ph-check-circle" id="checkIndisponivel" style="font-size:22px;color:var(--vivo);display:none;"></i>
+                        </div>
+
+                    </div>
+
+                    <div style="margin-top:24px;background:rgba(212,160,23,0.08);border:1px solid rgba(212,160,23,0.2);border-radius:12px;padding:16px;font-size:13px;color:var(--cinza);line-height:1.6;">
+                        <i class="ph-fill ph-info" style="color:var(--ouro);margin-right:6px;"></i>
+                        O teu estado muda automaticamente quando aceitas ou concluis uma reserva.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<style>
+.estado-opcao {
+    background: var(--negro2); border: 1px solid var(--borda);
+    border-radius: 16px; padding: 20px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; transition: 0.25s;
+}
+.estado-opcao:hover { border-color: rgba(255,255,255,0.15); }
+.estado-opcao.ativo-disponivel   { border-color: rgba(76,175,80,0.4);  background: rgba(76,175,80,0.06); }
+.estado-opcao.ativo-indisponivel { border-color: rgba(232,25,44,0.4);  background: rgba(232,25,44,0.06); }
+
+.filtro-btn { padding:7px 14px;border:1px solid var(--borda);border-radius:999px;background:transparent;color:var(--cinza);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fonte-c);transition:0.2s; }
+.filtro-btn.ativo { background:var(--ouro);border-color:var(--ouro);color:var(--negro); }
+</style>
+
+<script>
+    const API    = 'http://localhost:3000/api/v1';
+    const sessao = JSON.parse(localStorage.getItem('angomovel_studio_sessao') || '{}');
+    const guia   = JSON.parse(localStorage.getItem('angomovel_guia') || '{}');
+
+    // Verificar sessão
+    if (!sessao.tipo || sessao.tipo !== 'guia') {
+        window.location.href = 'angomovelstudio.html';
+    }
+
+    // Preencher sidebar
+    document.getElementById('sideNome').textContent  = guia.nome || 'Guia';
+    document.getElementById('sideEsp').textContent   = guia.esp  || 'Especialidade';
+    document.getElementById('sideAvatar').textContent = (guia.nome || 'G')[0].toUpperCase();
+    document.getElementById('topbarGuia').textContent = guia.nome || 'Guia';
+
+    // Estado actual
+    let estadoActual = guia.estado_guia || 'disponivel';
+    actualizarEstadoUI(estadoActual);
+
+    let todasReservas = [];
+
+    // ── Formatação ──
+    function formatKz(n) { return new Intl.NumberFormat('pt-AO').format(Math.round(n || 0)) + ' Kz'; }
+
+    function formatData(d) {
+        return new Date(d).toLocaleDateString('pt-AO', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    // ── Navegar ──
+    function irPara(pagina) {
+        document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('ativo'));
+
+        const mapa = {
+            dashboard: { tela: 'telaDashboard', nav: 'navDash',      titulo: 'Dashboard' },
+            reservas:  { tela: 'telaReservas',  nav: 'navReservas',  titulo: 'Reservas' },
+            historico: { tela: 'telaHistorico', nav: 'navHistorico', titulo: 'Histórico' },
+            perfil:    { tela: 'telaPerfil',    nav: 'navPerfil',    titulo: 'Meu Perfil' },
+            estado:    { tela: 'telaEstado',    nav: 'navEstado',    titulo: 'Meu Estado' },
+        };
+
+        const cfg = mapa[pagina];
+        if (!cfg) return;
+
+        document.getElementById(cfg.tela).classList.add('ativa');
+        document.getElementById(cfg.nav).classList.add('ativo');
+        document.getElementById('topbarTitulo').textContent = cfg.titulo;
+
+        if (pagina === 'dashboard') carregarDashboard();
+        if (pagina === 'reservas')  carregarReservas();
+        if (pagina === 'historico') carregarHistorico();
+        if (pagina === 'perfil')    carregarPerfil();
+        if (pagina === 'estado')    carregarEstado();
+    }
+
+    // ── Renderizar reserva ──
+    function renderReserva(r, mostrarAcoes = true) {
+        const dias = Math.ceil((new Date(r.data_saida) - new Date(r.data_entrada)) / (1000*60*60*24));
+        return `
+        <div class="reserva-card ${r.estado}">
+            <div>
+                <div class="reserva-cliente">
+                    <div class="reserva-avatar">${(r.cliente_nome||'C')[0].toUpperCase()}</div>
+                    <div>
+                        <div class="reserva-nome">${r.cliente_nome || '—'}</div>
+                        <div class="reserva-email">${r.cliente_email || '—'}</div>
+                    </div>
+                </div>
+                <div class="reserva-detalhes">
+                    <span class="reserva-det"><i class="ph ph-calendar"></i> ${formatData(r.data_entrada)} → ${formatData(r.data_saida)}</span>
+                    <span class="reserva-det"><i class="ph ph-users"></i> ${r.num_pessoas || 1} pessoa(s)</span>
+                    <span class="reserva-det"><i class="ph ph-clock"></i> ${dias} dia(s)</span>
+                    <span class="reserva-det"><i class="ph ph-currency-circle-dollar"></i> ${formatKz(r.valor_total)}</span>
+                </div>
+                ${r.rotas?.length ? `
+                <div class="reserva-rotas">
+                    ${r.rotas.map(rt => `<span class="rota-tag">📍 ${rt}</span>`).join('')}
+                </div>` : ''}
+                ${r.observacoes ? `<div style="margin-top:8px;font-size:12px;color:var(--cinza);font-style:italic;">"${r.observacoes}"</div>` : ''}
+            </div>
+            <div class="reserva-acoes">
+                <span class="badge-estado badge-${r.estado}">${traduzirEstado(r.estado)}</span>
+                ${mostrarAcoes ? renderAcoes(r) : ''}
+            </div>
+        </div>`;
+    }
+
+    function renderAcoes(r) {
+        if (r.estado === 'pendente') return `
+            <button class="btn-aceitar" onclick="aceitarReserva('${r.id}')"><i class="ph-fill ph-check-circle"></i> Aceitar</button>
+            <button class="btn-recusar" onclick="recusarReserva('${r.id}')"><i class="ph ph-x-circle"></i> Recusar</button>`;
+        if (r.estado === 'aceite') return `
+            <button class="btn-iniciar" onclick="iniciarActividade('${r.id}')"><i class="ph-fill ph-play-circle"></i> Iniciar</button>`;
+        if (r.estado === 'em_curso') return `
+            <button class="btn-concluir" onclick="concluirActividade('${r.id}')"><i class="ph-fill ph-flag-checkered"></i> Concluir</button>`;
+        return '';
+    }
+
+    function traduzirEstado(e) {
+        const t = { pendente: '⏳ Pendente', aceite: '✅ Aceite', em_curso: '🔵 Em curso', concluida: '✔️ Concluída', recusada: '❌ Recusada', cancelada: '🚫 Cancelada' };
+        return t[e] || e;
+    }
+
+    // ── Dashboard ──
+    async function carregarDashboard() {
+        const container = document.getElementById('reservasDash');
+        try {
+            // Por agora usa dados do localStorage
+            const reservas = JSON.parse(localStorage.getItem('angomovel_reservas_guia') || '[]');
+
+            const pendentes  = reservas.filter(r => r.estado === 'pendente').length;
+            const concluidas = reservas.filter(r => r.estado === 'concluida').length;
+            const ganhos     = reservas.filter(r => r.estado === 'concluida').reduce((s, r) => s + (r.valor_total || 0), 0);
+
+            document.getElementById('statPendentes').textContent  = pendentes;
+            document.getElementById('statConcluidas').textContent = concluidas;
+            document.getElementById('statGanhos').textContent     = formatKz(ganhos);
+            document.getElementById('statAvaliacao').textContent  = guia.avaliacao ? `${guia.avaliacao}⭐` : '—';
+
+            const recentes = reservas.slice(0, 3);
+            if (!recentes.length) {
+                container.innerHTML = '<div class="vazio"><i class="ph ph-calendar"></i><p>Sem reservas ainda.<br>Quando os clientes fizerem reservas aparecem aqui.</p></div>';
+                return;
+            }
+
+            container.innerHTML = recentes.map(r => renderReserva(r)).join('');
+        } catch (e) {
+            container.innerHTML = `<div class="vazio"><i class="ph ph-warning-circle"></i><p>Erro: ${e.message}</p></div>`;
+        }
+    }
+
+    // ── Reservas ──
+    async function carregarReservas() {
+        const container = document.getElementById('listaReservas');
+        container.innerHTML = '<div class="loading-box"><div class="spinner"></div><p>A carregar...</p></div>';
+
+        try {
+            todasReservas = JSON.parse(localStorage.getItem('angomovel_reservas_guia') || '[]');
+            document.getElementById('countReservas').textContent = todasReservas.length;
+
+            if (!todasReservas.length) {
+                container.innerHTML = '<div class="vazio"><i class="ph ph-calendar-check"></i><p>Sem reservas ainda.<br>Quando os clientes fizerem reservas aparecem aqui.</p></div>';
+                return;
+            }
+
+            container.innerHTML = todasReservas.map(r => renderReserva(r)).join('');
+        } catch (e) {
+            container.innerHTML = `<div class="vazio"><i class="ph ph-warning-circle"></i><p>Erro: ${e.message}</p></div>`;
+        }
+    }
+
+    // ── Filtrar reservas ──
+    function filtrarReservas(filtro) {
+        document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('ativo'));
+        document.getElementById(`fb${filtro.charAt(0).toUpperCase() + filtro.slice(1).replace('_', '')}`)?.classList.add('ativo');
+        document.getElementById('fbTodas')?.classList.toggle('ativo', filtro === 'todas');
+
+        const lista = filtro === 'todas' ? todasReservas : todasReservas.filter(r => r.estado === filtro);
+        document.getElementById('listaReservas').innerHTML = lista.length
+            ? lista.map(r => renderReserva(r)).join('')
+            : '<div class="vazio"><i class="ph ph-calendar"></i><p>Sem reservas nesta categoria.</p></div>';
+    }
+
+    // ── Histórico ──
+    function carregarHistorico() {
+        const container = document.getElementById('listaHistorico');
+        const todas = JSON.parse(localStorage.getItem('angomovel_reservas_guia') || '[]');
+        const hist  = todas.filter(r => ['concluida','recusada','cancelada'].includes(r.estado));
+
+        if (!hist.length) {
+            container.innerHTML = '<div class="vazio"><i class="ph ph-clock-clockwise"></i><p>Sem histórico ainda.</p></div>';
+            return;
+        }
+
+        container.innerHTML = hist.map(r => renderReserva(r, false)).join('');
+    }
+
+    // ── Acções das reservas ──
+    function aceitarReserva(id) {
+        alterarReserva(id, 'aceite');
+        mostrarToast('✅ Reserva aceite! O cliente será notificado.');
+    }
+
+    function recusarReserva(id) {
+        if (!confirm('Tens a certeza que queres recusar esta reserva?')) return;
+        alterarReserva(id, 'recusada');
+        mostrarToast('❌ Reserva recusada.');
+    }
+
+    function iniciarActividade(id) {
+        alterarReserva(id, 'em_curso');
+        alterarEstado('indisponivel');
+        mostrarToast('🔵 Actividade iniciada! Estás agora em serviço.');
+    }
+
+    function concluirActividade(id) {
+        alterarReserva(id, 'concluida');
+        alterarEstado('disponivel');
+        mostrarToast('🎉 Actividade concluída! Estás novamente disponível.');
+    }
+
+    function alterarReserva(id, novoEstado) {
+        let reservas = JSON.parse(localStorage.getItem('angomovel_reservas_guia') || '[]');
+        const idx = reservas.findIndex(r => r.id === id);
+        if (idx >= 0) {
+            reservas[idx].estado = novoEstado;
+            localStorage.setItem('angomovel_reservas_guia', JSON.stringify(reservas));
+        }
+        carregarReservas();
+        carregarDashboard();
+    }
+
+    // ── Perfil ──
+    function carregarPerfil() {
+        document.getElementById('perfilNome').textContent    = guia.nome || '—';
+        document.getElementById('perfilEsp').textContent     = guia.esp  || '—';
+        document.getElementById('perfilProv').textContent    = guia.prov || '—';
+        document.getElementById('perfilIdiomas').textContent = (guia.idiomas || []).join(', ') || '—';
+        document.getElementById('perfilPreco').textContent   = guia.preco ? formatKz(parseInt(guia.preco)) : '—';
+        document.getElementById('perfilEmpresa').textContent = guia.empresa_nome || 'Não vinculado';
+        document.getElementById('perfilAval').textContent    = guia.avaliacao ? `${guia.avaliacao}⭐` : '—';
+        document.getElementById('perfilAvatar').textContent  = (guia.nome || 'G')[0].toUpperCase();
+
+        const reservas   = JSON.parse(localStorage.getItem('angomovel_reservas_guia') || '[]');
+        const concluidas = reservas.filter(r => r.estado === 'concluida').length;
+        document.getElementById('perfilViagens').textContent = concluidas;
+
+        document.getElementById('editNome').value  = guia.nome  || '';
+        document.getElementById('editEsp').value   = guia.esp   || '';
+        document.getElementById('editPreco').value = guia.preco || '';
+        document.getElementById('editProv').value  = guia.prov  || '';
+        document.getElementById('editBio').value   = guia.bio   || '';
+    }
+
+    async function guardarPerfil() {
+        const novoGuia = {
+            ...guia,
+            nome:  document.getElementById('editNome').value.trim(),
+            esp:   document.getElementById('editEsp').value,
+            preco: document.getElementById('editPreco').value,
+            prov:  document.getElementById('editProv').value,
+            bio:   document.getElementById('editBio').value,
+        };
+
+        localStorage.setItem('angomovel_guia', JSON.stringify(novoGuia));
+        Object.assign(guia, novoGuia);
+
+        document.getElementById('sideNome').textContent = novoGuia.nome;
+        document.getElementById('sideEsp').textContent  = novoGuia.esp;
+        document.getElementById('topbarGuia').textContent = novoGuia.nome;
+
+        const alerta = document.getElementById('alertaSucesso');
+        alerta.style.display = 'flex';
+        setTimeout(() => alerta.style.display = 'none', 3000);
+
+        mostrarToast('✅ Perfil actualizado!');
+        carregarPerfil();
+    }
+
+    // ── Estado ──
+    function carregarEstado() {
+        document.getElementById('opcaoDisponivel').className   = `estado-opcao ${estadoActual === 'disponivel' ? 'ativo-disponivel' : ''}`;
+        document.getElementById('opcaoIndisponivel').className = `estado-opcao ${estadoActual === 'indisponivel' ? 'ativo-indisponivel' : ''}`;
+        document.getElementById('checkDisponivel').style.display   = estadoActual === 'disponivel'   ? 'block' : 'none';
+        document.getElementById('checkIndisponivel').style.display = estadoActual === 'indisponivel' ? 'block' : 'none';
+    }
+
+    function alterarEstado(novoEstado) {
+        estadoActual = novoEstado;
+        const guiaActual = JSON.parse(localStorage.getItem('angomovel_guia') || '{}');
+        guiaActual.estado_guia = novoEstado;
+        localStorage.setItem('angomovel_guia', JSON.stringify(guiaActual));
+        actualizarEstadoUI(novoEstado);
+        carregarEstado();
+        mostrarToast(novoEstado === 'disponivel' ? '🟢 Estás disponível para novos clientes!' : '🔴 Estás em actividade — não recebes novos pedidos.');
+    }
+
+    function actualizarEstadoUI(estado) {
+        const textos = { disponivel: '🟢 Disponível', indisponivel: '🔴 Em Actividade', inactivo: '⚫ Inactivo' };
+        const texto  = textos[estado] || '⚫ Inactivo';
+
+        document.getElementById('estadoTexto').textContent = texto;
+        document.getElementById('btnEstadoTexto').textContent = texto.replace(/^[^ ]+ /, '');
+
+        const estadoSide = document.getElementById('estadoSide');
+        const btnEstado  = document.getElementById('btnEstadoTop');
+
+        estadoSide.className = `estado-side estado-${estado === 'disponivel' ? 'disponivel' : estado === 'indisponivel' ? 'indisponivel' : 'inactivo'}`;
+        btnEstado.className  = `btn-estado ${estado === 'disponivel' ? 'disponivel' : 'indisponivel'}`;
+    }
+
+    // ── Toast ──
+    function mostrarToast(msg) {
+        document.querySelector('.toast-guia')?.remove();
+        const t = document.createElement('div');
+        t.className = 'toast-guia';
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+    }
+
+    // ── Sair ──
+    function sair() {
+        localStorage.removeItem('angomovel_studio_sessao');
+        window.location.href = 'angomovelstudio.html';
+    }
+
+    // ── Iniciar ──
+    irPara('dashboard');
+</script>
+
+</body>
+</html>

@@ -7,20 +7,15 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css">
 
-    <!-- Leaflet Routing Machine -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
-    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
-
-    <!-- 1º global, 2º específico -->
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/destino.css">
 </head>
 <body>
 
-<!-- ── HEADER ── -->
+<!-- HEADER -->
 <header class="header">
     <div class="header-inner">
         <a href="../angomovel.html" class="logo">
@@ -39,44 +34,94 @@
     </div>
 </header>
 
-<!-- ── LAYOUT PRINCIPAL: Sidebar + Mapa ── -->
+<!-- LAYOUT PRINCIPAL -->
 <div class="destino-wrapper">
 
-    <!-- Sidebar -->
+    <!-- SIDEBAR -->
     <aside class="sidebar">
         <h2 class="sidebar-titulo">🗺️ Visite Angola</h2>
 
+        <!-- Pesquisa -->
+        <div class="pesquisa-box">
+            <div class="pesquisa-wrap">
+                <i class="ph ph-magnifying-glass"></i>
+                <input type="text" id="inputPesquisa" placeholder="Pesquisa um destino..." oninput="pesquisar()">
+                <button onclick="limparPesquisa()" id="btnLimparPesq" style="display:none;">
+                    <i class="ph ph-x"></i>
+                </button>
+            </div>
+            <div class="sugestoes" id="sugestoes"></div>
+        </div>
+
         <!-- Tipo de transporte -->
         <div class="transporte-opcoes">
-            <button class="transporte-btn ativo" data-transporte="car">🚗 Carro</button>
-            <button class="transporte-btn" data-transporte="bike">🚴 Bicicleta</button>
-            <button class="transporte-btn" data-transporte="foot">🚶 A pé</button>
+            <button class="transporte-btn ativo" onclick="selTransporte('car', this)">🚗 Carro</button>
+            <button class="transporte-btn" onclick="selTransporte('bike', this)">🚴 Bicicleta</button>
+            <button class="transporte-btn" onclick="selTransporte('foot', this)">🚶 A pé</button>
         </div>
 
         <!-- Criar rota -->
         <div class="filtros-rota">
-            <h4>Criar Rota Turística</h4>
-            <select id="origem" class="select-rota">
-                <option value="">📍 Selecione a origem</option>
-            </select>
-            <select id="destino" class="select-rota">
-                <option value="">🏁 Selecione o destino</option>
-            </select>
-            <button id="traçarRota" class="btn-rota">🗺️ Traçar Rota</button>
-            <button id="limparRota" class="btn-limpar">🗑️ Limpar Rota</button>
+            <h4><i class="ph ph-map-trifold"></i> Criar Rota Turística</h4>
+            <div class="rota-input-wrap">
+                <i class="ph ph-map-pin" style="color:#4CAF50;"></i>
+                <input type="text" id="origemInput" class="input-rota" placeholder="📍 Origem (ex: Luanda)" list="origemSugestoes">
+            </div>
+            <datalist id="origemSugestoes"></datalist>
+
+            <div class="rota-input-wrap">
+                <i class="ph ph-flag" style="color:#E8192C;"></i>
+                <input type="text" id="destinoInput" class="input-rota" placeholder="🏁 Destino (ex: Malanje)" list="destinoSugestoes">
+            </div>
+            <datalist id="destinoSugestoes"></datalist>
+
+            <div class="rota-btns">
+                <button id="btnRota" onclick="calcularRota()">
+                    <i class="ph-fill ph-navigation"></i> Traçar Rota
+                </button>
+                <button id="btnMinhaLoc" onclick="minhaLocalizacao()">
+                    <i class="ph ph-crosshair"></i>
+                </button>
+                <button id="btnLimparRota" onclick="limparRota()">
+                    <i class="ph ph-trash"></i>
+                </button>
+            </div>
         </div>
 
-        <!-- Info da rota ativa -->
+        <!-- Info da rota -->
         <div id="rotaInfo" class="rota-info">
-            <h4>📌 Rota Atual</h4>
-            <p id="rotaOrigem"></p>
-            <p id="rotaDestino"></p>
-            <p id="rotaDistancia"></p>
-            <p id="rotaTempo"></p>
+            <div class="rota-info-header">
+                <i class="ph-fill ph-navigation"></i>
+                <h4>Rota Activa</h4>
+            </div>
+            <div class="rota-info-dados">
+                <div class="rota-dado">
+                    <span class="rota-label">De</span>
+                    <span class="rota-valor" id="rotaOrigem">—</span>
+                </div>
+                <div class="rota-dado">
+                    <span class="rota-label">Para</span>
+                    <span class="rota-valor" id="rotaDestino">—</span>
+                </div>
+                <div class="rota-dado">
+                    <span class="rota-label">Distância</span>
+                    <span class="rota-valor" id="rotaDistancia">—</span>
+                </div>
+                <div class="rota-dado">
+                    <span class="rota-label">Tempo</span>
+                    <span class="rota-valor" id="rotaTempo">—</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Favoritos do utilizador -->
+        <div id="secaoFavoritos" style="display:none;">
+            <h3 class="sidebar-subtitulo">❤️ Os meus Favoritos</h3>
+            <div id="listaFavoritos" class="destinos-lista"></div>
         </div>
 
         <!-- Lista de destinos -->
-        <h3 class="sidebar-subtitulo">🏖️ Praias e Cidades</h3>
+        <h3 class="sidebar-subtitulo">🏖️ Destinos Turísticos</h3>
         <div id="destinosLista" class="destinos-lista">
             <div class="loading">
                 <div class="spinner"></div>
@@ -85,24 +130,27 @@
         </div>
     </aside>
 
-    <!-- Mapa -->
+    <!-- MAPA -->
     <div class="mapa-wrapper">
         <div id="mapa"></div>
 
-        <!-- Painel de destinos em destaque (sobre o mapa) -->
+        <!-- Destaques flutuantes -->
         <div class="mapa-destaques">
             <span class="destaque-tag">⭐ Destinos em Destaque</span>
             <div class="destaques-lista" id="destaquesList"></div>
         </div>
+
+        <!-- Status do mapa -->
+        <div class="mapa-status" id="mapaStatus"></div>
     </div>
 </div>
 
-<!-- ── FOOTER ── -->
+<!-- FOOTER -->
 <footer class="main-footer">
     <div class="footer-inner">
         <div class="footer-brand">
             <h2>ANGOMOVEL<span>.</span></h2>
-            <p>A tua porta de entrada para o turismo autêntico em Angola. Descobre resorts, guias e sabores únicos.</p>
+            <p>A tua porta de entrada para o turismo autêntico em Angola.</p>
             <div class="social-icons">
                 <a href="#"><i class="ph ph-instagram-logo"></i></a>
                 <a href="#"><i class="ph ph-facebook-logo"></i></a>
@@ -115,7 +163,6 @@
                 <li><a href="../angomovel.html">Início</a></li>
                 <li><a href="../abas/guia.html">Guias Certificados</a></li>
                 <li><a href="../abas/categorias.html">Categorias</a></li>
-                <li><a href="#">Destinos Populares</a></li>
             </ul>
         </div>
         <div class="footer-contact">
@@ -130,7 +177,11 @@
     </div>
 </footer>
 
+<!-- Scripts -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
 <script src="../js/auth.js"></script>
 <script src="../js/destino.js"></script>
+
 </body>
 </html>

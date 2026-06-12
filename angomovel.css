@@ -7,7 +7,7 @@
    OVERRIDE — Página principal usa fundo claro
 ══════════════════════════════════════════════════════ */
 body {
-    background: #F5F0E8;
+    background: #FFFFFF;
     color: #111111;
 }
 
@@ -407,9 +407,13 @@ body p { color: #555048; }
    BANNERS PROMOÇÃO
 ══════════════════════════════════════════════════════ */
 .featured-section {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    display: grid;
+    grid-template-columns: 2fr 2fr 2fr;
+    gap: 24px;
     max-width: var(--container);
-    margin: 0 auto; padding: 0 24px 80px;
+    margin: 0 auto;
+    margin-top: 50px; 
+    padding: 0 24px 80px;
     background: transparent;
 }
 
@@ -510,13 +514,17 @@ body p { color: #555048; }
    CARDS RÁPIDOS — Fundo claro
 ══════════════════════════════════════════════════════ */
 .cards-atum {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 50px;
     max-width: var(--container);
-    margin: 60px auto 0; padding: 0 24px;
+    margin: 60px auto 0; 
+    padding: 0 24px;
+    margin-bottom:50px ;
 }
 
 .card-arma {
-    background: #FFFFFF;
+    background: #FAFAFA;
     padding: 32px; border-radius: var(--radius-xl);
     box-shadow: 0 4px 20px rgba(0,0,0,0.06);
     border: 1px solid rgba(0,0,0,0.06);
@@ -539,7 +547,7 @@ body p { color: #555048; }
 .card-arma h3 {
     font-family: var(--fonte-titulo);
     font-size: 20px; color: #111111;
-    margin-bottom: 12px; font-weight: 800;
+    margin-bottom: 15px; font-weight: 1000;
 }
 
 .card-arma p { font-size: 14px; color: #666058; line-height: 1.75; }
@@ -569,7 +577,7 @@ body p { color: #555048; }
 .destino-card:first-child { grid-row: span 2; }
 .destino-card:hover { transform: translateY(-5px); box-shadow: 0 18px 48px rgba(0,0,0,0.2); }
 
-.destino-card img {
+.destino-card img, .destino-card video {
     width: 100%; height: 100%;
     object-fit: cover; display: block;
     transition: transform 0.5s ease;
@@ -620,7 +628,7 @@ body p { color: #555048; }
 .guides-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 22px; margin-bottom: 0;
+    gap: 22px; margin-bottom: 50px;
 }
 
 .guide-card {
@@ -681,7 +689,9 @@ body p { color: #555048; }
     border: 1px solid rgba(0,0,0,0.06);
     border-radius: var(--radius-lg);
     padding: 16px 20px;
-    display: flex; align-items: center; gap: 16px;
+    display: flex; 
+    align-items: center;
+    gap: 16px;
     transition: var(--trans-normal);
 }
 

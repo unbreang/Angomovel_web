@@ -3,16 +3,666 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANGOMOVEL - Guias Turísticos</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+    <title>AngoMovel — Guias Turísticos</title>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <!-- 1º global, 2º específico -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/guia.css">
+    <style>
+        body { background: #F5F0E8; color: #111; }
+
+        /* ══════════════════════════
+           HERO
+        ══════════════════════════ */
+        .guia-hero {
+            background: linear-gradient(135deg, #0A0A0A 0%, #1a0a0a 50%, #CC0000 100%);
+            padding: 120px 24px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guia-hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1400&q=80');
+            background-size: cover; background-position: center;
+            opacity: 0.12;
+        }
+
+        .guia-hero::after {
+            content: 'GUIAS';
+            position: absolute; bottom: -40px; right: -20px;
+            font-family: var(--fonte-titulo);
+            font-size: 200px; font-weight: 900;
+            color: rgba(255,255,255,0.03);
+            pointer-events: none; letter-spacing: -8px;
+        }
+
+        .guia-hero-inner {
+            max-width: 1200px; margin: 0 auto;
+            position: relative; z-index: 1;
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 60px; align-items: center;
+        }
+
+        .hero-texto .badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(240,180,41,0.15);
+            border: 1px solid rgba(240,180,41,0.3);
+            color: #F0B429; padding: 6px 16px; border-radius: 999px;
+            font-size: 11px; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px;
+        }
+
+        .hero-texto h1 {
+            font-family: var(--fonte-titulo);
+            font-size: clamp(36px, 5vw, 60px);
+            font-weight: 900; color: #fff;
+            line-height: 1.05; letter-spacing: -2px; margin-bottom: 20px;
+        }
+
+        .hero-texto h1 em {
+            font-style: normal;
+            background: linear-gradient(90deg, #E8192C, #F0B429);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .hero-texto p { font-size: 16px; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 32px; }
+
+        .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+
+        .btn-hero-prim {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #E8192C; color: #fff;
+            padding: 13px 28px; border-radius: 999px;
+            font-weight: 700; font-size: 14px; border: none; cursor: pointer;
+            transition: 0.3s; box-shadow: 0 8px 28px rgba(232,25,44,0.4);
+            text-decoration: none;
+        }
+        .btn-hero-prim:hover { background: #A00000; transform: translateY(-2px); }
+
+        .btn-hero-sec {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.1); color: #fff;
+            padding: 13px 28px; border-radius: 999px;
+            font-weight: 700; font-size: 14px; border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer; transition: 0.3s; backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+        .btn-hero-sec:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+
+        /* Stats hero */
+        .hero-stats {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+        }
+
+        .hero-stat {
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px; padding: 20px;
+            text-align: center;
+        }
+
+        .hero-stat-num {
+            font-family: var(--fonte-titulo);
+            font-size: 36px; font-weight: 900; color: #F0B429;
+            line-height: 1; margin-bottom: 6px;
+        }
+
+        .hero-stat-label { font-size: 12px; color: rgba(255,255,255,0.55); font-weight: 500; }
+
+        /* ══════════════════════════
+           TIPOS DE GUIA
+        ══════════════════════════ */
+        .tipos-secao {
+            background: #fff; padding: 64px 24px;
+        }
+
+        .tipos-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+            max-width: 900px; margin: 0 auto;
+        }
+
+        .tipo-card {
+            border-radius: 24px; padding: 36px;
+            transition: 0.35s; cursor: pointer;
+            position: relative; overflow: hidden;
+        }
+
+        .tipo-card.humano {
+            background: linear-gradient(135deg, #0A0A0A, #1a0a0a);
+            color: #fff;
+        }
+
+        .tipo-card.digital {
+            background: #F5F0E8;
+            border: 2px solid rgba(0,0,0,0.06);
+            color: #111;
+        }
+
+        .tipo-card:hover { transform: translateY(-6px); box-shadow: 0 20px 56px rgba(0,0,0,0.2); }
+
+        .tipo-icone {
+            width: 64px; height: 64px; border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px; margin-bottom: 20px;
+        }
+
+        .humano .tipo-icone { background: rgba(232,25,44,0.15); }
+        .digital .tipo-icone { background: rgba(212,160,23,0.12); }
+
+        .tipo-card h3 {
+            font-family: var(--fonte-titulo);
+            font-size: 24px; font-weight: 800; margin-bottom: 10px;
+        }
+
+        .humano h3 { color: #fff; }
+        .digital h3 { color: #111; }
+
+        .tipo-card p { font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+        .humano p { color: rgba(255,255,255,0.65); }
+        .digital p { color: #666058; }
+
+        .tipo-features { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+
+        .tipo-features li {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 13px; font-weight: 500;
+        }
+
+        .humano .tipo-features li { color: rgba(255,255,255,0.8); }
+        .digital .tipo-features li { color: #555048; }
+
+        .tipo-features li i { font-size: 16px; }
+        .humano .tipo-features li i { color: #F0B429; }
+        .digital .tipo-features li i { color: #E8192C; }
+
+        .btn-tipo {
+            width: 100%; padding: 13px; border: none; border-radius: 12px;
+            font-family: var(--fonte-corpo); font-size: 14px; font-weight: 800;
+            cursor: pointer; transition: 0.3s;
+        }
+
+        .humano .btn-tipo { background: #E8192C; color: #fff; box-shadow: 0 6px 20px rgba(232,25,44,0.35); }
+        .humano .btn-tipo:hover { background: #A00000; }
+        .digital .btn-tipo { background: linear-gradient(135deg, #D4A017, #F0B429); color: #0A0A0A; }
+        .digital .btn-tipo:hover { filter: brightness(1.08); }
+
+        /* ══════════════════════════
+           SECÇÃO GUIAS
+        ══════════════════════════ */
+        .guias-secao {
+            padding: 80px 24px;
+            background: #F5F0E8;
+        }
+
+        .guias-inner {
+            max-width: 1200px; margin: 0 auto;
+        }
+
+        .guias-header {
+            display: flex; align-items: flex-start;
+            justify-content: space-between; gap: 24px;
+            margin-bottom: 32px; flex-wrap: wrap;
+        }
+
+        .guias-header-esq .titulo-secao { text-align: left; }
+        .guias-header-esq .titulo-secao::after { margin: 12px 0 0; }
+
+        .guias-header-esq p { font-size: 14px; color: #6b6560; margin-top: 8px; }
+
+        /* Pesquisa */
+        .guias-pesquisa {
+            display: flex; gap: 10px; flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .input-pesquisa-wrap {
+            position: relative;
+        }
+
+        .input-pesquisa-wrap i {
+            position: absolute; left: 14px; top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px; color: #9a9590;
+            pointer-events: none;
+        }
+
+        .input-pesquisa {
+            padding: 11px 14px 11px 42px;
+            border: 1.5px solid rgba(0,0,0,0.1);
+            border-radius: 999px;
+            font-family: var(--fonte-corpo); font-size: 13px; color: #111;
+            background: #fff; width: 240px;
+            transition: 0.25s;
+        }
+
+        .input-pesquisa:focus {
+            outline: none; border-color: #E8192C;
+            box-shadow: 0 0 0 3px rgba(232,25,44,0.08);
+        }
+
+        /* Layout principal */
+        .guias-layout {
+            display: grid; grid-template-columns: 260px 1fr; gap: 24px;
+        }
+
+        /* FILTROS */
+        .filtros-panel {
+            background: #fff; border-radius: 20px; padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.05);
+            height: fit-content; position: sticky; top: 88px;
+        }
+
+        .filtros-titulo {
+            font-family: var(--fonte-titulo);
+            font-size: 16px; font-weight: 800; color: #111;
+            margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
+        }
+
+        .filtros-titulo i { color: #E8192C; font-size: 18px; }
+
+        .filtro-grupo { margin-bottom: 20px; }
+
+        .filtro-grupo:last-child { margin-bottom: 0; }
+
+        .filtro-grupo-titulo {
+            font-size: 10px; font-weight: 700; color: #888;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            margin-bottom: 10px; display: block;
+        }
+
+        .filtro-chips { display: flex; flex-direction: column; gap: 6px; }
+
+        .filtro-chip-item {
+            display: flex; align-items: center; gap: 8px;
+            padding: 9px 12px; border-radius: 10px;
+            cursor: pointer; transition: 0.2s;
+            font-size: 13px; font-weight: 500; color: #555048;
+            border: 1px solid transparent;
+        }
+
+        .filtro-chip-item:hover { background: #F5F0E8; }
+
+        .filtro-chip-item.ativo {
+            background: rgba(232,25,44,0.06);
+            border-color: rgba(232,25,44,0.15);
+            color: #E8192C; font-weight: 700;
+        }
+
+        .filtro-chip-item i { font-size: 16px; }
+        .filtro-chip-item.ativo i { color: #E8192C; }
+
+        .filtro-range {
+            display: flex; flex-direction: column; gap: 8px;
+        }
+
+        .filtro-range input[type="range"] {
+            width: 100%; accent-color: #E8192C;
+        }
+
+        .filtro-range-vals {
+            display: flex; justify-content: space-between;
+            font-size: 12px; color: #888;
+        }
+
+        .filtro-range-vals span { font-weight: 700; color: #E8192C; }
+
+        .btn-limpar-filtros {
+            width: 100%; padding: 10px;
+            background: rgba(232,25,44,0.06);
+            border: 1px solid rgba(232,25,44,0.15);
+            border-radius: 10px; color: #E8192C;
+            font-family: var(--fonte-corpo); font-size: 12px;
+            font-weight: 700; cursor: pointer; transition: 0.2s;
+            margin-top: 16px;
+        }
+
+        .btn-limpar-filtros:hover { background: rgba(232,25,44,0.1); }
+
+        /* LISTA DE GUIAS */
+        .guias-resultados { display: flex; flex-direction: column; gap: 0; }
+
+        .guias-count {
+            font-size: 13px; color: #6b6560; margin-bottom: 16px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .guias-count strong { color: #111; }
+
+        .sort-select {
+            padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px; font-family: var(--fonte-corpo);
+            font-size: 13px; color: #111; background: #fff;
+            cursor: pointer;
+        }
+
+        /* Card do guia */
+        .guia-card {
+            background: #fff; border-radius: 20px; padding: 20px;
+            display: flex; gap: 18px; align-items: flex-start;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: 0.3s; cursor: pointer;
+            margin-bottom: 14px;
+        }
+
+        .guia-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+            border-color: rgba(232,25,44,0.15);
+        }
+
+        .guia-foto {
+            width: 80px; height: 80px; border-radius: 50%;
+            overflow: hidden; flex-shrink: 0;
+            border: 3px solid rgba(0,0,0,0.06);
+            position: relative;
+        }
+
+        .guia-foto img { width: 100%; height: 100%; object-fit: cover; }
+
+        .guia-foto .placeholder {
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #CC0000, #E8192C);
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--fonte-titulo); font-size: 28px; font-weight: 900; color: #fff;
+        }
+
+        .estado-dot {
+            position: absolute; bottom: 4px; right: 4px;
+            width: 14px; height: 14px; border-radius: 50%;
+            border: 2px solid #fff;
+        }
+
+        .dot-disponivel   { background: #4CAF50; }
+        .dot-indisponivel { background: #E8192C; }
+        .dot-inactivo     { background: #9a9590; }
+
+        .guia-corpo { flex: 1; }
+
+        .guia-topo {
+            display: flex; align-items: flex-start;
+            justify-content: space-between; gap: 12px;
+            margin-bottom: 8px; flex-wrap: wrap;
+        }
+
+        .guia-nome-wrap { display: flex; align-items: center; gap: 8px; }
+
+        .guia-nome {
+            font-family: var(--fonte-titulo);
+            font-size: 18px; font-weight: 800; color: #111;
+        }
+
+        .guia-verificado { color: #1a7adf; font-size: 16px; }
+
+        .guia-avaliacao {
+            display: flex; align-items: center; gap: 4px;
+            font-size: 13px; font-weight: 700; color: #111;
+        }
+
+        .guia-avaliacao i { color: #F0B429; font-size: 14px; }
+        .guia-avaliacao span { color: #888; font-size: 12px; font-weight: 400; }
+
+        .guia-meta {
+            display: flex; gap: 16px; flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .guia-meta-item {
+            display: flex; align-items: center; gap: 5px;
+            font-size: 12px; color: #6b6560;
+        }
+
+        .guia-meta-item i { font-size: 14px; color: #E8192C; }
+
+        .guia-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+
+        .badge-esp {
+            background: rgba(232,25,44,0.07);
+            color: #E8192C; border: 1px solid rgba(232,25,44,0.12);
+            font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 6px;
+        }
+
+        .badge-idioma {
+            background: #F5F0E8; color: #555048;
+            font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 6px;
+        }
+
+        .badge-estado-disp {
+            background: rgba(76,175,80,0.1); color: #2e7d32;
+            border: 1px solid rgba(76,175,80,0.2);
+            font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 6px;
+        }
+
+        .badge-estado-indisp {
+            background: rgba(232,25,44,0.08); color: #E8192C;
+            border: 1px solid rgba(232,25,44,0.15);
+            font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 6px;
+        }
+
+        .guia-bio {
+            font-size: 13px; color: #6b6560; line-height: 1.65;
+            margin-bottom: 14px;
+            display: -webkit-box; -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; overflow: hidden;
+        }
+
+        .guia-rodape {
+            display: flex; align-items: center;
+            justify-content: space-between; gap: 12px; flex-wrap: wrap;
+        }
+
+        .guia-preco {
+            font-family: var(--fonte-titulo);
+            font-size: 22px; font-weight: 900; color: #E8192C;
+        }
+
+        .guia-preco span { font-size: 12px; color: #888; font-family: var(--fonte-corpo); font-weight: 400; }
+
+        .guia-acoes { display: flex; gap: 8px; }
+
+        .btn-ver-perfil {
+            padding: 10px 18px;
+            border: 1.5px solid rgba(0,0,0,0.1);
+            border-radius: 999px; background: transparent;
+            font-family: var(--fonte-corpo); font-size: 13px; font-weight: 600;
+            color: #555048; cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        .btn-ver-perfil:hover { border-color: #111; color: #111; }
+
+        .btn-reservar {
+            padding: 10px 20px;
+            border: none; border-radius: 999px;
+            background: #E8192C; color: #fff;
+            font-family: var(--fonte-corpo); font-size: 13px; font-weight: 700;
+            cursor: pointer; transition: 0.3s;
+            box-shadow: 0 4px 16px rgba(232,25,44,0.3);
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        .btn-reservar:hover { background: #A00000; transform: translateY(-2px); }
+
+        .btn-reservar.indisponivel {
+            background: #9a9590; box-shadow: none; cursor: not-allowed;
+        }
+
+        /* Empresa tag */
+        .empresa-tag {
+            display: inline-flex; align-items: center; gap: 5px;
+            background: rgba(212,160,23,0.08);
+            border: 1px solid rgba(212,160,23,0.2);
+            color: #D4A017; font-size: 11px; font-weight: 700;
+            padding: 2px 8px; border-radius: 6px;
+        }
+
+        /* Loading e vazio */
+        .loading-guias { text-align: center; padding: 60px 20px; color: #6b6560; }
+        .spinner { width: 36px; height: 36px; border: 3px solid rgba(0,0,0,0.08); border-top-color: #E8192C; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .guias-vazio { text-align: center; padding: 60px 20px; color: #6b6560; }
+        .guias-vazio i { font-size: 48px; opacity: 0.2; display: block; margin-bottom: 12px; }
+
+        /* ══════════════════════════
+           MODAL PERFIL
+        ══════════════════════════ */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(12px);
+            z-index: 2000; display: flex; align-items: center; justify-content: center;
+            padding: 20px; opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+
+        .modal-overlay.aberto { opacity: 1; pointer-events: all; }
+
+        .modal-guia {
+            background: #fff; border-radius: 28px;
+            width: 100%; max-width: 640px; max-height: 90vh;
+            overflow-y: auto; transform: scale(0.92);
+            transition: 0.35s; box-shadow: 0 40px 80px rgba(0,0,0,0.25);
+        }
+
+        .modal-overlay.aberto .modal-guia { transform: scale(1); }
+
+        .modal-guia-hero {
+            background: linear-gradient(135deg, #0A0A0A, #1a0a0a);
+            padding: 32px; position: relative; overflow: hidden;
+        }
+
+        .modal-guia-hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: var(--grad-angola, linear-gradient(135deg, #CC0000, #E8192C));
+            opacity: 0.15;
+        }
+
+        .modal-fechar {
+            position: absolute; top: 16px; right: 16px; z-index: 1;
+            width: 36px; height: 36px; border-radius: 50%;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+            color: #fff; font-size: 18px; cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .modal-fechar:hover { background: rgba(232,25,44,0.3); }
+
+        .modal-guia-topo {
+            display: flex; gap: 20px; align-items: center;
+            position: relative; z-index: 1;
+        }
+
+        .modal-foto-grande {
+            width: 90px; height: 90px; border-radius: 50%;
+            overflow: hidden; border: 3px solid rgba(255,255,255,0.2);
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #CC0000, #E8192C);
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--fonte-titulo); font-size: 36px; font-weight: 900; color: #fff;
+        }
+
+        .modal-foto-grande img { width: 100%; height: 100%; object-fit: cover; }
+
+        .modal-guia-info h2 { font-family: var(--fonte-titulo); font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+        .modal-guia-info p  { font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 10px; }
+
+        .modal-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+        .modal-tag { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 6px; }
+
+        .modal-corpo { padding: 28px; }
+
+        .modal-secao-titulo { font-family: var(--fonte-titulo); font-size: 15px; font-weight: 800; color: #111; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .modal-secao-titulo i { font-size: 16px; color: #E8192C; }
+
+        .modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .modal-info-item { background: #F5F0E8; border-radius: 12px; padding: 14px; }
+        .modal-info-item label { font-size: 10px; font-weight: 700; color: #888; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+        .modal-info-item p { font-size: 15px; font-weight: 700; color: #111; }
+
+        .modal-bio { font-size: 14px; color: #555048; line-height: 1.75; margin-bottom: 20px; background: #F5F0E8; border-radius: 12px; padding: 16px; }
+
+        /* Formulário de reserva */
+        .reserva-form { background: #F5F0E8; border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+        .reserva-form-titulo { font-family: var(--fonte-titulo); font-size: 18px; font-weight: 800; color: #111; margin-bottom: 16px; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+
+        .campo-form label { font-size: 11px; font-weight: 700; color: #555; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 5px; }
+
+        .campo-form input,
+        .campo-form select,
+        .campo-form textarea {
+            width: 100%; padding: 11px 14px;
+            border: 1.5px solid rgba(0,0,0,0.1); border-radius: 10px;
+            font-family: var(--fonte-corpo); font-size: 13px; color: #111;
+            background: #fff; transition: 0.25s; appearance: none;
+        }
+
+        .campo-form input:focus,
+        .campo-form select:focus,
+        .campo-form textarea:focus {
+            outline: none; border-color: #E8192C;
+            box-shadow: 0 0 0 3px rgba(232,25,44,0.08);
+        }
+
+        .campo-form textarea { resize: none; height: 80px; }
+
+        .rotas-input { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+        .rota-chip { display: flex; align-items: center; gap: 6px; background: rgba(232,25,44,0.08); border: 1px solid rgba(232,25,44,0.15); color: #E8192C; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; }
+        .rota-chip button { background: none; border: none; cursor: pointer; color: #E8192C; font-size: 14px; padding: 0; line-height: 1; }
+
+        .valor-estimado { background: rgba(212,160,23,0.1); border: 1px solid rgba(212,160,23,0.2); border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+        .valor-estimado span { font-size: 13px; color: #555048; }
+        .valor-estimado strong { font-family: var(--fonte-titulo); font-size: 22px; font-weight: 900; color: #D4A017; }
+
+        .btn-confirmar-reserva {
+            width: 100%; padding: 14px; background: #E8192C; color: #fff;
+            border: none; border-radius: 12px; font-family: var(--fonte-corpo);
+            font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 6px 24px rgba(232,25,44,0.3);
+        }
+
+        .btn-confirmar-reserva:hover { background: #A00000; transform: translateY(-2px); }
+        .btn-confirmar-reserva:disabled { background: #9a9590; box-shadow: none; cursor: not-allowed; transform: none; }
+
+        /* Sucesso reserva */
+        .reserva-sucesso {
+            text-align: center; padding: 32px 20px;
+            display: none;
+        }
+
+        .reserva-sucesso i { font-size: 56px; color: #4CAF50; margin-bottom: 16px; display: block; }
+        .reserva-sucesso h3 { font-family: var(--fonte-titulo); font-size: 24px; color: #111; margin-bottom: 8px; }
+        .reserva-sucesso p { font-size: 14px; color: #6b6560; line-height: 1.7; }
+
+        /* ══════════════════════════
+           RESPONSIVIDADE
+        ══════════════════════════ */
+        @media (max-width: 1024px) {
+            .guia-hero-inner { grid-template-columns: 1fr; gap: 40px; }
+            .hero-stats { grid-template-columns: repeat(3, 1fr); }
+            .guias-layout { grid-template-columns: 1fr; }
+            .filtros-panel { position: static; }
+            .tipos-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+        }
+
+        @media (max-width: 768px) {
+            .guia-hero { padding: 100px 16px 60px; }
+            .guias-secao { padding: 48px 16px; }
+            .modal-info-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .modal-guia-topo { flex-direction: column; text-align: center; }
+            .hero-btns { flex-direction: column; }
+        }
+    </style>
 </head>
 <body>
 
-<!-- ── HEADER ── -->
+<!-- HEADER -->
 <header class="header">
     <div class="header-inner">
         <a href="../angomovel.html" class="logo">
@@ -21,462 +671,163 @@
         </a>
         <nav class="nav">
             <a href="../angomovel.html">Início</a>
-            <a href="../abas/categorias.html">Categorias</a>
-            <a href="../abas/destino.html">Destinos</a>
-            <a href="../abas/sobre.html">Sobre</a>
+            <a href="categorias.html">Categorias</a>
+            <a href="destino.html">Destinos</a>
+            <a href="sobre.html">Sobre</a>
         </nav>
-        <a href="../abas/cadastroAngo.html">
+        <a href="cadastroAngo.html">
             <button class="btn-entrar">Entrar</button>
         </a>
     </div>
 </header>
 
-<!-- ══════════════════════════════════════════
-     TELA HOME — Escolha seu Guia
-══════════════════════════════════════════ -->
-<div id="home" class="screen active">
-
-    <!-- Hero: texto + cards de escolha -->
-    <div class="hero-guia">
+<!-- HERO -->
+<section class="guia-hero">
+    <div class="guia-hero-inner">
         <div class="hero-texto">
-            <h1>Escolha o seu Guia</h1>
-            <p>Escolha entre um guia humano local ou um guia digital gratuito para explorar Angola ao seu ritmo.</p>
-            <button class="btn-primario" onclick="document.querySelector('.lista-guias').scrollIntoView({behavior:'smooth'})">
-                Ver Guias
-            </button>
-        </div>
-
-        <div class="opcoes-guia">
-            <!-- Guia Humano -->
-            <div class="card-opcao-guia">
-                <img src="../assets/the-king.jpg" class="guia-foto-destaque" alt="Guia Humano">
-                <h3>Guia Humano <span></span></h3>
-                <ul class="features-list">
-                    <li><i class="ph-fill ph-check-circle"></i> Experiência local</li>
-                    <li><i class="ph-fill ph-check-circle"></i> Interação pessoal</li>
-                    <li><i class="ph-fill ph-check-circle"></i> Flexibilidade</li>
-                    <li><i class="ph-fill ph-check-circle"></i> Dicas exclusivas</li>
-                </ul>
-                <button class="btn-primario" style="width:100%; margin-top:14px;"
-                    onclick="document.querySelector('.lista-guias').scrollIntoView({behavior:'smooth'})">
-                    Ver Guias
-                </button>
+            <div class="badge"><i class="ph-fill ph-compass"></i> Guias Certificados</div>
+            <h1>Encontra o guia <em>perfeito</em> para Angola</h1>
+            <p>Guias locais certificados prontos para te mostrar o melhor de Angola. Experiências autênticas, seguras e inesquecíveis.</p>
+            <div class="hero-btns">
+                <a href="#guias" class="btn-hero-prim"><i class="ph ph-magnifying-glass"></i> Explorar Guias</a>
+                <a href="../Angomovestudio/angomovelstudio.html" class="btn-hero-sec"><i class="ph ph-buildings"></i> Registar como Guia</a>
             </div>
+        </div>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-num">120+</div>
+                <div class="hero-stat-label">Guias Certificados</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">18</div>
+                <div class="hero-stat-label">Províncias</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">4.9⭐</div>
+                <div class="hero-stat-label">Avaliação Média</div>
+            </div>
+        </div>
+    </div>
+</section>
 
-            <!-- Guia Digital -->
-            <div class="card-opcao-guia">
-                <div class="guia-digital-icon">
-                    <i class="ph ph-map-trifold"></i>
-                </div>
-                <h3>Guia Digital <span></span></h3>
-                <ul class="features-list">
-                    <li><i class="ph-fill ph-check-circle"></i> Disponível 24h</li>
+<!-- TIPOS DE GUIA -->
+<section class="tipos-secao">
+    <div style="max-width:1200px;margin:0 auto 40px;padding:0 24px;">
+        <h2 class="titulo-secao">Escolhe o tipo de guia</h2>
+        <p class="subtitulo-secao" style="margin-bottom:0;">Guia humano local ou roteiro digital — a escolha é tua</p>
+    </div>
+    <div style="max-width:1200px;margin:0 auto;padding:0 24px;">
+        <div class="tipos-grid">
+            <div class="tipo-card humano" onclick="scrollParaGuias()">
+                <div class="tipo-icone">👤</div>
+                <h3>Guia Humano</h3>
+                <p>Experiência local autêntica com um angolano que conhece cada canto do seu destino.</p>
+                <ul class="tipo-features">
+                    <li><i class="ph-fill ph-check-circle"></i> Experiência local exclusiva</li>
+                    <li><i class="ph-fill ph-check-circle"></i> Interacção pessoal e cultural</li>
+                    <li><i class="ph-fill ph-check-circle"></i> Rotas personalizadas</li>
+                    <li><i class="ph-fill ph-check-circle"></i> Dicas e segredos locais</li>
+                </ul>
+                <button class="btn-tipo">Ver Guias Disponíveis</button>
+            </div>
+            <div class="tipo-card digital">
+                <div class="tipo-icone">🗺️</div>
+                <h3>Guia Digital</h3>
+                <p>Roteiros e mapas interactivos gratuitos para explorar Angola ao teu ritmo.</p>
+                <ul class="tipo-features">
+                    <li><i class="ph-fill ph-check-circle"></i> Disponível 24h / 7 dias</li>
                     <li><i class="ph-fill ph-check-circle"></i> Funciona offline</li>
-                    <li><i class="ph-fill ph-check-circle"></i> Gratuito</li>
+                    <li><i class="ph-fill ph-check-circle"></i> Mapas e rotas interactivas</li>
+                    <li><i class="ph-fill ph-check-circle"></i> Completamente gratuito</li>
                 </ul>
-                <button class="btn-verde" style="width:100%; margin-top:14px;">
-                    Grátis
-                </button>
-                <button class="btn-outline" style="width:100%; margin-top:10px;"
-                    onclick="showScreen('digital')">
-                    Ver Roteiros
-                </button>
+                <button class="btn-tipo" onclick="window.location.href='destino.html'">Ver Mapa & Roteiros</button>
             </div>
         </div>
     </div>
+</section>
 
-    <!-- Separador -->
-    <hr class="separador">
+<!-- SECÇÃO GUIAS -->
+<section class="guias-secao" id="guias">
+    <div class="guias-inner">
+        <div class="guias-header">
+            <div class="guias-header-esq">
+                <h2 class="titulo-secao" style="text-align:left;">Guias Disponíveis</h2>
+                <p>Guias activados por empresas certificadas na plataforma AngoMovel</p>
+            </div>
+            <div class="guias-pesquisa">
+                <div class="input-pesquisa-wrap">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input type="text" class="input-pesquisa" id="inputPesquisaGuia" placeholder="Pesquisa por nome..." oninput="filtrarGuias()">
+                </div>
+                <select class="sort-select" id="sortSelect" onchange="filtrarGuias()">
+                    <option value="avaliacao">Melhor avaliados</option>
+                    <option value="preco_asc">Preço ↑</option>
+                    <option value="preco_desc">Preço ↓</option>
+                </select>
+            </div>
+        </div>
 
-    <!-- ── Lista de Guias ── -->
-    <div class="container lista-guias">
-        <h2 class="titulo-secao">Guias Disponíveis</h2>
+        <div class="guias-layout">
+            <!-- Filtros -->
+            <aside class="filtros-panel">
+                <div class="filtros-titulo"><i class="ph-fill ph-funnel"></i> Filtrar por</div>
 
-        <div class="guias-lista-wrap">
-
-            <!-- Filtros rápidos -->
-            <div class="filtros-guia">
-                <h3>Filtrar por</h3>
                 <div class="filtro-grupo">
-                    <p class="filtro-titulo">Idioma</p>
-                    <label><input type="checkbox" checked> Português</label>
-                    <label><input type="checkbox"> Inglês</label>
-                    <label><input type="checkbox"> Francês</label>
-                    <label><input type="checkbox"> Espanhol</label>
+                    <span class="filtro-grupo-titulo">Especialidade</span>
+                    <div class="filtro-chips" id="filtroEsp">
+                        <div class="filtro-chip-item ativo" onclick="setFiltro('esp', 'todas', this)"><i class="ph ph-squares-four"></i> Todas</div>
+                        <div class="filtro-chip-item" onclick="setFiltro('esp', 'Praias e Costa', this)"><i class="ph ph-waves"></i> Praias e Costa</div>
+                        <div class="filtro-chip-item" onclick="setFiltro('esp', 'Cultura e História', this)"><i class="ph ph-buildings"></i> Cultura e História</div>
+                        <div class="filtro-chip-item" onclick="setFiltro('esp', 'Natureza e Parques', this)"><i class="ph ph-tree"></i> Natureza e Parques</div>
+                        <div class="filtro-chip-item" onclick="setFiltro('esp', 'Gastronomia', this)"><i class="ph ph-fork-knife"></i> Gastronomia</div>
+                        <div class="filtro-chip-item" onclick="setFiltro('esp', 'Aventura e Desporto', this)"><i class="ph ph-mountains"></i> Aventura</div>
+                    </div>
                 </div>
+
                 <div class="filtro-grupo">
-                    <p class="filtro-titulo">Especialidade</p>
-                    <label><input type="radio" name="esp" checked> Todos</label>
-                    <label><input type="radio" name="esp"> Praias</label>
-                    <label><input type="radio" name="esp"> Cultura</label>
-                    <label><input type="radio" name="esp"> Gastronomia</label>
-                    <label><input type="radio" name="esp"> Aventura</label>
+                    <span class="filtro-grupo-titulo">Província</span>
+                    <div class="filtro-chips" id="filtroProv">
+                        <div class="filtro-chip-item ativo" onclick="setFiltro('prov', 'todas', this)"><i class="ph ph-map-pin"></i> Todas</div>
+                        <div class="filtro-chip-item" onclick="setFiltro('prov', 'Luanda', this)"><i class="ph ph-map-pin"></i> Luanda</div>
+                        <div class="filtro-chip-item" onclick="setFiltro('prov', 'Benguela', this)"><i class="ph ph-map-pin"></i> Benguela</div>
+                        <div class="filtro-chip-item" onclick="setFiltro('prov', 'Namibe', this)"><i class="ph ph-map-pin"></i> Namibe</div>
+                        <div class="filtro-chip-item" onclick="setFiltro('prov', 'Huíla', this)"><i class="ph ph-map-pin"></i> Huíla</div>
+                    </div>
                 </div>
+
                 <div class="filtro-grupo">
-                    <p class="filtro-titulo">Tipo</p>
-                    <label><input type="radio" name="tipo" checked> Todos</label>
-                    <label><input type="radio" name="tipo"> Guia Humano</label>
-                    <label><input type="radio" name="tipo"> Guia Digital</label>
-                </div>
-            </div>
-
-            <!-- Lista de guias -->
-            <div class="guias-lista">
-
-                <div class="guia-item">
-                    <div class="guia-avatar">
-                        <img src="../assets/humano2.jfif" alt="Helena Silva">
-                    </div>
-                    <div class="guia-info">
-                        <div class="guia-nome">Miguel Silva <i class="ph-fill ph-seal-check" style="color:#0E6BA8"></i></div>
-                        <div class="guia-detalhes">
-                            <span>Praias</span>
-                            <span class="guia-preco">31.000 Kz/dia</span>
-                        </div>
-                        <div class="guia-idiomas">
-                            <span class="badge-idioma">PT</span>
-                            <span class="badge-idioma">EN</span>
-                            <span class="badge-idioma">CH</span>
+                    <span class="filtro-grupo-titulo">Preço máximo/dia</span>
+                    <div class="filtro-range">
+                        <input type="range" min="5000" max="100000" step="5000" value="100000" id="rangePreco" oninput="actualizarRange()">
+                        <div class="filtro-range-vals">
+                            <span>5.000 Kz</span>
+                            <span id="rangeVal">100.000 Kz</span>
                         </div>
                     </div>
-                    <button class="btn-contactar"><span>+</span> Contactar</button>
                 </div>
 
-                <div class="guia-item">
-                    <div class="guia-avatar">
-                        <img src="../assets/humano4.jfif" alt="Helena Silva">
-                    </div>
-                    <div class="guia-info">
-                        <div class="guia-nome">Luna Vivienne<i class="ph-fill ph-seal-check" style="color:#0E6BA8"></i></div>
-                        <div class="guia-detalhes">
-                            <span>Prarques</span>
-                            <span class="guia-preco">87.000 Kz/dia</span>
-                        </div>
-                        <div class="guia-idiomas">
-                            <span class="badge-idioma">JPN</span>
-                            <span class="badge-idioma">RUS</span>
-                            <span class="badge-idioma">FR</span>
-                        </div>
-                    </div>
-                    <button class="btn-contactar"><span>+</span> Contactar</button>
-                </div>
-
-                <div class="guia-item">
-                    <div class="guia-avatar">
-                        <img src="../assets/homano1.jfif" alt="Helena Silva">
-                    </div>
-                    <div class="guia-info">
-                        <div class="guia-nome">Davi Raviole <i class="ph-fill ph-seal-check" style="color:#0E6BA8"></i></div>
-                        <div class="guia-detalhes">
-                            <span>Hoteis</span>
-                            <span class="guia-preco">49.000 Kz/dia</span>
-                        </div>
-                        <div class="guia-idiomas">
-                            <span class="badge-idioma">DEU</span>
-                            <span class="badge-idioma">ESP</span>
-                            <span class="badge-idioma">FR</span>
-                        </div>
-                    </div>
-                    <button class="btn-contactar"><span>+</span> Contactar</button>
-                </div>
-
-                <div class="guia-item">
-                    <div class="guia-avatar">
-                        <img src="../assets/timothy-barlin-2BJwlRZaR5M-unsplash.jpg" alt="Helena Silva">
-                    </div>
-                    <div class="guia-info">
-                        <div class="guia-nome">Bernardo Silva <i class="ph-fill ph-seal-check" style="color:#0E6BA8"></i></div>
-                        <div class="guia-detalhes">
-                            <span>História cultural</span>
-                            <span class="guia-preco">31.000 Kz/dia</span>
-                        </div>
-                        <div class="guia-idiomas">
-                            <span class="badge-idioma">PT</span>
-                            <span class="badge-idioma">EN</span>
-                            <span class="badge-idioma">ITA</span>
-                        </div>
-                    </div>
-                    <button class="btn-contactar"><span>+</span> Contactar</button>
-                </div>
-
-                <div class="guia-item">
-                    <div class="guia-avatar">
-                        <img src="../assets/humano3.jfif" alt="Helena Silva">
-                    </div>
-                    <div class="guia-info">
-                        <div class="guia-nome">Aline Flávia <i class="ph-fill ph-seal-check" style="color:#0E6BA8"></i></div>
-                        <div class="guia-detalhes">
-                            <span>História e Artes</span>
-                            <span class="guia-preco">44.000 Kz/dia</span>
-                        </div>
-                        <div class="guia-idiomas">
-                            <span class="badge-idioma">JPN</span>
-                            <span class="badge-idioma">KOR</span>
-                            <span class="badge-idioma">CH</span>
-                        </div>
-                    </div>
-                    <button class="btn-contactar"><span>+</span> Contactar</button>
-                </div>
-
-                <div class="guia-item">
-                    <div class="guia-avatar">
-                        <img src="../assets/rodgers-otieno-DwTO1h0D4b4-unsplash.jpg" alt="Helena Silva">
-                    </div>
-                    <div class="guia-info">
-                        <div class="guia-nome">Arthur Heitor<i class="ph-fill ph-seal-check" style="color:#0E6BA8"></i></div>
-                        <div class="guia-detalhes">
-                            <span>Gastronômica </span>
-                            <span class="guia-preco">81.000 Kz/dia</span>
-                        </div>
-                        <div class="guia-idiomas">
-                            <span class="badge-idioma">PT</span>
-                            <span class="badge-idioma">EN</span>
-                            <span class="badge-idioma">FR</span>
-                        </div>
-                    </div>
-                    <button class="btn-contactar"><span>+</span> Contactar</button>
-                </div>
-
-                <div class="guia-item">
-                    <div class="guia-avatar">
-                        <img src="../assets/stefan-stefancik-QXevDflbl8A-unsplash.jpg" alt="Helena Silva">
-                    </div>
-                    <div class="guia-info">
-                        <div class="guia-nome">Helena Silva <i class="ph-fill ph-seal-check" style="color:#0E6BA8"></i></div>
-                        <div class="guia-detalhes">
-                            <span>História e Artes</span>
-                            <span class="guia-preco">81.000 Kz/dia</span>
-                        </div>
-                        <div class="guia-idiomas">
-                            <span class="badge-idioma">PT</span>
-                            <span class="badge-idioma">EN</span>
-                            <span class="badge-idioma">FR</span>
-                        </div>
-                    </div>
-                    <button class="btn-contactar"><span>+</span> Contactar</button>
-                </div>
-
-                <div class="guia-item">
-                    <div class="guia-avatar">
-                        <img src="../assets/levi-meir-clancy-tS7zCQf9dGQ-unsplash.jpg" alt="Helena Silva">
-                    </div>
-                    <div class="guia-info">
-                        <div class="guia-nome">Manuel jose<i class="ph-fill ph-seal-check" style="color:#0E6BA8"></i></div>
-                        <div class="guia-detalhes">
-                            <span>História e Artes</span>
-                            <span class="guia-preco">67.000 Kz/dia</span>
-                        </div>
-                        <div class="guia-idiomas">
-                            <span class="badge-idioma">PT</span>
-                            <span class="badge-idioma">EN</span>
-                            <span class="badge-idioma">FR</span>
-                        </div>
-                    </div>
-                    <button class="btn-contactar"><span>+</span> Contactar</button>
-                </div>
-
-                <div class="guia-item">
-                    <div class="guia-avatar">
-                        <img src="../assets/nana-kwame-VEWUZkWnGL4-unsplash.jpg" alt="Helena Silva">
-                    </div>
-                    <div class="guia-info">
-                        <div class="guia-nome">Milena Joao<i class="ph-fill ph-seal-check" style="color:#0E6BA8"></i></div>
-                        <div class="guia-detalhes">
-                            <span>História e Artes</span>
-                            <span class="guia-preco">81.000 Kz/dia</span>
-                        </div>
-                        <div class="guia-idiomas">
-                            <span class="badge-idioma">CH</span>
-                            <span class="badge-idioma">EN</span>
-                            <span class="badge-idioma">DEU</span>
-                        </div>
-                    </div>
-                    <button class="btn-contactar"><span>+</span> Contactar</button>
-                </div>
-
-                <div class="guia-item">
-                    <div class="guia-avatar">
-                        <img src="../assets/hans-eiskonen-JuMrIE10_5c-unsplash.jpg" alt="Davi Silva">
-                    </div>
-                    <div class="guia-info">
-                        <div class="guia-nome">Davi Silva <i class="ph-fill ph-seal-check" style="color:#0E6BA8"></i></div>
-                        <div class="guia-detalhes">
-                            <span>PT | EN | FR</span>
-                            <span class="guia-preco">45.000 Kz/dia</span>
-                        </div>
-                        <div class="guia-idiomas">
-                            <span class="badge-idioma">PT</span>
-                            <span class="badge-idioma">EN</span>
-                            <span class="badge-idioma">FR</span>
-                        </div>
-                    </div>
-                    <button class="btn-contactar"><span>+</span> Contactar</button>
-                </div>
-
-                <div class="guia-item">
-                    <div class="guia-avatar">
-                        <img src="../assets/jean-carlos-taravine-smith-sd2KLcITvHQ-unsplash.jpg" alt="José Silva">
-                    </div>
-                    <div class="guia-info">
-                        <div class="guia-nome">José Silva</div>
-                        <div class="guia-detalhes">
-                            <span>EN | FR</span>
-                            <span class="guia-preco">10.000 Kz/dia</span>
-                        </div>
-                        <div class="guia-idiomas">
-                            <span class="badge-idioma">EN</span>
-                            <span class="badge-idioma">FR</span>
-                        </div>
-                    </div>
-                    <button class="btn-contactar"><span>+</span> Contactar</button>
-                </div>
-
-                <div class="guia-item">
-                    <div class="guia-avatar">
-                        <img src="../assets/timothy-barlin-2BJwlRZaR5M-unsplash.jpg" alt="Maria Silva">
-                    </div>
-                    <div class="guia-info">
-                        <div class="guia-nome">Mario Silva <i class="ph-fill ph-seal-check" style="color:#0E6BA8"></i></div>
-                        <div class="guia-detalhes">
-                            <span>PT | ESP | FR</span>
-                            <span class="guia-preco">15.000 Kz/dia</span>
-                        </div>
-                        <div class="guia-idiomas">
-                            <span class="badge-idioma">PT</span>
-                            <span class="badge-idioma">ESP</span>
-                            <span class="badge-idioma">FR</span>
-                        </div>
-                    </div>
-                    <button class="btn-contactar"><span>+</span> Contactar</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     TELA CATEGORIAS DE GUIAS
-══════════════════════════════════════════ -->
-<div id="categorias" class="screen">
-    <div class="container">
-        <h2 class="titulo-secao">Categorias de Guias</h2>
-        <div class="categorias-grid">
-            <div class="card-categoria cat-praias">
-                <span class="cat-icon">🏖️</span>
-                <span>Guias de</span>
-                <h3>Praias</h3>
-            </div>
-            <div class="card-categoria cat-parques">
-                <span class="cat-icon">🌳</span>
-                <span>Guias de</span>
-                <h3>Parques</h3>
-            </div>
-            <div class="card-categoria cat-cultura">
-                <span class="cat-icon">🏛️</span>
-                <span>Guias de</span>
-                <h3>Cultura</h3>
-            </div>
-            <div class="card-categoria cat-gastronomia">
-                <span class="cat-icon">🍴</span>
-                <span>Guias de</span>
-                <h3>Gastronomia</h3>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     TELA GUIA DIGITAL — Roteiros
-══════════════════════════════════════════ -->
-<div id="digital" class="screen">
-    <div class="container">
-        <h2 class="titulo-secao">Guia Digital</h2>
-        <div class="roteiro-container">
-            <div class="roteiro-main">
-                <div class="roteiro-header">
-                    <div>
-                        <h2>Roteiro Histórico de Luanda</h2>
-                        <p>3 horas &nbsp;|&nbsp; 8 pontos de interesse</p>
-                    </div>
-                    <span class="badge-offline">📶 Disponível Offline</span>
-                </div>
-                <img src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=1000" alt="Mapa Luanda">
-                <div class="idiomas-roteiro">
-                    <span class="badge-idioma ativo">PT</span>
-                    <span class="badge-idioma">EN</span>
-                    <span class="badge-idioma">FR</span>
-                    <span class="badge-idioma">ES</span>
-                </div>
-                <button class="btn-primario iniciar-btn">
-                    ▶ Iniciar Roteiro
+                <button class="btn-limpar-filtros" onclick="limparFiltros()">
+                    <i class="ph ph-arrows-clockwise"></i> Limpar filtros
                 </button>
-            </div>
+            </aside>
 
-            <div class="roteiro-sidebar">
-                <h3>Pontos do Roteiro</h3>
-                <div class="ponto-item">
-                    <div class="ponto-numero">1</div>
-                    <div>
-                        <strong>Fortaleza de São Miguel</strong>
-                        <small>Histórico · 1 M-40 km</small>
-                    </div>
+            <!-- Lista -->
+            <div>
+                <div class="guias-count">
+                    <span>A mostrar <strong id="countGuias">0</strong> guias</span>
                 </div>
-                <div class="ponto-item">
-                    <div class="ponto-numero">2</div>
-                    <div>
-                        <strong>Museu Nacional</strong>
-                        <small>Cultura · 1 M-40 km</small>
-                    </div>
-                </div>
-                <div class="ponto-item">
-                    <div class="ponto-numero">3</div>
-                    <div>
-                        <strong>Igreja da Nazaré</strong>
-                        <small>Religioso · 3 M-430 km</small>
-                    </div>
-                </div>
-                <div class="ponto-item">
-                    <div class="ponto-numero">4</div>
-                    <div>
-                        <strong>Marginal de Luanda</strong>
-                        <small>Lazer · 4 M-440 km</small>
+                <div class="guias-resultados" id="listaGuias">
+                    <div class="loading-guias">
+                        <div class="spinner"></div>
+                        <p>A carregar guias...</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<!-- ══════════════════════════════════════════
-     TELA PERFIL
-══════════════════════════════════════════ -->
-<div id="perfil" class="screen">
-    <div class="container">
-        <div class="perfil-card">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150" class="perfil-foto" alt="João Silva">
-            <div class="perfil-info">
-                <h2>João Silva</h2>
-                <p>joao.silva@email.com</p>
-            </div>
-            <div class="perfil-stats">
-                <div class="stat-item"><strong>12</strong><small>Viagens</small></div>
-                <div class="stat-item"><strong>8</strong><small>Favoritos</small></div>
-                <div class="stat-item"><strong>4.9 ★</strong><small>Avaliação</small></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ── NAVBAR INFERIOR MOBILE ── -->
-<nav class="navbar-inferior">
-    <i class="ph-fill ph-house ativo" onclick="showScreen('home')"></i>
-    <i class="ph ph-compass" onclick="showScreen('categorias')"></i>
-    <i class="ph ph-map-trifold" onclick="showScreen('digital')"></i>
-    <i class="ph ph-user" onclick="showScreen('perfil')"></i>
-</nav>
-
-<!-- ── FOOTER ── -->
+<!-- FOOTER -->
 <footer class="main-footer">
     <div class="footer-inner">
         <div class="footer-brand">
@@ -492,9 +843,8 @@
             <h3>Explorar</h3>
             <ul>
                 <li><a href="../angomovel.html">Início</a></li>
-                <li><a href="../abas/guia.html">Guias Certificados</a></li>
-                <li><a href="../abas/categorias.html">Categorias</a></li>
-                <li><a href="#">Destinos Populares</a></li>
+                <li><a href="categorias.html">Categorias</a></li>
+                <li><a href="destino.html">Destinos</a></li>
             </ul>
         </div>
         <div class="footer-contact">
@@ -509,18 +859,413 @@
     </div>
 </footer>
 
-<script>
-    function showScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(screenId).classList.add('active');
-        document.querySelectorAll('.navbar-inferior i').forEach(i => i.classList.remove('ativo'));
-        const map = { home: 0, categorias: 1, digital: 2, perfil: 3 };
-        const icons = document.querySelectorAll('.navbar-inferior i');
-        if (map[screenId] !== undefined) icons[map[screenId]].classList.add('ativo');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-</script>
-<script src="../js/auth.js"></script>
+<!-- MODAL PERFIL DO GUIA -->
+<div class="modal-overlay" id="modalGuia" onclick="if(event.target===this)fecharModal()">
+    <div class="modal-guia">
+        <div class="modal-guia-hero">
+            <button class="modal-fechar" onclick="fecharModal()"><i class="ph ph-x"></i></button>
+            <div class="modal-guia-topo">
+                <div class="modal-foto-grande" id="modalFoto">G</div>
+                <div class="modal-guia-info">
+                    <h2 id="modalNome">—</h2>
+                    <p id="modalEsp">—</p>
+                    <div class="modal-tags" id="modalTags"></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-corpo">
+            <div class="modal-info-grid">
+                <div class="modal-info-item"><label>📍 Província</label><p id="modalProv">—</p></div>
+                <div class="modal-info-item"><label>💰 Preço/dia</label><p id="modalPreco">—</p></div>
+                <div class="modal-info-item"><label>⭐ Avaliação</label><p id="modalAval">—</p></div>
+                <div class="modal-info-item"><label>🏢 Empresa</label><p id="modalEmpresa">—</p></div>
+            </div>
 
+            <div class="modal-bio" id="modalBio">—</div>
+
+            <!-- Formulário de reserva -->
+            <div class="reserva-form" id="reservaForm">
+                <div class="reserva-form-titulo">📅 Fazer Reserva</div>
+
+                <div class="form-row">
+                    <div class="campo-form">
+                        <label>Data de Entrada *</label>
+                        <input type="date" id="resEntrada" onchange="calcularValor()">
+                    </div>
+                    <div class="campo-form">
+                        <label>Data de Saída *</label>
+                        <input type="date" id="resSaida" onchange="calcularValor()">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="campo-form">
+                        <label>Nº de Pessoas</label>
+                        <select id="resPessoas">
+                            <option value="1">1 pessoa</option>
+                            <option value="2">2 pessoas</option>
+                            <option value="3">3 pessoas</option>
+                            <option value="4">4 pessoas</option>
+                            <option value="5+">5+ pessoas</option>
+                        </select>
+                    </div>
+                    <div class="campo-form">
+                        <label>Método de Pagamento</label>
+                        <select id="resPagamento">
+                            <option value="dinheiro">💵 Dinheiro</option>
+                            <option value="transferencia">🏦 Transferência</option>
+                            <option value="multicaixa">💳 Multicaixa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="campo-form" style="margin-bottom:12px;">
+                    <label>Destinos / Rotas</label>
+                    <div class="rotas-input" id="rotasInput"></div>
+                    <input type="text" id="rotaAdd" placeholder="Adiciona um destino e prime Enter..."
+                        onkeydown="if(event.key==='Enter'){event.preventDefault();adicionarRota()}"
+                        style="width:100%;padding:9px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-family:var(--fonte-corpo);font-size:13px;margin-top:6px;">
+                </div>
+
+                <div class="campo-form" style="margin-bottom:14px;">
+                    <label>Observações</label>
+                    <textarea id="resObs" placeholder="Preferências especiais, necessidades específicas..."></textarea>
+                </div>
+
+                <div class="valor-estimado" id="valorEstimado" style="display:none;">
+                    <span>Valor estimado:</span>
+                    <strong id="valorTotal">0 Kz</strong>
+                </div>
+
+                <button class="btn-confirmar-reserva" id="btnConfirmar" onclick="confirmarReserva()">
+                    <i class="ph-fill ph-calendar-check"></i> Confirmar Reserva
+                </button>
+            </div>
+
+            <!-- Sucesso -->
+            <div class="reserva-sucesso" id="reservaSucesso">
+                <i class="ph-fill ph-check-circle"></i>
+                <h3>Reserva enviada! 🎉</h3>
+                <p>O guia receberá a tua solicitação e confirmará em breve.<br>Podes acompanhar o estado na tua conta.</p>
+                <button onclick="fecharModal()" style="margin-top:20px;padding:12px 28px;background:#E8192C;color:#fff;border:none;border-radius:999px;font-weight:700;font-size:14px;cursor:pointer;">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/auth.js"></script>
+<script>
+    const API = 'http://localhost:3000/api/v1';
+    let todosGuias = [];
+    let guiaModal  = null;
+    let rotasSel   = [];
+    let filtros    = { esp: 'todas', prov: 'todas', preco: 100000 };
+
+    // Guias demo para quando não há backend
+    const guiasDemo = [
+        { id:'d1', nome:'Carlos Mbemba',  especialidade:'Cultura e História', provincia:'Luanda',   preco_por_dia:25000, idiomas:['PT','EN','FR'], bio:'Guia cultural com 8 anos de experiência em Luanda e arredores. Especialista em história angolana.', avaliacao:4.9, total_avaliacoes:47, estado_guia:'disponivel', empresa_nome:'TurAngola Lda.', foto:null },
+        { id:'d2', nome:'Filomena Neto',  especialidade:'Praias e Costa',     provincia:'Benguela', preco_por_dia:18000, idiomas:['PT','ES'],       bio:'Especialista em turismo de praias e actividades aquáticas. Conhece cada praia de Benguela.', avaliacao:4.8, total_avaliacoes:32, estado_guia:'disponivel', empresa_nome:'Benguela Tours', foto:null },
+        { id:'d3', nome:'Agostinho Lopes',especialidade:'Natureza e Parques', provincia:'Namibe',   preco_por_dia:30000, idiomas:['PT','EN'],       bio:'Guia do Parque Nacional da Iona há 10 anos. Expert em fauna e flora do deserto do Namibe.', avaliacao:4.7, total_avaliacoes:28, estado_guia:'disponivel', empresa_nome:'Desert Safari AO', foto:null },
+        { id:'d4', nome:'Maria Kianda',   especialidade:'Gastronomia',        provincia:'Luanda',   preco_por_dia:20000, idiomas:['PT','FR','EN'],  bio:'Apaixonada pela culinária angolana. Leva os clientes pelos melhores sabores de Luanda.', avaliacao:4.9, total_avaliacoes:61, estado_guia:'disponivel', empresa_nome:'Flavours Angola', foto:null },
+        { id:'d5', nome:'João Dala',      especialidade:'Aventura e Desporto',provincia:'Huíla',    preco_por_dia:22000, idiomas:['PT','EN'],       bio:'Especialista em trekking na Serra da Leba e Fenda da Tundavala. Ama a aventura.', avaliacao:4.6, total_avaliacoes:19, estado_guia:'indisponivel', empresa_nome:'Huíla Adventures', foto:null },
+        { id:'d6', nome:'Ana Kapumba',    especialidade:'Cultura e História', provincia:'Malanje',  preco_por_dia:15000, idiomas:['PT'],            bio:'Natural de Malanje, guia das Pedras Negras de Pungo Andongo e das Quedas de Calandula.', avaliacao:4.8, total_avaliacoes:23, estado_guia:'disponivel', empresa_nome:'Malanje Turismo', foto:null },
+    ];
+
+    // ── Carregar guias ──
+    async function carregarGuias() {
+        try {
+            const res = await fetch(`${API}/users/guias`);
+            if (res.ok) {
+                const data = await res.json();
+                todosGuias = data.length > 0 ? data : guiasDemo;
+            } else {
+                todosGuias = guiasDemo;
+            }
+        } catch {
+            todosGuias = guiasDemo;
+        }
+        renderGuias(todosGuias);
+    }
+
+    // ── Render guias ──
+    function renderGuias(lista) {
+        const container = document.getElementById('listaGuias');
+        document.getElementById('countGuias').textContent = lista.length;
+
+        if (!lista.length) {
+            container.innerHTML = `
+                <div class="guias-vazio">
+                    <i class="ph ph-users"></i>
+                    <p>Nenhum guia encontrado com estes filtros.</p>
+                </div>`;
+            return;
+        }
+
+        container.innerHTML = lista.map(g => {
+            const disp = g.estado_guia === 'disponivel';
+            const foto = g.foto
+                ? `<img src="${g.foto}" alt="${g.nome}">`
+                : `<div class="placeholder">${g.nome[0].toUpperCase()}</div>`;
+
+            return `
+            <div class="guia-card" onclick="abrirModal('${g.id}')">
+                <div class="guia-foto">
+                    ${foto}
+                    <div class="estado-dot dot-${g.estado_guia || 'inactivo'}"></div>
+                </div>
+                <div class="guia-corpo">
+                    <div class="guia-topo">
+                        <div class="guia-nome-wrap">
+                            <span class="guia-nome">${g.nome}</span>
+                            <i class="ph-fill ph-seal-check guia-verificado"></i>
+                        </div>
+                        <div class="guia-avaliacao">
+                            <i class="ph-fill ph-star"></i>
+                            ${g.avaliacao || '—'}
+                            <span>(${g.total_avaliacoes || 0})</span>
+                        </div>
+                    </div>
+                    <div class="guia-meta">
+                        <div class="guia-meta-item"><i class="ph ph-map-pin"></i> ${g.provincia || '—'}</div>
+                        ${g.empresa_nome ? `<div class="guia-meta-item"><i class="ph ph-buildings"></i> ${g.empresa_nome}</div>` : ''}
+                    </div>
+                    <div class="guia-badges">
+                        ${g.especialidade ? `<span class="badge-esp">${g.especialidade}</span>` : ''}
+                        ${(g.idiomas||[]).map(l => `<span class="badge-idioma">${l}</span>`).join('')}
+                        <span class="${disp ? 'badge-estado-disp' : 'badge-estado-indisp'}">
+                            ${disp ? '🟢 Disponível' : '🔴 Em actividade'}
+                        </span>
+                    </div>
+                    ${g.bio ? `<div class="guia-bio">${g.bio}</div>` : ''}
+                    <div class="guia-rodape">
+                        <div class="guia-preco">
+                            ${formatKz(g.preco_por_dia)} <span>/dia</span>
+                        </div>
+                        <div class="guia-acoes">
+                            <button class="btn-ver-perfil" onclick="event.stopPropagation();abrirModal('${g.id}')">
+                                <i class="ph ph-user-circle"></i> Ver perfil
+                            </button>
+                            <button class="${disp ? 'btn-reservar' : 'btn-reservar indisponivel'}"
+                                onclick="event.stopPropagation();${disp ? `abrirReserva('${g.id}')` : ''}">
+                                <i class="ph ph-calendar-plus"></i>
+                                ${disp ? 'Reservar' : 'Indisponível'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // ── Filtrar ──
+    function filtrarGuias() {
+        const pesquisa = document.getElementById('inputPesquisaGuia').value.toLowerCase();
+        const sort     = document.getElementById('sortSelect').value;
+
+        let lista = todosGuias.filter(g => {
+            const matchNome  = g.nome.toLowerCase().includes(pesquisa);
+            const matchEsp   = filtros.esp === 'todas'   || g.especialidade === filtros.esp;
+            const matchProv  = filtros.prov === 'todas'  || g.provincia === filtros.prov;
+            const matchPreco = (g.preco_por_dia || 0) <= filtros.preco;
+            return matchNome && matchEsp && matchProv && matchPreco;
+        });
+
+        if (sort === 'avaliacao') lista.sort((a,b) => (b.avaliacao||0) - (a.avaliacao||0));
+        if (sort === 'preco_asc') lista.sort((a,b) => (a.preco_por_dia||0) - (b.preco_por_dia||0));
+        if (sort === 'preco_desc') lista.sort((a,b) => (b.preco_por_dia||0) - (a.preco_por_dia||0));
+
+        renderGuias(lista);
+    }
+
+    function setFiltro(tipo, val, btn) {
+        filtros[tipo] = val;
+        const grupo = document.getElementById(tipo === 'esp' ? 'filtroEsp' : 'filtroProv');
+        grupo.querySelectorAll('.filtro-chip-item').forEach(b => b.classList.remove('ativo'));
+        btn.classList.add('ativo');
+        filtrarGuias();
+    }
+
+    function actualizarRange() {
+        const v = document.getElementById('rangePreco').value;
+        filtros.preco = parseInt(v);
+        document.getElementById('rangeVal').textContent = formatKz(parseInt(v)) + ' Kz';
+        filtrarGuias();
+    }
+
+    function limparFiltros() {
+        filtros = { esp: 'todas', prov: 'todas', preco: 100000 };
+        document.getElementById('rangePreco').value = 100000;
+        document.getElementById('rangeVal').textContent = '100.000 Kz';
+        document.getElementById('inputPesquisaGuia').value = '';
+        document.querySelectorAll('.filtro-chip-item').forEach(b => b.classList.remove('ativo'));
+        document.querySelectorAll('.filtro-chip-item:first-child').forEach(b => b.classList.add('ativo'));
+        filtrarGuias();
+    }
+
+    // ── Modal ──
+    function abrirModal(id) {
+        guiaModal = todosGuias.find(g => g.id === id);
+        if (!guiaModal) return;
+
+        document.getElementById('modalNome').textContent    = guiaModal.nome;
+        document.getElementById('modalEsp').textContent     = guiaModal.especialidade || '—';
+        document.getElementById('modalProv').textContent    = guiaModal.provincia || '—';
+        document.getElementById('modalPreco').textContent   = formatKz(guiaModal.preco_por_dia) + ' Kz';
+        document.getElementById('modalAval').textContent    = guiaModal.avaliacao ? `${guiaModal.avaliacao} ⭐ (${guiaModal.total_avaliacoes} avaliações)` : '—';
+        document.getElementById('modalEmpresa').textContent = guiaModal.empresa_nome || 'Independente';
+        document.getElementById('modalBio').textContent     = guiaModal.bio || 'Sem biografia disponível.';
+
+        const fotoEl = document.getElementById('modalFoto');
+        if (guiaModal.foto) {
+            fotoEl.innerHTML = `<img src="${guiaModal.foto}" alt="${guiaModal.nome}" style="width:100%;height:100%;object-fit:cover;">`;
+        } else {
+            fotoEl.textContent = guiaModal.nome[0].toUpperCase();
+        }
+
+        const tags = document.getElementById('modalTags');
+        tags.innerHTML = [
+            ...(guiaModal.idiomas || []).map(l => `<span class="modal-tag">${l}</span>`),
+            guiaModal.estado_guia === 'disponivel'
+                ? '<span class="modal-tag" style="background:rgba(76,175,80,0.2);color:#4CAF50;">🟢 Disponível</span>'
+                : '<span class="modal-tag" style="background:rgba(232,25,44,0.2);color:#E8192C;">🔴 Em actividade</span>',
+        ].join('');
+
+        // Reset form
+        rotasSel = [];
+        document.getElementById('rotasInput').innerHTML = '';
+        document.getElementById('rotaAdd').value = '';
+        document.getElementById('resEntrada').value = '';
+        document.getElementById('resSaida').value   = '';
+        document.getElementById('resObs').value     = '';
+        document.getElementById('valorEstimado').style.display = 'none';
+        document.getElementById('reservaForm').style.display   = 'block';
+        document.getElementById('reservaSucesso').style.display = 'none';
+
+        const btnConf = document.getElementById('btnConfirmar');
+        btnConf.disabled = guiaModal.estado_guia !== 'disponivel';
+        btnConf.textContent = guiaModal.estado_guia !== 'disponivel' ? '🔴 Guia indisponível' : '';
+        if (guiaModal.estado_guia === 'disponivel') {
+            btnConf.innerHTML = '<i class="ph-fill ph-calendar-check"></i> Confirmar Reserva';
+        }
+
+        document.getElementById('modalGuia').classList.add('aberto');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function abrirReserva(id) {
+        abrirModal(id);
+        setTimeout(() => {
+            document.querySelector('.reserva-form')?.scrollIntoView({ behavior: 'smooth' });
+        }, 400);
+    }
+
+    function fecharModal() {
+        document.getElementById('modalGuia').classList.remove('aberto');
+        document.body.style.overflow = '';
+    }
+
+    // ── Rotas ──
+    function adicionarRota() {
+        const val = document.getElementById('rotaAdd').value.trim();
+        if (!val) return;
+        rotasSel.push(val);
+        document.getElementById('rotaAdd').value = '';
+        renderRotas();
+    }
+
+    function removerRota(i) {
+        rotasSel.splice(i, 1);
+        renderRotas();
+    }
+
+    function renderRotas() {
+        document.getElementById('rotasInput').innerHTML = rotasSel.map((r, i) => `
+            <span class="rota-chip">📍 ${r}
+                <button onclick="removerRota(${i})">×</button>
+            </span>
+        `).join('');
+    }
+
+    // ── Calcular valor ──
+    function calcularValor() {
+        const entrada = document.getElementById('resEntrada').value;
+        const saida   = document.getElementById('resSaida').value;
+        if (!entrada || !saida || !guiaModal) return;
+
+        const dias = Math.ceil((new Date(saida) - new Date(entrada)) / (1000*60*60*24));
+        if (dias <= 0) return;
+
+        const total = dias * (guiaModal.preco_por_dia || 0);
+        document.getElementById('valorTotal').textContent = formatKz(total) + ' Kz';
+        document.getElementById('valorEstimado').style.display = 'flex';
+    }
+
+    // ── Confirmar reserva ──
+    async function confirmarReserva() {
+        const token = localStorage.getItem('angomovel_token');
+        if (!token) {
+            alert('👤 Precisas de fazer login para reservar um guia!');
+            window.location.href = 'cadastroAngo.html';
+            return;
+        }
+
+        const entrada = document.getElementById('resEntrada').value;
+        const saida   = document.getElementById('resSaida').value;
+
+        if (!entrada || !saida) { alert('⚠️ Selecciona as datas de entrada e saída!'); return; }
+        if (new Date(saida) <= new Date(entrada)) { alert('⚠️ A data de saída deve ser posterior à entrada!'); return; }
+
+        const btn = document.getElementById('btnConfirmar');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="ph ph-spinner"></i> A enviar...';
+
+        try {
+            const res = await fetch(`${API}/reservas`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({
+                    guia_id:          guiaModal.id,
+                    data_entrada:     entrada,
+                    data_saida:       saida,
+                    num_pessoas:      parseInt(document.getElementById('resPessoas').value) || 1,
+                    rotas:            rotasSel,
+                    observacoes:      document.getElementById('resObs').value,
+                    metodo_pagamento: document.getElementById('resPagamento').value,
+                }),
+            });
+
+            if (res.ok) {
+                document.getElementById('reservaForm').style.display   = 'none';
+                document.getElementById('reservaSucesso').style.display = 'block';
+            } else {
+                const err = await res.json();
+                alert('❌ ' + (err.message || 'Erro ao fazer reserva'));
+                btn.disabled = false;
+                btn.innerHTML = '<i class="ph-fill ph-calendar-check"></i> Confirmar Reserva';
+            }
+        } catch {
+            // Sem backend — simular sucesso
+            document.getElementById('reservaForm').style.display   = 'none';
+            document.getElementById('reservaSucesso').style.display = 'block';
+        }
+    }
+
+    // ── Utils ──
+    function formatKz(n) { return new Intl.NumberFormat('pt-AO').format(Math.round(n || 0)); }
+
+    function scrollParaGuias() {
+        document.getElementById('guias').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Definir data mínima como hoje
+    const hoje = new Date().toISOString().split('T')[0];
+    document.getElementById('resEntrada').min = hoje;
+    document.getElementById('resSaida').min   = hoje;
+
+    // Iniciar
+    carregarGuias();
+</script>
 </body>
 </html>

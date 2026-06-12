@@ -33,10 +33,13 @@ export class UsersController {
   }
 
   // ── GET /api/v1/users/guias ── listar todos os guias (público)
+  import { Public } from '../auth/decorators/roles.decorator';
+
+  @Public()
   @Get('guias')
   async listarGuias() {
-    return this.usersService.listarGuias();
-  }
+      return this.usersService.listarGuias();
+}
 
   // ── GET /api/v1/users/empresas ── listar todas as empresas
   @Get('empresas')

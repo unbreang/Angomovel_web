@@ -536,9 +536,10 @@
     const sessao = JSON.parse(localStorage.getItem('angomovel_studio_sessao') || '{}');
     const user   = JSON.parse(localStorage.getItem('angomovel_user') || '{}');
 
-    if (!token || !sessao.tipo || sessao.tipo !== 'empresa') {
-        window.location.href = 'studio.html';
-    }
+  // aceita localStorage puro 
+if (!sessao.tipo || sessao.tipo !== 'empresa') {
+    window.location.href = 'angomovelstudio.html';
+}
 
     // Preencher sidebar
     document.getElementById('sideEmpNome').textContent  = user.nome_empresa || user.nome || 'Empresa';
@@ -560,16 +561,11 @@
     }
 
     // ── Fetch com token ──
-    async function fetchAPI(url, opcoes = {}) {
-        return fetch(`${API}${url}`, {
-            ...opcoes,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-                ...opcoes.headers,
-            }
-        });
-    }
+  async function fetchAPI(url, opcoes = {}) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return fetch(`${API}${url}`, { ...opcoes, headers });
+}
 
     // ── Formatação ──
     function formatKz(n) { return new Intl.NumberFormat('pt-AO').format(Math.round(n || 0)); }

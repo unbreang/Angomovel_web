@@ -987,7 +987,7 @@
 
             <!-- Guia -->
             <div class="opcao-card guia">
-                <div class="opcao-icone">🧭</div>
+                <div class="opcao-icone"></div>
                 <h3>Sou um Guia</h3>
                 <p>Cria o teu perfil profissional, vincula-te a uma empresa, recebe reservas e gere o teu calendário.</p>
                 <ul class="opcao-features">
@@ -1316,7 +1316,7 @@
                     </div>
 
                     <div class="campo">
-                        <label><i class="ph ph-calendar"></i> Idade <span class="obrig">*</span> 🔞</label>
+                        <label><i class="ph ph-calendar"></i> Idade <span class="obrig">*</span>18</label>
                         <input type="number" id="guiIdade" placeholder="Ex: 28" min="18" max="70">
                         <div class="erro" id="errGuiIdade"><i class="ph ph-warning-circle"></i> Tens de ter 18+ anos</div>
                     </div>
@@ -1385,14 +1385,14 @@
                     <div class="campo full">
                         <label><i class="ph ph-translate"></i> Idiomas que dominas <span class="obrig">*</span></label>
                         <div class="idiomas-grid" id="idiomasGrid">
-                            <label class="idioma-check" onclick="toggleIdioma(this)"><input type="checkbox" value="PT"> 🇵🇹 Português</label>
-                            <label class="idioma-check" onclick="toggleIdioma(this)"><input type="checkbox" value="EN"> 🇬🇧 Inglês</label>
-                            <label class="idioma-check" onclick="toggleIdioma(this)"><input type="checkbox" value="FR"> 🇫🇷 Francês</label>
-                            <label class="idioma-check" onclick="toggleIdioma(this)"><input type="checkbox" value="ES"> 🇪🇸 Espanhol</label>
-                            <label class="idioma-check" onclick="toggleIdioma(this)"><input type="checkbox" value="ZH"> 🇨🇳 Chinês</label>
-                            <label class="idioma-check" onclick="toggleIdioma(this)"><input type="checkbox" value="AR"> 🇸🇦 Árabe</label>
-                            <label class="idioma-check" onclick="toggleIdioma(this)"><input type="checkbox" value="KI"> 🇦🇴 Kimbundu</label>
-                            <label class="idioma-check" onclick="toggleIdioma(this)"><input type="checkbox" value="KO"> 🇦🇴 Kikongo</label>
+                            <label class="idioma-check" onclick="event.preventDefault(); toggleIdioma(this)"><input type="checkbox" value="PT"> 🇵🇹 Português</label>
+                            <label class="idioma-check" onclick="event.preventDefault(); toggleIdioma(this)"><input type="checkbox" value="EN"> 🇬🇧 Inglês</label>
+                            <label class="idioma-check" onclick="event.preventDefault(); toggleIdioma(this)"><input type="checkbox" value="FR"> 🇫🇷 Francês</label>
+                            <label class="idioma-check" onclick="event.preventDefault(); toggleIdioma(this)"><input type="checkbox" value="ES"> 🇪🇸 Espanhol</label>
+                            <label class="idioma-check" onclick="event.preventDefault(); toggleIdioma(this)"><input type="checkbox" value="ZH"> 🇨🇳 Chinês</label>
+                            <label class="idioma-check" onclick="event.preventDefault(); toggleIdioma(this)"><input type="checkbox" value="AR"> 🇸🇦 Árabe</label>
+                            <label class="idioma-check" onclick="event.preventDefault(); toggleIdioma(this)"><input type="checkbox" value="KI"> 🇦🇴 Kimbundu</label>
+                            <label class="idioma-check" onclick="event.preventDefault(); toggleIdioma(this)"><input type="checkbox" value="KO"> 🇦🇴 Kikongo</label>
                         </div>
                         <div class="erro" id="errGuiIdiomas"><i class="ph ph-warning-circle"></i> Seleciona pelo menos 1 idioma</div>
                     </div>
@@ -1550,7 +1550,10 @@ function err(id, show) {
 }
 
 // ── CADASTRAR EMPRESA ──
-function cadastrarEmpresa() {
+const API = 'http://localhost:3000/api/v1';
+
+// ── CADASTRAR EMPRESA ──
+async function cadastrarEmpresa() {
     const nome  = document.getElementById('empNome').value.trim();
     const nif   = document.getElementById('empNif').value.trim();
     const email = document.getElementById('empEmail').value.trim();
@@ -1574,51 +1577,86 @@ function cadastrarEmpresa() {
     if (!termos) { alert('⚠️ Aceita os termos para continuar.'); ok = false; }
     if (!ok) return;
 
-    localStorage.setItem('angomovel_empresa', JSON.stringify({ nome, nif, email, tel, prov, tipo, senha }));
+    try {
+        const res = await fetch(`${API}/auth/registar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nome, email, senha,
+                telefone: tel,
+                role: 'empresa',
+                nome_empresa: nome,
+                nif, tipo_empresa: tipo, provincia: prov,
+            }),
+        });
 
-    mudarTabEmp('login');
-    document.getElementById('empSucesso').style.display = 'flex';
-    document.getElementById('empLoginEmail').value = email;
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Erro ao criar conta');
+
+        mudarTabEmp('login');
+        document.getElementById('empSucesso').style.display = 'flex';
+        document.getElementById('empLoginEmail').value = email;
+
+    } catch (e) { alert('❌ ' + e.message); }
 }
 
 // ── LOGIN EMPRESA ──
-function loginEmpresa() {
-    const email = document.getElementById('empLoginEmail').value.trim();
-    const senha = document.getElementById('empLoginSenha').value;
+async function loginEmpresa() {
+    const email   = document.getElementById('empLoginEmail').value.trim();
+    const senha   = document.getElementById('empLoginSenha').value;
     const erroBox = document.getElementById('empErroLogin');
-
     if (!email || !senha) return;
 
-    const emp = JSON.parse(localStorage.getItem('angomovel_empresa') || '{}');
+    try {
+        const res = await fetch(`${API}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, senha }),
+        });
 
-    if (emp.email === email && emp.senha === senha) {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Email ou senha incorrectos');
+
+        if (data.utilizador.role !== 'empresa') {
+            throw new Error('Esta conta não é uma empresa. Usa o login de guia.');
+        }
+
+        // Guardar sessão e token
+        localStorage.setItem('angomovel_token', data.token);
+        localStorage.setItem('angomovel_user',  JSON.stringify(data.utilizador));
+        localStorage.setItem('angomovel_studio_sessao', JSON.stringify({
+            tipo: 'empresa', nome: data.utilizador.nome_empresa || data.utilizador.nome, email
+        }));
+
         erroBox.classList.remove('vis');
-        localStorage.setItem('angomovel_studio_sessao', JSON.stringify({ tipo: 'empresa', nome: emp.nome, email }));
-
         const btn = document.querySelector('#empTelaLog .btn-modal');
         btn.innerHTML = '<i class="ph-fill ph-check-circle"></i> A entrar...';
         btn.style.background = '#1a7a3f';
         btn.style.color = '#fff';
         setTimeout(() => { window.location.href = 'dashboard-empresa.html'; }, 1200);
-    } else {
+
+    } catch (e) {
+        document.querySelector('#empErroLogin p') 
+            ? document.querySelector('#empErroLogin p').textContent = e.message 
+            : null;
         erroBox.classList.add('vis');
     }
 }
 
 // ── CADASTRAR GUIA ──
-function cadastrarGuia() {
-    const nome  = document.getElementById('guiNome').value.trim();
-    const idade = parseInt(document.getElementById('guiIdade').value);
-    const email = document.getElementById('guiEmail').value.trim();
-    const tel   = document.getElementById('guiTel').value.trim();
-    const prov  = document.getElementById('guiProv').value;
-    const esp   = document.getElementById('guiEsp').value;
-    const preco = document.getElementById('guiPreco').value;
-    const genero= document.getElementById('guiGenero').value;
-    const idiomas = getIdiomasSel();
-    const senha = document.getElementById('guiSenha').value;
-    const conf  = document.getElementById('guiConfirmar').value;
-    const termos= document.getElementById('guiTermos').checked;
+async function cadastrarGuia() {
+    const nome   = document.getElementById('guiNome').value.trim();
+    const idade  = parseInt(document.getElementById('guiIdade').value);
+    const email  = document.getElementById('guiEmail').value.trim();
+    const tel    = document.getElementById('guiTel').value.trim();
+    const prov   = document.getElementById('guiProv').value;
+    const esp    = document.getElementById('guiEsp').value;
+    const preco  = document.getElementById('guiPreco').value;
+    const genero = document.getElementById('guiGenero').value;
+    const idiomas= getIdiomasSel();
+    const senha  = document.getElementById('guiSenha').value;
+    const conf   = document.getElementById('guiConfirmar').value;
+    const termos = document.getElementById('guiTermos').checked;
 
     let ok = true;
     err('errGuiNome', !nome);        if (!nome) ok = false;
@@ -1636,33 +1674,72 @@ function cadastrarGuia() {
     if (!termos) { alert('⚠️ Aceita os termos para continuar.'); ok = false; }
     if (!ok) return;
 
-    localStorage.setItem('angomovel_guia', JSON.stringify({ nome, idade, email, tel, prov, esp, preco, genero, idiomas, senha }));
+    try {
+        const res = await fetch(`${API}/auth/registar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nome, email, senha,
+                telefone:      tel,
+                idade,         genero,
+                role:          'guia',
+                especialidade: esp,
+                provincia:     prov,
+                preco_por_dia: parseInt(preco),
+                idiomas,
+            }),
+        });
 
-    mudarTabGui('login');
-    document.getElementById('guiSucesso').style.display = 'flex';
-    document.getElementById('guiLoginEmail').value = email;
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Erro ao criar conta');
+
+        mudarTabGui('login');
+        document.getElementById('guiSucesso').style.display = 'flex';
+        document.getElementById('guiLoginEmail').value = email;
+
+    } catch (e) { alert('❌ ' + e.message); }
 }
 
 // ── LOGIN GUIA ──
-function loginGuia() {
-    const email = document.getElementById('guiLoginEmail').value.trim();
-    const senha = document.getElementById('guiLoginSenha').value;
+async function loginGuia() {
+    const email   = document.getElementById('guiLoginEmail').value.trim();
+    const senha   = document.getElementById('guiLoginSenha').value;
     const erroBox = document.getElementById('guiErroLogin');
-
     if (!email || !senha) return;
 
-    const guia = JSON.parse(localStorage.getItem('angomovel_guia') || '{}');
+    try {
+        const res = await fetch(`${API}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, senha }),
+        });
 
-    if (guia.email === email && guia.senha === senha) {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Email ou senha incorrectos');
+
+        if (data.utilizador.role !== 'guia') {
+            throw new Error('Esta conta não é um guia. Usa o login de empresa.');
+        }
+
+        // Guardar sessão e token
+        localStorage.setItem('angomovel_token', data.token);
+        localStorage.setItem('angomovel_user',  JSON.stringify(data.utilizador));
+        localStorage.setItem('angomovel_studio_sessao', JSON.stringify({
+            tipo: 'guia', nome: data.utilizador.nome, email
+        }));
+        localStorage.setItem('angomovel_guia', JSON.stringify(data.utilizador));
+
         erroBox.classList.remove('vis');
-        localStorage.setItem('angomovel_studio_sessao', JSON.stringify({ tipo: 'guia', nome: guia.nome, email }));
-
         const btn = document.querySelector('#guiTelaLog .btn-modal');
         btn.innerHTML = '<i class="ph-fill ph-check-circle"></i> A entrar...';
         btn.style.background = '#1a7a3f';
         btn.style.color = '#0a0a0a';
         setTimeout(() => { window.location.href = 'dashboard-guia.html'; }, 1200);
-    } else {
+
+    } catch (e) {
+        document.querySelector('#guiErroLogin p')
+            ? document.querySelector('#guiErroLogin p').textContent = e.message
+            : null;
         erroBox.classList.add('vis');
     }
 }
