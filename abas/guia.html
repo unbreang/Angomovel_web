@@ -957,7 +957,7 @@
 
 <script src="../js/auth.js"></script>
 <script>
-    const API = 'http://localhost:3000/api/v1';
+    const API_GUIA = 'http://localhost:3000/api/v1';
     let todosGuias = [];
     let guiaModal  = null;
     let rotasSel   = [];
@@ -976,7 +976,7 @@
     // ── Carregar guias ──
     async function carregarGuias() {
         try {
-            const res = await fetch(`${API}/users/guias`);
+            const res = await fetch(`${API_GUIA}/users/guias`);
             if (res.ok) {
                 const data = await res.json();
                 todosGuias = data.length > 0 ? data : guiasDemo;
@@ -1222,7 +1222,7 @@
         btn.innerHTML = '<i class="ph ph-spinner"></i> A enviar...';
 
         try {
-            const res = await fetch(`${API}/reservas`, {
+            const res = await fetch(`${API_GUIA}/reservas`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({
