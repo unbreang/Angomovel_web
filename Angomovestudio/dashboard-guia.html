@@ -639,16 +639,44 @@
         </div>`;
     }
 
-    function renderAcoes(r) {
-        if (r.estado === 'pendente') return `
-            <button class="btn-aceitar" onclick="aceitarReserva('${r.id}')"><i class="ph-fill ph-check-circle"></i> Aceitar</button>
-            <button class="btn-recusar" onclick="recusarReserva('${r.id}')"><i class="ph ph-x-circle"></i> Recusar</button>`;
-        if (r.estado === 'aceite') return `
-            <button class="btn-iniciar" onclick="iniciarActividade('${r.id}')"><i class="ph-fill ph-play-circle"></i> Iniciar</button>`;
-        if (r.estado === 'em_curso') return `
-            <button class="btn-concluir" onclick="concluirActividade('${r.id}')"><i class="ph-fill ph-flag-checkered"></i> Concluir</button>`;
-        return '';
-    }
+function renderAcoes(r) {
+    const podeChatear = ['aceite', 'em_curso', 'pendente'].includes(r.estado);
+
+    const btnChat = podeChatear ? `
+        <a href="../abas/chat.html?reserva_id=${r.id}&voltar=../Angomovestudio/dashboard-guia.html"
+            style="padding:8px 16px;border-radius:8px;
+            background:rgba(212,160,23,0.12);color:#D4A017;
+            border:1px solid rgba(212,160,23,0.3);
+            font-family:var(--fonte-c);font-size:12px;font-weight:800;
+            display:inline-flex;align-items:center;gap:5px;text-decoration:none;transition:0.2s;"
+            onmouseover="this.style.background='rgba(212,160,23,0.2)'"
+            onmouseout="this.style.background='rgba(212,160,23,0.12)'">
+            <i class="ph-fill ph-chat-dots"></i> Chat
+        </a>` : '';
+
+    if (r.estado === 'pendente') return `
+        ${btnChat}
+        <button class="btn-aceitar" onclick="aceitarReserva('${r.id}')">
+            <i class="ph-fill ph-check-circle"></i> Aceitar
+        </button>
+        <button class="btn-recusar" onclick="recusarReserva('${r.id}')">
+            <i class="ph ph-x-circle"></i> Recusar
+        </button>`;
+
+    if (r.estado === 'aceite') return `
+        ${btnChat}
+        <button class="btn-iniciar" onclick="iniciarActividade('${r.id}')">
+            <i class="ph-fill ph-play-circle"></i> Iniciar
+        </button>`;
+
+    if (r.estado === 'em_curso') return `
+        ${btnChat}
+        <button class="btn-concluir" onclick="concluirActividade('${r.id}')">
+            <i class="ph-fill ph-flag-checkered"></i> Concluir
+        </button>`;
+
+    return btnChat;
+}
 
     function traduzirEstado(e) {
         const t = { pendente: '⏳ Pendente', aceite: '✅ Aceite', em_curso: '🔵 Em curso', concluida: '✔️ Concluída', recusada: '❌ Recusada', cancelada: '🚫 Cancelada' };
@@ -656,52 +684,71 @@
     }
 
     // ── Dashboard ──
-    async function carregarDashboard() {
-        const container = document.getElementById('reservasDash');
-        try {
-            // Por agora usa dados do localStorage
-            const reservas = JSON.parse(localStorage.getItem('angomovel_reservas_guia') || '[]');
+   async function carregarDashboard() {
+    const container = document.getElementById('reservasDash');
 
-            const pendentes  = reservas.filter(r => r.estado === 'pendente').length;
-            const concluidas = reservas.filter(r => r.estado === 'concluida').length;
-            const ganhos     = reservas.filter(r => r.estado === 'concluida').reduce((s, r) => s + (r.valor_total || 0), 0);
+    try {
+        const token = localStorage.getItem('angomovel_token');
+        const res   = await fetch('http://localhost:3000/api/v1/reservas/guia', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
 
-            document.getElementById('statPendentes').textContent  = pendentes;
-            document.getElementById('statConcluidas').textContent = concluidas;
-            document.getElementById('statGanhos').textContent     = formatKz(ganhos);
-            document.getElementById('statAvaliacao').textContent  = guia.avaliacao ? `${guia.avaliacao}⭐` : '—';
+        const reservas = await res.json();
 
-            const recentes = reservas.slice(0, 3);
-            if (!recentes.length) {
-                container.innerHTML = '<div class="vazio"><i class="ph ph-calendar"></i><p>Sem reservas ainda.<br>Quando os clientes fizerem reservas aparecem aqui.</p></div>';
-                return;
-            }
+        const pendentes  = reservas.filter(r => r.estado === 'pendente').length;
+        const concluidas = reservas.filter(r => r.estado === 'concluida').length;
+        const ganhos     = reservas.filter(r => r.estado === 'concluida')
+                                   .reduce((s, r) => s + (r.valor_total || 0), 0);
 
-            container.innerHTML = recentes.map(r => renderReserva(r)).join('');
-        } catch (e) {
-            container.innerHTML = `<div class="vazio"><i class="ph ph-warning-circle"></i><p>Erro: ${e.message}</p></div>`;
+        document.getElementById('statPendentes').textContent  = pendentes;
+        document.getElementById('statConcluidas').textContent = concluidas;
+        document.getElementById('statGanhos').textContent     = formatKz(ganhos);
+
+        const recentes = reservas.slice(0, 3);
+        if (!recentes.length) {
+            container.innerHTML = `
+                <div class="vazio">
+                    <i class="ph ph-calendar"></i>
+                    <p>Sem reservas ainda.</p>
+                </div>`;
+            return;
         }
-    }
 
+        container.innerHTML = recentes.map(r => renderReserva(r)).join('');
+
+    } catch (e) {
+        container.innerHTML = `<div class="vazio"><i class="ph ph-warning-circle"></i><p>Erro: ${e.message}</p></div>`;
+    }
+}
     // ── Reservas ──
-    async function carregarReservas() {
-        const container = document.getElementById('listaReservas');
-        container.innerHTML = '<div class="loading-box"><div class="spinner"></div><p>A carregar...</p></div>';
+   async function carregarReservas() {
+    const container = document.getElementById('listaReservas');
+    container.innerHTML = '<div class="loading-box"><div class="spinner"></div><p>A carregar reservas...</p></div>';
 
-        try {
-            todasReservas = JSON.parse(localStorage.getItem('angomovel_reservas_guia') || '[]');
-            document.getElementById('countReservas').textContent = todasReservas.length;
+    try {
+        const token = localStorage.getItem('angomovel_token');
+        const res   = await fetch('http://localhost:3000/api/v1/reservas/guia', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
 
-            if (!todasReservas.length) {
-                container.innerHTML = '<div class="vazio"><i class="ph ph-calendar-check"></i><p>Sem reservas ainda.<br>Quando os clientes fizerem reservas aparecem aqui.</p></div>';
-                return;
-            }
+        todasReservas = await res.json();
+        document.getElementById('countReservas').textContent = todasReservas.length;
 
-            container.innerHTML = todasReservas.map(r => renderReserva(r)).join('');
-        } catch (e) {
-            container.innerHTML = `<div class="vazio"><i class="ph ph-warning-circle"></i><p>Erro: ${e.message}</p></div>`;
+        if (!todasReservas.length) {
+            container.innerHTML = `
+                <div class="vazio">
+                    <i class="ph ph-calendar-check"></i>
+                    <p>Sem reservas ainda.<br>Quando os clientes fizerem reservas aparecem aqui.</p>
+                </div>`;
+            return;
         }
+
+        container.innerHTML = todasReservas.map(r => renderReserva(r)).join('');
+
+    } catch (e) {
+        container.innerHTML = `<div class="vazio"><i class="ph ph-warning-circle"></i><p>Erro: ${e.message}</p></div>`;
     }
+}
 
     // ── Filtrar reservas ──
     function filtrarReservas(filtro) {
@@ -730,28 +777,65 @@
     }
 
     // ── Acções das reservas ──
-    function aceitarReserva(id) {
-        alterarReserva(id, 'aceite');
+    async function aceitarReserva(id) {
+    const token = localStorage.getItem('angomovel_token');
+    try {
+        const res = await fetch(`http://localhost:3000/api/v1/reservas/${id}/aceitar`, {
+            method: 'PATCH',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error((await res.json()).message);
         mostrarToast('✅ Reserva aceite! O cliente será notificado.');
-    }
+        alterarEstado('indisponivel');
+        carregarReservas();
+        carregarDashboard();
+    } catch (e) { mostrarToast('❌ ' + e.message); }
+}
 
-    function recusarReserva(id) {
-        if (!confirm('Tens a certeza que queres recusar esta reserva?')) return;
-        alterarReserva(id, 'recusada');
+    async function recusarReserva(id) {
+    if (!confirm('Tens a certeza que queres recusar esta reserva?')) return;
+    const token = localStorage.getItem('angomovel_token');
+    try {
+        const res = await fetch(`http://localhost:3000/api/v1/reservas/${id}/recusar`, {
+            method: 'PATCH',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error((await res.json()).message);
         mostrarToast('❌ Reserva recusada.');
-    }
+        carregarReservas();
+        carregarDashboard();
+    } catch (e) { mostrarToast('❌ ' + e.message); }
+}
 
-    function iniciarActividade(id) {
-        alterarReserva(id, 'em_curso');
+    async function iniciarActividade(id) {
+    const token = localStorage.getItem('angomovel_token');
+    try {
+        const res = await fetch(`http://localhost:3000/api/v1/reservas/${id}/iniciar`, {
+            method: 'PATCH',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error((await res.json()).message);
         alterarEstado('indisponivel');
         mostrarToast('🔵 Actividade iniciada! Estás agora em serviço.');
-    }
+        carregarReservas();
+        carregarDashboard();
+    } catch (e) { mostrarToast('❌ ' + e.message); }
+}
 
-    function concluirActividade(id) {
-        alterarReserva(id, 'concluida');
+    async function concluirActividade(id) {
+    const token = localStorage.getItem('angomovel_token');
+    try {
+        const res = await fetch(`http://localhost:3000/api/v1/reservas/${id}/concluir`, {
+            method: 'PATCH',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error((await res.json()).message);
         alterarEstado('disponivel');
         mostrarToast('🎉 Actividade concluída! Estás novamente disponível.');
-    }
+        carregarReservas();
+        carregarDashboard();
+    } catch (e) { mostrarToast('❌ ' + e.message); }
+}
 
     function alterarReserva(id, novoEstado) {
         let reservas = JSON.parse(localStorage.getItem('angomovel_reservas_guia') || '[]');
@@ -862,6 +946,8 @@
     // ── Iniciar ──
     irPara('dashboard');
 </script>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 
 </body>
 </html>

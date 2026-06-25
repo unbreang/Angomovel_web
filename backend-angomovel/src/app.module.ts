@@ -1,13 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler'; // 👈
-import { APP_GUARD } from '@nestjs/core';                             // 👈
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ReservasModule } from './reservas/reservas.module';
+import { ChatModule } from './chat/chat.module';
+import { AvaliacoesModule } from './avaliacoes/avaliacoes.module';
 import { User } from './users/entities/user.entity';
 import { Reserva } from './reservas/entities/reservas.entity';
+import { Mensagem } from './chat/entities/mensagem.entity';
+import { Avaliacao } from './avaliacoes/entities/avaliacao.entity';
 
 @Module({
   imports: [
@@ -26,13 +30,13 @@ import { Reserva } from './reservas/entities/reservas.entity';
         username: config.get<string>('DB_USERNAME', 'admin'),
         password: config.get<string>('DB_PASSWORD', 'password123'),
         database: config.get<string>('DB_NAME', 'angomovel'),
-        entities: [User, Reserva],
+        entities: [User, Reserva, Mensagem, Avaliacao],
         synchronize: true,
         logging: false,
       }),
     }),
 
-    ThrottlerModule.forRoot([{  
+    ThrottlerModule.forRoot([{
       ttl: 60000,
       limit: 10,
     }]),
@@ -40,9 +44,11 @@ import { Reserva } from './reservas/entities/reservas.entity';
     AuthModule,
     UsersModule,
     ReservasModule,
+    ChatModule,
+    AvaliacoesModule,
   ],
 
-  providers: [          
+  providers: [
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
