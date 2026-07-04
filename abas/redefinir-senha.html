@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-ao">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AngoMovel — Redefinir Senha</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vermelho: #E8192C;
+            --negro:    #0A0A0A;
+            --dourado:  #F0B429;
+            --fonte-t:  'Playfair Display', serif;
+            --fonte-c:  'Plus Jakarta Sans', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--fonte-c);
+            min-height: 100vh;
+            background: #F5F0E8;
+            display: flex; flex-direction: column;
+        }
+
+        /* Fundo */
+        .auth-bg {
+            position: fixed; inset: 0; z-index: 0;
+            background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1400&q=80');
+            background-size: cover; background-position: center;
+        }
+
+        .auth-bg::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(10,10,10,0.94), rgba(140,0,0,0.65));
+        }
+
+        /* Topo */
+        .topo {
+            position: relative; z-index: 10;
+            background: rgba(10,10,10,0.6);
+            backdrop-filter: blur(20px);
+            padding: 0 40px; height: 60px;
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .topo::after {
+            content: '';
+            position: absolute; bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--vermelho), var(--dourado));
+        }
+
+        .topo-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+        .topo-logo span { font-size: 18px; color: var(--dourado); }
+        .topo-logo h1 { font-family: var(--fonte-t); font-size: 18px; font-weight: 900; letter-spacing: 2px; color: #fff; }
+
+        /* Wrapper */
+        .wrapper {
+            position: relative; z-index: 1; flex: 1;
+            display: flex; align-items: center; justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* Card */
+        .card {
+            background: rgba(255,255,255,0.97);
+            border-radius: 28px; width: 100%; max-width: 460px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #CC0000, #E8192C);
+            padding: 28px 32px;
+            position: relative;
+        }
+
+        .card-header::after {
+            content: '';
+            position: absolute; bottom: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--dourado), #F0B429);
+        }
+
+        .card-header i { font-size: 36px; color: var(--dourado); display: block; margin-bottom: 10px; }
+        .card-header h2 { font-family: var(--fonte-t); font-size: 24px; font-weight: 900; color: #fff; margin-bottom: 4px; }
+        .card-header p  { font-size: 13px; color: rgba(255,255,255,0.7); }
+
+        .card-body { padding: 32px; }
+
+        /* Campos */
+        .campo { margin-bottom: 16px; }
+
+        .campo label {
+            display: block; font-size: 11px; font-weight: 700;
+            color: #555; letter-spacing: 0.5px;
+            text-transform: uppercase; margin-bottom: 6px;
+        }
+
+        .inp-wrap { position: relative; }
+
+        .campo input {
+            width: 100%; padding: 13px 14px 13px 42px;
+            border: 1.5px solid #e8e4e0; border-radius: 10px;
+            font-family: var(--fonte-c); font-size: 14px; color: #111;
+            background: #faf8f5; transition: 0.25s;
+        }
+
+        .campo input:focus {
+            outline: none; border-color: var(--vermelho);
+            background: #fff; box-shadow: 0 0 0 3px rgba(232,25,44,0.08);
+        }
+
+        .campo-icon {
+            position: absolute; left: 13px; top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px; color: #9a9590; pointer-events: none;
+        }
+
+        .olho {
+            position: absolute; right: 13px; top: 50%;
+            transform: translateY(-50%);
+            font-size: 17px; color: #9a9590;
+            cursor: pointer; transition: 0.2s; background: none; border: none;
+        }
+
+        .olho:hover { color: var(--vermelho); }
+
+        /* Força da senha */
+        .forca { margin-top: 6px; display: none; }
+        .forca.vis { display: block; }
+        .forca-barra { height: 4px; border-radius: 4px; background: #e8e4e0; overflow: hidden; margin-bottom: 3px; }
+        .forca-fill  { height: 100%; border-radius: 4px; transition: 0.4s; width: 0%; }
+        .forca-label { font-size: 11px; font-weight: 600; }
+
+        /* Botão */
+        .btn-submit {
+            width: 100%; padding: 14px; border: none; border-radius: 12px;
+            font-family: var(--fonte-c); font-size: 14px; font-weight: 800;
+            cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: var(--vermelho); color: #fff;
+            box-shadow: 0 6px 24px rgba(232,25,44,0.3);
+            margin-top: 8px;
+        }
+
+        .btn-submit:hover { background: #A00000; transform: translateY(-2px); }
+        .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        /* Estados */
+        .estado-loading,
+        .estado-sucesso,
+        .estado-erro {
+            text-align: center; padding: 40px 20px;
+            display: none;
+        }
+
+        .estado-loading.vis,
+        .estado-sucesso.vis,
+        .estado-erro.vis { display: block; }
+
+        .estado-loading .spinner {
+            width: 40px; height: 40px;
+            border: 4px solid rgba(232,25,44,0.15);
+            border-top-color: var(--vermelho);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .estado-sucesso i { font-size: 56px; color: #4CAF50; display: block; margin-bottom: 14px; }
+        .estado-sucesso h3 { font-family: var(--fonte-t); font-size: 22px; color: #111; margin-bottom: 8px; }
+        .estado-sucesso p  { font-size: 14px; color: #6b6560; line-height: 1.7; margin-bottom: 20px; }
+
+        .estado-erro i { font-size: 48px; color: var(--vermelho); display: block; margin-bottom: 14px; }
+        .estado-erro h3 { font-family: var(--fonte-t); font-size: 20px; color: #111; margin-bottom: 8px; }
+        .estado-erro p  { font-size: 14px; color: #6b6560; margin-bottom: 20px; }
+
+        .btn-login {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 28px; background: var(--vermelho); color: #fff;
+            border-radius: 999px; font-weight: 700; font-size: 14px;
+            text-decoration: none; transition: 0.25s;
+        }
+
+        .btn-login:hover { background: #A00000; }
+    </style>
+</head>
+<body>
+
+<div class="auth-bg"></div>
+
+<!-- Topo -->
+<div class="topo">
+    <a href="../angomovel.html" class="topo-logo">
+        <span>✈</span>
+        <h1>ANGOMOVEL</h1>
+    </a>
+</div>
+
+<!-- Card -->
+<div class="wrapper">
+    <div class="card">
+
+        <div class="card-header">
+            <i class="ph-fill ph-lock-key-open"></i>
+            <h2>Redefinir Senha</h2>
+            <p>Cria uma nova senha segura para a tua conta</p>
+        </div>
+
+        <div class="card-body">
+
+            <!-- A verificar token -->
+            <div class="estado-loading vis" id="estadoLoading">
+                <div class="spinner"></div>
+                <p style="font-size:14px;color:#6b6560;">A verificar o link...</p>
+            </div>
+
+            <!-- Formulário -->
+            <div id="estadoForm" style="display:none;">
+                <div class="campo">
+                    <label><i class="ph ph-lock"></i> Nova Senha</label>
+                    <div class="inp-wrap">
+                        <i class="ph ph-lock campo-icon"></i>
+                        <input type="password" id="novaSenha" placeholder="Mínimo 6 caracteres" oninput="calcForca()">
+                        <button type="button" class="olho" onclick="verOlho('novaSenha', this)">
+                            <i class="ph ph-eye"></i>
+                        </button>
+                    </div>
+                    <div class="forca" id="forca">
+                        <div class="forca-barra"><div class="forca-fill" id="forcaFill"></div></div>
+                        <span class="forca-label" id="forcaLabel"></span>
+                    </div>
+                </div>
+
+                <div class="campo">
+                    <label><i class="ph ph-lock-key"></i> Confirmar Nova Senha</label>
+                    <div class="inp-wrap">
+                        <i class="ph ph-lock-key campo-icon"></i>
+                        <input type="password" id="confirmarSenha" placeholder="Repete a nova senha">
+                        <button type="button" class="olho" onclick="verOlho('confirmarSenha', this)">
+                            <i class="ph ph-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button class="btn-submit" id="btnRedefinir" onclick="redefinirSenha()">
+                    <i class="ph-fill ph-lock-key-open"></i> Redefinir Senha
+                </button>
+            </div>
+
+            <!-- Sucesso -->
+            <div class="estado-sucesso" id="estadoSucesso">
+                <i class="ph-fill ph-check-circle"></i>
+                <h3>Senha redefinida! 🎉</h3>
+                <p>A tua senha foi alterada com sucesso.<br>Podes agora fazer login com a nova senha.</p>
+                <a href="cadastroAngo.html" class="btn-login">
+                    <i class="ph-fill ph-sign-in"></i> Fazer Login
+                </a>
+            </div>
+
+            <!-- Erro token inválido -->
+            <div class="estado-erro" id="estadoErro">
+                <i class="ph-fill ph-warning-circle"></i>
+                <h3>Link inválido ou expirado</h3>
+                <p>Este link de recuperação já não é válido.<br>Os links expiram após 30 minutos.</p>
+                <a href="cadastroAngo.html" class="btn-login" style="background:#555;">
+                    <i class="ph ph-arrow-left"></i> Voltar ao Login
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const API   = 'http://localhost:3000/api/v1';
+    const params = new URLSearchParams(window.location.search);
+    const token  = params.get('token');
+
+    // Verificar se token existe na URL
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            document.getElementById('estadoLoading').classList.remove('vis');
+            if (!token) {
+                document.getElementById('estadoErro').classList.add('vis');
+            } else {
+                document.getElementById('estadoForm').style.display = 'block';
+            }
+        }, 1000);
+    });
+
+    // Ver/esconder senha
+    function verOlho(id, btn) {
+        const inp = document.getElementById(id);
+        inp.type = inp.type === 'password' ? 'text' : 'password';
+        btn.querySelector('i').classList.toggle('ph-eye');
+        btn.querySelector('i').classList.toggle('ph-eye-slash');
+    }
+
+    // Força da senha
+    function calcForca() {
+        const s     = document.getElementById('novaSenha').value;
+        const cont  = document.getElementById('forca');
+        const fill  = document.getElementById('forcaFill');
+        const label = document.getElementById('forcaLabel');
+
+        if (!s) { cont.classList.remove('vis'); return; }
+        cont.classList.add('vis');
+
+        let p = 0;
+        if (s.length >= 6)  p++;
+        if (s.length >= 10) p++;
+        if (/[A-Z]/.test(s)) p++;
+        if (/[0-9]/.test(s)) p++;
+        if (/[^A-Za-z0-9]/.test(s)) p++;
+
+        const niveis = [
+            { txt: 'Muito fraca', cor: '#E8192C', w: '20%' },
+            { txt: 'Fraca',       cor: '#ff6b35', w: '40%' },
+            { txt: 'Razoável',    cor: '#F0B429', w: '60%' },
+            { txt: 'Boa',         cor: '#4CAF50', w: '80%' },
+            { txt: 'Excelente ✓', cor: '#1a7a3f', w: '100%' },
+        ];
+
+        const n = niveis[Math.max(0, Math.min(p - 1, 4))];
+        fill.style.width      = n.w;
+        fill.style.background = n.cor;
+        label.textContent     = n.txt;
+        label.style.color     = n.cor;
+    }
+
+    // Redefinir senha
+    async function redefinirSenha() {
+        const novaSenha      = document.getElementById('novaSenha').value;
+        const confirmarSenha = document.getElementById('confirmarSenha').value;
+
+        if (novaSenha.length < 6) {
+            alert('⚠️ A senha deve ter pelo menos 6 caracteres!');
+            return;
+        }
+
+        if (novaSenha !== confirmarSenha) {
+            alert('⚠️ As senhas não coincidem!');
+            return;
+        }
+
+        const btn = document.getElementById('btnRedefinir');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="ph ph-spinner"></i> A redefinir...';
+
+        try {
+            const res = await fetch(`${API}/auth/redefinir-senha`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, nova_senha: novaSenha }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                document.getElementById('estadoForm').style.display = 'none';
+                document.getElementById('estadoSucesso').classList.add('vis');
+            } else {
+                throw new Error(data.message || 'Erro ao redefinir senha');
+            }
+
+        } catch (e) {
+            document.getElementById('estadoForm').style.display = 'none';
+            document.getElementById('estadoErro').classList.add('vis');
+        }
+    }
+</script>
+
+</body>
+</html>
