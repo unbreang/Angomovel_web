@@ -1,299 +1,305 @@
 /* ============================================================
-   DESTINO.CSS — Apenas estilos exclusivos da página Destinos.
-   Header, footer, botões, spinner, reset → global.css
+   DESTINO.CSS — Estilos exclusivos da página Destinos
    ============================================================ */
 
-/* ── Layout principal: sidebar + mapa ── */
+/* ── Layout principal ── */
 .destino-wrapper {
     display: grid;
-    grid-template-columns: 340px 1fr;
-    height: calc(100vh - 57px); /* altura total menos o header */
+    grid-template-columns: 320px 1fr;
+    height: calc(100vh - 68px);
+    margin-top: 68px;
     overflow: hidden;
 }
 
-/* ── Sidebar ── */
+/* ── SIDEBAR ── */
 .sidebar {
-    background: linen;
-    padding: 18px;
-    border-right: 1px solid #e0d8cc;
+    background: #F5F0E8;
+    border-right: 1px solid rgba(0,0,0,0.08);
     overflow-y: auto;
     height: 100%;
+    padding: 16px;
     scrollbar-width: thin;
-    scrollbar-color: #C29D5B transparent;
+    scrollbar-color: #E8192C transparent;
 }
 
-.sidebar::-webkit-scrollbar { width: 5px; }
-.sidebar::-webkit-scrollbar-thumb { background: #C29D5B; border-radius: 4px; }
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: #E8192C; border-radius: 4px; }
 
 .sidebar-titulo {
-    color: #C29D5B;
-    font-size: 1.3rem;
-    font-weight: 800;
-    border-bottom: 2px solid #C29D5B;
-    padding-bottom: 10px;
-    margin-bottom: 16px;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 900; color: #111;
+    border-bottom: 2px solid #E8192C;
+    padding-bottom: 10px; margin-bottom: 14px;
 }
 
 .sidebar-subtitulo {
-    color: #6B8E23;
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin: 20px 0 10px;
+    font-size: 11px; font-weight: 700; color: #888;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    margin: 16px 0 10px;
 }
+
+/* ── Pesquisa ── */
+.pesquisa-box { position: relative; margin-bottom: 14px; }
+
+.pesquisa-wrap {
+    display: flex; align-items: center; gap: 8px;
+    background: #fff; border: 1.5px solid rgba(0,0,0,0.1);
+    border-radius: 10px; padding: 9px 12px;
+    transition: 0.25s;
+}
+
+.pesquisa-wrap:focus-within {
+    border-color: #E8192C;
+    box-shadow: 0 0 0 3px rgba(232,25,44,0.08);
+}
+
+.pesquisa-wrap i { font-size: 16px; color: #888; flex-shrink: 0; }
+
+.pesquisa-wrap input {
+    flex: 1; border: none; outline: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px; color: #111; background: transparent;
+}
+
+.pesquisa-wrap input::placeholder { color: #9a9590; }
+
+.sugestoes {
+    position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+    background: #fff; border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    z-index: 100; display: none;
+    max-height: 200px; overflow-y: auto;
+}
+
+.sugestao-item {
+    padding: 10px 14px; cursor: pointer;
+    font-size: 13px; color: #111;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    transition: 0.15s;
+}
+
+.sugestao-item:last-child { border-bottom: none; }
+.sugestao-item:hover { background: #F5F0E8; color: #E8192C; }
 
 /* ── Transporte ── */
 .transporte-opcoes {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
+    display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap;
 }
 
 .transporte-btn {
-    padding: 7px 12px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    background: #fff;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    transition: 0.3s;
-    font-family: inherit;
+    padding: 7px 12px; border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 20px; background: #fff; cursor: pointer;
+    font-size: 12px; font-weight: 600; color: #555;
+    transition: 0.2s; font-family: 'Plus Jakarta Sans', sans-serif;
 }
+
+.transporte-btn:hover { border-color: #E8192C; color: #E8192C; }
 
 .transporte-btn.ativo {
-    background: #ffcc00;
-    border-color: #ffcc00;
-    color: #1a1a1a;
-    box-shadow: 0 2px 8px rgba(255,204,0,0.4);
+    background: #E8192C; border-color: #E8192C;
+    color: #fff; box-shadow: 0 2px 8px rgba(232,25,44,0.3);
 }
 
-.transporte-btn:hover:not(.ativo) { background: #f5f5f5; }
-
-/* ── Filtros de rota ── */
+/* ── Rota ── */
 .filtros-rota {
-    background: #fff;
-    border-radius: 12px;
-    padding: 14px;
-    margin-bottom: 16px;
+    background: #fff; border-radius: 12px;
+    padding: 14px; margin-bottom: 14px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
 .filtros-rota h4 {
-    color: #483D8B;
+    font-size: 13px; font-weight: 700; color: #111;
     margin-bottom: 10px;
-    font-size: 13px;
-    font-weight: 700;
+    display: flex; align-items: center; gap: 6px;
 }
 
-.select-rota {
-    width: 100%;
-    padding: 9px 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 13px;
-    font-family: inherit;
-    background: #fafafa;
+.filtros-rota h4 i { color: #E8192C; }
+
+.rota-input-wrap {
+    display: flex; align-items: center; gap: 8px;
+    background: #F5F0E8; border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 8px; padding: 8px 10px;
     transition: 0.2s;
 }
 
-.select-rota:focus {
-    border-color: #E61C2E;
-    background: #fff;
-    outline: none;
+.rota-input-wrap:focus-within {
+    border-color: #E8192C; background: #fff;
 }
+
+.input-rota {
+    flex: 1; border: none; outline: none;
+    background: transparent;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px; color: #111;
+}
+
+.input-rota::placeholder { color: #9a9590; }
 
 .btn-rota {
-    width: 100%;
-    padding: 10px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 13px;
-    font-family: inherit;
-    transition: 0.3s;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, #E8192C, #A00000);
+    color: #fff; border: none; border-radius: 8px;
+    cursor: pointer; font-weight: 700; font-size: 12px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: 0.25s; display: flex; align-items: center; gap: 5px;
 }
 
-.btn-rota:hover { transform: scale(1.02); opacity: 0.95; }
+.btn-rota:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
 .btn-limpar {
-    width: 100%;
-    padding: 8px;
-    margin-top: 8px;
-    background: #dc3545;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 12px;
-    font-family: inherit;
-    transition: 0.3s;
+    padding: 10px 12px;
+    background: rgba(232,25,44,0.08);
+    border: 1px solid rgba(232,25,44,0.2);
+    color: #E8192C; border-radius: 8px;
+    cursor: pointer; font-size: 13px; transition: 0.2s;
 }
 
-.btn-limpar:hover { background: #b02a37; }
+.btn-limpar:hover { background: rgba(232,25,44,0.15); }
 
 /* ── Info da rota ── */
 .rota-info {
-    background: #2a5298;
-    color: #fff;
-    padding: 12px 14px;
-    border-radius: 10px;
-    margin-top: 10px;
-    display: none;
-    font-size: 13px;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff; padding: 14px 16px;
+    border-radius: 10px; margin-bottom: 14px;
+    display: none; font-size: 13px; line-height: 1.8;
 }
 
 .rota-info.mostrar { display: block; }
+.rota-info h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #F0B429; }
+.rota-info p { margin: 2px 0; color: rgba(255,255,255,0.8); }
+.rota-info strong { color: #fff; }
 
-.rota-info h4 {
-    font-size: 13px;
-    margin-bottom: 8px;
-    font-weight: 700;
-}
-
-.rota-info p { margin: 4px 0; }
-
-/* ── Lista de destinos ── */
+/* ── Destinos lista ── */
 .destinos-lista {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
+    display: flex; flex-direction: column; gap: 8px;
+    margin-bottom: 16px;
 }
 
 .destino-item {
-    background: #fff;
-    border-radius: 10px;
-    padding: 13px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
-    cursor: pointer;
-    transition: all 0.3s;
-    border-left: 4px solid transparent;
+    background: #fff; border-radius: 10px; padding: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    cursor: pointer; transition: 0.25s;
+    border-left: 3px solid transparent;
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
 .destino-item:hover {
-    transform: translateX(4px);
-    box-shadow: 0 5px 16px rgba(0,0,0,0.12);
-    border-left-color: #C29D5B;
+    transform: translateX(3px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    border-color: rgba(232,25,44,0.2);
 }
 
 .destino-item.ativo {
-    border-left-color: #E61C2E;
+    border-left: 3px solid #E8192C;
     background: #fff5f5;
 }
 
 .destino-item h4 {
-    color: #808000;
-    margin-bottom: 4px;
-    font-size: 14px;
-    font-weight: 700;
+    color: #111; font-size: 13px; font-weight: 700;
 }
 
 .destino-item .cidade {
-    color: #666;
-    font-size: 12px;
-    margin-bottom: 6px;
+    color: #888; font-size: 11px; margin-bottom: 4px;
 }
 
 .destino-item .cidade::before { content: "📍 "; }
 
 .destino-item .descricao {
-    color: #555;
-    font-size: 12px;
-    line-height: 1.45;
+    color: #555; font-size: 11px; line-height: 1.5;
 }
 
-.destino-item .coordenadas {
-    font-size: 10px;
-    color: #aaa;
-    margin-top: 6px;
-    font-family: monospace;
+/* ── Loading ── */
+.loading {
+    text-align: center; padding: 40px 20px; color: #888;
 }
 
-/* Botões de favorito dentro do item */
-.destino-item .fav-btns {
-    margin-top: 10px;
-    justify-content: flex-start;
+.spinner {
+    width: 28px; height: 28px;
+    border: 3px solid rgba(0,0,0,0.08);
+    border-top-color: #E8192C;
+    border-radius: 50%;
+    animation: girar 0.8s linear infinite;
+    margin: 0 auto 10px;
 }
 
-/* ── Mapa ── */
+@keyframes girar { to { transform: rotate(360deg); } }
+
+/* ── MAPA ── */
 .mapa-wrapper {
-    position: relative;
-    height: 100%;
+    position: relative; height: 100%; overflow: hidden;
 }
 
-#mapa {
-    height: 100%;
-    width: 100%;
-    z-index: 1;
-}
+#mapa { height: 100%; width: 100%; z-index: 1; }
 
-/* Popup do mapa */
-.popup-conteudo { max-width: 200px; }
-.popup-conteudo h4 { color: #1e3c72; margin-bottom: 5px; font-size: 14px; }
-.popup-conteudo p  { color: #555; font-size: 12px; line-height: 1.4; }
-
-/* ── Destaques flutuantes sobre o mapa ── */
+/* ── Destaques ── */
 .mapa-destaques {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    z-index: 500;
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(8px);
-    border-radius: 14px;
-    padding: 12px 14px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    position: absolute; top: 14px; right: 14px; z-index: 500;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+    border-radius: 14px; padding: 12px 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
     max-width: 200px;
 }
 
 .destaque-tag {
-    font-size: 11px;
-    font-weight: 700;
-    color: #C29D5B;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: block;
-    margin-bottom: 8px;
+    font-size: 10px; font-weight: 700; color: #E8192C;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    display: block; margin-bottom: 8px;
 }
 
-.destaques-lista {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
+.destaques-lista { display: flex; flex-direction: column; gap: 5px; }
 
 .destaque-item {
-    font-size: 12px;
-    color: #333;
-    padding: 5px 8px;
-    background: #f9f5ef;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.2s;
-    border-left: 3px solid #C29D5B;
+    font-size: 12px; color: #333; padding: 5px 8px;
+    background: #F5F0E8; border-radius: 7px;
+    cursor: pointer; transition: 0.15s;
+    border-left: 2px solid #E8192C;
 }
 
-.destaque-item:hover { background: #f0e8d8; }
+.destaque-item:hover { background: #f0e8d8; color: #E8192C; }
 
-/* ── Responsividade ── */
-@media (max-width: 968px) {
+/* ── Status ── */
+.mapa-status {
+    position: absolute; bottom: 20px; left: 50%;
+    transform: translateX(-50%);
+    background: rgba(10,10,10,0.88);
+    backdrop-filter: blur(10px);
+    color: #fff; padding: 10px 20px;
+    border-radius: 999px; font-size: 13px; font-weight: 600;
+    z-index: 500; white-space: nowrap;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.mapa-status.ok    { border-left: 3px solid #4CAF50; }
+.mapa-status.erro  { border-left: 3px solid #E8192C; }
+
+/* ── Leaflet routing override ── */
+.leaflet-routing-container {
+    background: #fff !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+    max-height: 300px !important;
+    overflow-y: auto !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 12px !important;
+}
+
+.leaflet-routing-alt { display: none !important; }
+
+/* ── RESPONSIVIDADE ── */
+@media (max-width: 900px) {
     .destino-wrapper {
         grid-template-columns: 1fr;
-        grid-template-rows: 300px 1fr;
+        grid-template-rows: 260px 1fr;
         height: auto;
+        margin-top: 60px;
     }
 
     .sidebar {
-        height: 300px;
+        height: 260px;
         border-right: none;
-        border-bottom: 1px solid #e0d8cc;
+        border-bottom: 1px solid rgba(0,0,0,0.08);
     }
 
     .mapa-wrapper { height: 60vh; }
@@ -301,6 +307,6 @@
 }
 
 @media (max-width: 480px) {
+    .sidebar { padding: 12px; }
     .transporte-opcoes { justify-content: center; }
-    .sidebar { padding: 14px; }
 }

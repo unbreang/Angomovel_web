@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-ao">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,11 +24,11 @@
         </a>
         <nav class="nav">
             <a href="../angomovel.html">Início</a>
-            <a href="../abas/categorias.html">Categorias</a>
-            <a href="../abas/guia.html">Guias</a>
-            <a href="../abas/sobre.html">Sobre</a>
+            <a href="categorias.html">Categorias</a>
+            <a href="guia.html">Guias</a>
+            <a href="sobre.html">Sobre</a>
         </nav>
-        <a href="../abas/cadastroAngo.html">
+        <a href="cadastroAngo.html">
             <button class="btn-entrar">Entrar</button>
         </a>
     </div>
@@ -46,14 +46,14 @@
             <div class="pesquisa-wrap">
                 <i class="ph ph-magnifying-glass"></i>
                 <input type="text" id="inputPesquisa" placeholder="Pesquisa um destino..." oninput="pesquisar()">
-                <button onclick="limparPesquisa()" id="btnLimparPesq" style="display:none;">
+                <button onclick="limparPesquisa()" id="btnLimparPesq" style="display:none;background:none;border:none;cursor:pointer;color:#888;font-size:16px;padding:0;">
                     <i class="ph ph-x"></i>
                 </button>
             </div>
             <div class="sugestoes" id="sugestoes"></div>
         </div>
 
-        <!-- Tipo de transporte -->
+        <!-- Transporte -->
         <div class="transporte-opcoes">
             <button class="transporte-btn ativo" onclick="selTransporte('car', this)">🚗 Carro</button>
             <button class="transporte-btn" onclick="selTransporte('bike', this)">🚴 Bicicleta</button>
@@ -63,26 +63,33 @@
         <!-- Criar rota -->
         <div class="filtros-rota">
             <h4><i class="ph ph-map-trifold"></i> Criar Rota Turística</h4>
+
             <div class="rota-input-wrap">
-                <i class="ph ph-map-pin" style="color:#4CAF50;"></i>
-                <input type="text" id="origemInput" class="input-rota" placeholder="📍 Origem (ex: Luanda)" list="origemSugestoes">
+                <i class="ph ph-map-pin" style="color:#4CAF50;font-size:16px;flex-shrink:0;"></i>
+                <input type="text" id="origemInput" class="input-rota"
+                    placeholder="Origem (ex: Luanda)"
+                    list="origemSugestoes">
             </div>
             <datalist id="origemSugestoes"></datalist>
 
-            <div class="rota-input-wrap">
-                <i class="ph ph-flag" style="color:#E8192C;"></i>
-                <input type="text" id="destinoInput" class="input-rota" placeholder="🏁 Destino (ex: Malanje)" list="destinoSugestoes">
+            <div class="rota-input-wrap" style="margin-top:8px;">
+                <i class="ph ph-flag" style="color:#E8192C;font-size:16px;flex-shrink:0;"></i>
+                <input type="text" id="destinoInput" class="input-rota"
+                    placeholder="Destino (ex: Malanje)"
+                    list="destinoSugestoes">
             </div>
             <datalist id="destinoSugestoes"></datalist>
 
-            <div class="rota-btns">
-                <button id="btnRota" onclick="calcularRota()">
+            <div style="display:flex;gap:8px;margin-top:10px;">
+                <button class="btn-rota" onclick="calcularRota()" style="flex:1;">
                     <i class="ph-fill ph-navigation"></i> Traçar Rota
                 </button>
-                <button id="btnMinhaLoc" onclick="minhaLocalizacao()">
+                <button class="btn-rota" onclick="minhaLocalizacao()"
+                    style="background:#4CAF50;padding:10px 12px;flex:0;border-radius:8px;">
                     <i class="ph ph-crosshair"></i>
                 </button>
-                <button id="btnLimparRota" onclick="limparRota()">
+                <button class="btn-limpar" onclick="limparRota()"
+                    style="padding:10px 12px;flex:0;">
                     <i class="ph ph-trash"></i>
                 </button>
             </div>
@@ -90,31 +97,14 @@
 
         <!-- Info da rota -->
         <div id="rotaInfo" class="rota-info">
-            <div class="rota-info-header">
-                <i class="ph-fill ph-navigation"></i>
-                <h4>Rota Activa</h4>
-            </div>
-            <div class="rota-info-dados">
-                <div class="rota-dado">
-                    <span class="rota-label">De</span>
-                    <span class="rota-valor" id="rotaOrigem">—</span>
-                </div>
-                <div class="rota-dado">
-                    <span class="rota-label">Para</span>
-                    <span class="rota-valor" id="rotaDestino">—</span>
-                </div>
-                <div class="rota-dado">
-                    <span class="rota-label">Distância</span>
-                    <span class="rota-valor" id="rotaDistancia">—</span>
-                </div>
-                <div class="rota-dado">
-                    <span class="rota-label">Tempo</span>
-                    <span class="rota-valor" id="rotaTempo">—</span>
-                </div>
-            </div>
+            <h4>📌 Rota Actual</h4>
+            <p>De: <strong id="rotaOrigem"></strong></p>
+            <p>Para: <strong id="rotaDestino"></strong></p>
+            <p>Distância: <strong id="rotaDistancia"></strong></p>
+            <p>Tempo: <strong id="rotaTempo"></strong></p>
         </div>
 
-        <!-- Favoritos do utilizador -->
+        <!-- Favoritos -->
         <div id="secaoFavoritos" style="display:none;">
             <h3 class="sidebar-subtitulo">❤️ Os meus Favoritos</h3>
             <div id="listaFavoritos" class="destinos-lista"></div>
@@ -134,14 +124,14 @@
     <div class="mapa-wrapper">
         <div id="mapa"></div>
 
-        <!-- Destaques flutuantes -->
+        <!-- Destaques -->
         <div class="mapa-destaques">
             <span class="destaque-tag">⭐ Destinos em Destaque</span>
             <div class="destaques-lista" id="destaquesList"></div>
         </div>
 
-        <!-- Status do mapa -->
-        <div class="mapa-status" id="mapaStatus"></div>
+        <!-- Status -->
+        <div class="mapa-status" id="mapaStatus" style="display:none;"></div>
     </div>
 </div>
 
@@ -161,8 +151,8 @@
             <h3>Explorar</h3>
             <ul>
                 <li><a href="../angomovel.html">Início</a></li>
-                <li><a href="../abas/guia.html">Guias Certificados</a></li>
-                <li><a href="../abas/categorias.html">Categorias</a></li>
+                <li><a href="guia.html">Guias Certificados</a></li>
+                <li><a href="categorias.html">Categorias</a></li>
             </ul>
         </div>
         <div class="footer-contact">
