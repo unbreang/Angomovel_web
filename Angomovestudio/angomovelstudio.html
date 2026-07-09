@@ -935,6 +935,97 @@
             .genero-row { flex-wrap: wrap; }
             .idiomas-grid { grid-template-columns: repeat(2, 1fr); }
         }
+        /* ══════════════════════════════════════════
+   ACESSIBILIDADE & LEGIBILIDADE
+══════════════════════════════════════════ */
+
+/* Tamanho base de texto aumentado */
+body { font-size: 16px !important; }
+
+/* Footer texto mais visível */
+.footer p { 
+    font-size: 14px !important; 
+    color: rgba(255,255,255,0.6) !important; 
+}
+
+.footer-link { font-size: 14px !important; }
+
+/* Textos gerais com melhor contraste */
+p, span, li, label {
+    font-size: 15px !important;
+    line-height: 1.75 !important;
+    color: rgba(255,255,255,0.85) !important;
+}
+
+/* Títulos maiores e mais legíveis */
+h1 { font-size: clamp(36px, 5vw, 72px) !important; }
+h2 { font-size: clamp(24px, 3vw, 42px) !important; }
+h3 { font-size: clamp(18px, 2vw, 26px) !important; }
+h4 { font-size: 18px !important; }
+
+/* Inputs maiores e mais fáceis de usar */
+input, select, textarea {
+    font-size: 15px !important;
+    padding: 14px 16px !important;
+    line-height: 1.5 !important;
+}
+
+/* Botões maiores */
+button, .cta-btn-emp, .cta-btn-gui {
+    font-size: 15px !important;
+    padding: 14px 32px !important;
+    min-height: 48px !important;
+}
+
+/* Nav links maiores */
+.nav a { 
+    font-size: 15px !important; 
+    color: rgba(255,255,255,0.9) !important;
+}
+
+/* Cards com melhor contraste */
+.opcao-card h3 { 
+    font-size: 22px !important;
+    color: #fff !important;
+}
+
+.opcao-card p { 
+    font-size: 14px !important;
+    color: rgba(255,255,255,0.8) !important;
+}
+
+.opcao-card li {
+    font-size: 14px !important;
+    color: rgba(255,255,255,0.8) !important;
+}
+
+/* Labels dos campos */
+.campo label {
+    font-size: 13px !important;
+    color: rgba(255,255,255,0.9) !important;
+    font-weight: 700 !important;
+}
+
+/* Stat numbers */
+.stat-num {
+    font-size: clamp(36px, 4vw, 56px) !important;
+}
+
+.stat-label {
+    font-size: 15px !important;
+    color: rgba(255,255,255,0.7) !important;
+}
+
+/* Funcionalidades */
+.func-card h3 { font-size: 18px !important; color: #fff !important; }
+.func-card p  { font-size: 14px !important; color: rgba(255,255,255,0.75) !important; }
+
+/* Hero subtítulo */
+.hero-sub { 
+    font-size: 18px !important; 
+    color: rgba(255,255,255,0.85) !important;
+    line-height: 1.8 !important;
+}
     </style>
 </head>
 <body>

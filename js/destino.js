@@ -181,6 +181,13 @@ function configurarPesquisa() {
 }
 
 function pesquisar() {
+     const token = localStorage.getItem('angomovel_token');
+    if (!token) {
+        mostrarStatus('👤 Faz login para pesquisar destinos!', 'erro');
+        setTimeout(() => { window.location.href = '../abas/cadastroAngo.html'; }, 1500);
+        return;
+    }
+
     var input = document.getElementById('inputPesquisa');
     var sugestoesEl = document.getElementById('sugestoes');
     var btnLimpar = document.getElementById('btnLimparPesq');
@@ -269,6 +276,12 @@ function selTransporte(tipo, btn) {
 }
 
 async function calcularRota() {
+     const token = localStorage.getItem('angomovel_token');
+    if (!token) {
+        mostrarStatus('👤 Faz login para traçar rotas!', 'erro');
+        setTimeout(() => { window.location.href = '../abas/cadastroAngo.html'; }, 1500);
+        return;
+    }
     // Suporta IDs antigos e novos
     var origemEl  = document.getElementById('origemInput')  || document.getElementById('origem');
     var destinoEl = document.getElementById('destinoInput') || document.getElementById('destino');
@@ -374,6 +387,13 @@ function limparRota() {
 }
 
 function minhaLocalizacao() {
+    const token = localStorage.getItem('angomovel_token');
+    if (!token) {
+        mostrarStatus('👤 Faz login para usar a localização!', 'erro');
+        setTimeout(() => { window.location.href = '../abas/cadastroAngo.html'; }, 1500);
+        return;
+    }
+
     if (!navigator.geolocation) {
         mostrarStatus('❌ O teu browser não suporta geolocalização', 'erro');
         return;
@@ -602,3 +622,10 @@ async function marcarUtil(id, btn) {
         }
     } catch(e) {}
 }
+
+// Mostrar aviso de login se não estiver logado
+document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('angomovel_token');
+    const aviso = document.getElementById('avisoLogin');
+    if (!token && aviso) aviso.style.display = 'block';
+});

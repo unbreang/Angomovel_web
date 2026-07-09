@@ -1047,8 +1047,8 @@
                             <button class="btn-ver-perfil" onclick="event.stopPropagation();abrirModal('${g.id}')">
                                 <i class="ph ph-user-circle"></i> Ver perfil
                             </button>
-                            <button class="${disp ? 'btn-reservar' : 'btn-reservar indisponivel'}"
-                                onclick="event.stopPropagation();${disp ? `abrirReserva('${g.id}')` : ''}">
+                             <button class="${disp ? 'btn-reservar' : 'btn-reservar indisponivel'}"
+    onclick="event.stopPropagation();${disp ? `verificarLoginEReservar('${g.id}')` : ''}">
                                 <i class="ph ph-calendar-plus"></i>
                                 ${disp ? 'Reservar' : 'Indisponível'}
                             </button>
@@ -1205,11 +1205,17 @@
     // ── Confirmar reserva ──
     async function confirmarReserva() {
         const token = localStorage.getItem('angomovel_token');
-        if (!token) {
-            alert('👤 Precisas de fazer login para reservar um guia!');
-            window.location.href = 'cadastroAngo.html';
-            return;
-        }
+    
+    // ── Verificar login ──
+    if (!token) {
+        fecharModal();
+        mostrarToast('👤 Precisas de fazer login para reservar um guia!');
+        setTimeout(() => {
+            window.location.href = 'cadastroAngo.html?redirect=guia';
+        }, 1800);
+        return;
+    }
+
 
         const entrada = document.getElementById('resEntrada').value;
         const saida   = document.getElementById('resSaida').value;
@@ -1266,6 +1272,45 @@
 
     // Iniciar
     carregarGuias();
+
+    function verificarLoginEReservar(guiaId) {
+    const token = localStorage.getItem('angomovel_token');
+    if (!token) {
+        mostrarToastGuia('👤 Faz login para reservar um guia!');
+        setTimeout(() => {
+            window.location.href = 'cadastroAngo.html?redirect=guia';
+        }, 1800);
+        return;
+    }
+    abrirReserva(guiaId);
+}
+
+function mostrarToastGuia(msg) {
+    const existing = document.querySelector('.toast-guia-aviso');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.className = 'toast-guia-aviso';
+    toast.style.cssText = `
+        position: fixed; bottom: 28px; right: 28px; z-index: 9999;
+        background: #111; border-left: 4px solid #E8192C;
+        color: #fff; padding: 14px 20px; border-radius: 12px;
+        font-size: 14px; font-weight: 600;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        animation: toastIn 0.3s ease;
+        display: flex; align-items: center; gap: 10px;
+    `;
+    toast.innerHTML = `
+        <span style="font-size:20px;">🔐</span>
+        <div>
+            <div>${msg}</div>
+            <a href="cadastroAngo.html" style="color:#F0B429;font-size:12px;font-weight:700;">
+                Clica aqui para entrar →
+            </a>
+        </div>
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
 </script>
 </body>
 </html>

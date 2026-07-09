@@ -750,3 +750,25 @@ body p { color: #555048; }
     .destinos-grid { grid-template-columns: 1fr; }
     .turismo h1 { font-size: 30px; }
 }
+
+/* ── Animações de entrada ── */
+.reveal,
+.reveal-esquerda,
+.reveal-direita {
+    transition-duration: 0.7s !important;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Contador */
+.stat-numero {
+    transition: all 0.3s ease;
+}
+
+/* Cards com hover melhorado */
+.guide-card:hover,
+.destino-card:hover,
+.card-arma:hover,
+.featured-banner:hover {
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.35s ease !important;
+}

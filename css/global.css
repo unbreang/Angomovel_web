@@ -576,3 +576,37 @@ p { color: var(--branco-65); font-size: 15px; line-height: 1.75; }
     .container, .containerma { padding: 0 16px; }
     .btn-primario, .btn-secundario, .btn-ghost { padding: 12px 20px; font-size: 13px; }
 }
+/* ══════════════════════════════════════════
+   ACESSIBILIDADE GLOBAL
+══════════════════════════════════════════ */
+body { font-size: 16px; }
+
+p { 
+    font-size: 15px; 
+    line-height: 1.75; 
+}
+
+.nav a { 
+    font-size: 15px !important;
+}
+
+.footer p { 
+    font-size: 14px !important; 
+    color: rgba(255,255,255,0.7) !important; 
+}
+
+.footer-nav ul li a { 
+    font-size: 14px !important;
+    color: rgba(255,255,255,0.7) !important;
+}
+
+.footer-contact p { 
+    font-size: 14px !important;
+    color: rgba(255,255,255,0.7) !important;
+}
+
+.btn-primario, .btn-secundario, .btn-ghost {
+    font-size: 15px !important;
+    padding: 14px 32px !important;
+    min-height: 48px !important;
+}

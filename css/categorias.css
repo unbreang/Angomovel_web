@@ -58,29 +58,46 @@
     flex-direction: column;
     justify-content: flex-end;
     transition: transform 0.3s ease;
-    cursor: pointer; 
+    cursor: pointer;
+    overflow: hidden;
 }
 
 .card-categoria:hover {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.18);
 }
 
 .card-categoria .icon {
     position: absolute;
-    top: 25px;
-    font-size: 38px;
-    margin-bottom: 50px;
-    margin-top: 2px;
+    top: 20px;
+    left: 25px;
+    font-size: 42px;
+    line-height: 1;
+    z-index: 1;
 }
 
 .card-categoria h3 {
     font-size: 26px;
+    font-weight: 800;
     margin-bottom: 6px;
+    padding-top: 0;
+    position: relative;
+    z-index: 2;
+    /* Garante que o título nunca fica atrás do ícone */
+    margin-top: 0;
 }
 
 .card-categoria span {
-    font-size: 14px;
-    opacity: 0.9;
+    font-size: 13px;
+    opacity: 0.88;
+    line-height: 1.55;
+    position: relative;
+    z-index: 2;
+    /* Limitar a 3 linhas para não transbordar */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 /* CORES */
@@ -89,7 +106,7 @@
                 url("praias.jpg") center/cover;
 }
 
-.cat-hotel {
+.cat-hoteis {
     background: linear-gradient(rgb(106, 90, 205), rgb(106, 90, 205)),
                 url("hotel.jpg") center/cover;
 }
@@ -109,10 +126,9 @@
                 url("cultura.jpg") center/cover;
 }
 
-.cat-gastronomia {
+.cat-gastro {
     background: linear-gradient(rgba(250,196,48,0.9), rgba(250,196,48,0.9)),
                 url("gastronomia.jpg") center/cover;
-    color: #222;
 }
 
 
@@ -305,3 +321,41 @@
 
   /* card texto com imagem//////////////////////////////////////////////////////////////////////////// */
 
+/* ── Animações extra ── */
+.card-categoria .icon {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.categorias-grid {
+    animation: entrarGrid 0.6s ease forwards;
+}
+
+@keyframes entrarGrid {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Brilho no hover dos cards coloridos */
+.card-categoria::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 25px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card-categoria:hover::after { opacity: 1; }
+
+/* Cards do carrossel */
+.cardee {
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1),
+                box-shadow 0.4s ease !important;
+}
+
+.cardee:hover {
+    transform: scale(1.04) translateY(-4px) !important;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.2) !important;
+}

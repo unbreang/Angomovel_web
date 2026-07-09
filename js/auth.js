@@ -271,3 +271,161 @@ document.head.appendChild(styleAuth);
 
 // ── Iniciar automaticamente quando DOM estiver pronto ──
 document.addEventListener('DOMContentLoaded', iniciarHeader);
+
+// ══════════════════════════════════════════
+// SISTEMA DE NOTIFICAÇÕES
+// ══════════════════════════════════════════
+
+async function verificarNotificacoes() {
+    const token = localStorage.getItem('angomovel_token');
+    const user  = JSON.parse(localStorage.getItem('angomovel_user') || '{}');
+
+    if (!token || user.role !== 'cliente') return;
+
+    try {
+        const res = await fetch('http://localhost:3000/api/v1/reservas/minhas', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!res.ok) return;
+
+        const reservas = await res.json();
+
+        // Verificar reservas aceites que ainda não foram notificadas
+        const notificadas = JSON.parse(localStorage.getItem('angomovel_notificadas') || '[]');
+
+        reservas.forEach(r => {
+            if (r.estado === 'aceite' && !notificadas.includes(r.id)) {
+                // Mostrar notificação
+                mostrarNotificacao(
+                    '✅ Reserva Aceite!',
+                    `O guia <strong>${r.guia_nome}</strong> aceitou a tua reserva de ${new Date(r.data_entrada).toLocaleDateString('pt-AO')} a ${new Date(r.data_saida).toLocaleDateString('pt-AO')}.`,
+                    r.id
+                );
+
+                // Marcar como notificada
+                notificadas.push(r.id);
+                localStorage.setItem('angomovel_notificadas', JSON.stringify(notificadas));
+            }
+
+            if (r.estado === 'recusada' && !notificadas.includes(r.id + '_rec')) {
+                mostrarNotificacao(
+                    '❌ Reserva Recusada',
+                    `O guia <strong>${r.guia_nome}</strong> não está disponível para a data solicitada.`,
+                    null,
+                    'erro'
+                );
+                notificadas.push(r.id + '_rec');
+                localStorage.setItem('angomovel_notificadas', JSON.stringify(notificadas));
+            }
+
+            if (r.estado === 'concluida' && !notificadas.includes(r.id + '_conc')) {
+                mostrarNotificacao(
+                    '🎉 Actividade Concluída!',
+                    `A tua actividade com o guia <strong>${r.guia_nome}</strong> foi concluída. Avalia a experiência!`,
+                    r.id,
+                    'sucesso'
+                );
+                notificadas.push(r.id + '_conc');
+                localStorage.setItem('angomovel_notificadas', JSON.stringify(notificadas));
+            }
+        });
+
+    } catch (e) {}
+}
+
+function mostrarNotificacao(titulo, mensagem, reservaId, tipo) {
+    tipo = tipo || 'sucesso';
+
+    // Remover notificação anterior se existir
+    const existing = document.querySelector('.notif-reserva');
+    if (existing) existing.remove();
+
+    const cores = {
+        sucesso: { borda: '#4CAF50', icone: '✅', bg: 'rgba(76,175,80,0.08)' },
+        erro:    { borda: '#E8192C', icone: '❌', bg: 'rgba(232,25,44,0.08)' },
+    };
+
+    const cor = cores[tipo] || cores.sucesso;
+
+    const notif = document.createElement('div');
+    notif.className = 'notif-reserva';
+    notif.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        z-index: 9999;
+        background: #fff;
+        border: 1px solid rgba(0,0,0,0.08);
+        border-left: 4px solid ${cor.borda};
+        border-radius: 16px;
+        padding: 16px 20px;
+        max-width: 360px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+        animation: notifEntrar 0.4s cubic-bezier(0.4,0,0.2,1);
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    `;
+
+    notif.innerHTML = `
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+            <div style="font-size:24px;flex-shrink:0;">${cor.icone}</div>
+            <div style="flex:1;">
+                <div style="font-size:15px;font-weight:800;color:#111;margin-bottom:4px;">
+                    ${titulo}
+                </div>
+                <div style="font-size:13px;color:#555;line-height:1.6;margin-bottom:12px;">
+                    ${mensagem}
+                </div>
+                <div style="display:flex;gap:8px;">
+                    ${reservaId ? `
+                    <a href="abas/perfil.html#reservas"
+                        style="padding:7px 14px;background:#E8192C;color:#fff;
+                        border-radius:999px;font-size:12px;font-weight:700;
+                        text-decoration:none;">
+                        Ver Reserva
+                    </a>` : ''}
+                    <button onclick="this.closest('.notif-reserva').remove()"
+                        style="padding:7px 14px;background:rgba(0,0,0,0.06);
+                        border:none;border-radius:999px;font-size:12px;
+                        font-weight:600;color:#555;cursor:pointer;
+                        font-family:'Plus Jakarta Sans',sans-serif;">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+            <button onclick="this.closest('.notif-reserva').remove()"
+                style="background:none;border:none;font-size:18px;color:#888;
+                cursor:pointer;flex-shrink:0;padding:0;line-height:1;">×</button>
+        </div>
+    `;
+
+    document.body.appendChild(notif);
+
+    // Auto fechar após 8 segundos
+    setTimeout(() => {
+        if (notif.parentElement) {
+            notif.style.animation = 'notifSair 0.3s ease forwards';
+            setTimeout(() => notif.remove(), 300);
+        }
+    }, 8000);
+}
+
+// CSS das animações
+const notifCSS = document.createElement('style');
+notifCSS.textContent = `
+    @keyframes notifEntrar {
+        from { opacity: 0; transform: translateX(100px); }
+        to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes notifSair {
+        from { opacity: 1; transform: translateX(0); }
+        to   { opacity: 0; transform: translateX(100px); }
+    }
+`;
+document.head.appendChild(notifCSS);
+
+// Verificar ao carregar e depois a cada 30 segundos
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(verificarNotificacoes, 2000);
+    setInterval(verificarNotificacoes, 30000);
+});

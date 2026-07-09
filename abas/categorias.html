@@ -42,7 +42,7 @@
         <div class="card-categoria cat-praias">
             <div class="icon">☂</div>
             <h3>Praias</h3>
-            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto ad earum id itaque accusantium exercitationem voluptas aut vel consequuntur tempora, dolore iure at quibusdam explicabo, aperiam tenetur impedit eius quidem.</span>
+            <span>Descobre as praias mais deslumbrantes de Angola, das águas cristalinas do Mussulo às areias douradas do Namibe.</span>
         </div>
          </a>
 
@@ -50,7 +50,7 @@
         <div class="card-categoria cat-hoteis">
             <div class="icon"><i class="ph ph-bed"></i></div>
             <h3>Hotéis</h3>
-            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto ad earum id itaque accusantium exercitationem voluptas aut vel consequuntur tempora, dolore iure at quibusdam explicabo, aperiam tenetur impedit eius quidem.</span>
+            <span>Encontra os melhores hotéis em Angola, com conforto e qualidade para a tua estadia inesquecível.</span>
         </div>
          </a>
 
@@ -58,32 +58,32 @@
         <div class="card-categoria cat-resort">
             <div class="icon"><i class="ph ph-towel"></i></div>
             <h3>Resort</h3>
-            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto ad earum id itaque accusantium exercitationem voluptas aut vel consequuntur tempora, dolore iure at quibusdam explicabo, aperiam tenetur impedit eius quidem.</span>
-        </div>
+            <span>Relaxa nos resorts mais exclusivos de Angola, com piscinas, spa e vistas deslumbrantes.</span>
+            </div>
          </a>
 
 <a href="../abas/categoriahtml/parques.html">
         <div class="card-categoria cat-parques">
             <div class="icon">🌳</div>
             <h3>Parques</h3>
-            <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe, cupiditate odit maiores labore exercitationem iure id eius doloremque voluptatem quis, asperiores impedit vel aliquid temporibus aliquam pariatur facilis aspernatur. Libero!</span>
-        </div>
+            <span>Explora os parques naturais de Angola, lar de fauna e flora únicas no mundo.</span>
+            </div>
 </a>
 
 <a href="../abas/categoriahtml/cultura.html">
         <div class="card-categoria cat-cultura">
             <div class="icon">🏛</div>
             <h3>Cultura</h3>
-            <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit voluptatibus tempora dolorem doloremque delectus repellat similique quas nihil! Molestiae qui voluptatem a quia praesentium? Optio quasi unde libero similique nostrum.</span>
-        </div>
+            <span>Mergulha na rica cultura angolana, com museus, monumentos e tradições milenares.</span>
+           </div>
 </a>
 
 <a href="../abas/categoriahtml/gastro.html">
         <div class="card-categoria cat-gastro">
             <div class="icon">🍴</div>
             <h3>Gastronomia</h3>
-            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem ratione minus natus incidunt quod inventore sed rem enim, maxime quidem porro ad repellat, facilis excepturi. At sed modi provident qui?</span>
-        </div>
+            <span>Saboreia a gastronomia angolana, do Funje ao Muamba, uma viagem pelos sabores únicos de Angola.</span>
+             </div>
 </a>
     </div>
   
@@ -220,6 +220,73 @@
     </div>
 </footer>
 <script src="../js/auth.js"></script>
+<script>
+// ══════════════════════════════════════════
+// ANIMAÇÕES — Categorias
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+
+    // 1. Cards coloridos — entram com escala
+    const cardsCategoria = document.querySelectorAll('.card-categoria');
+    cardsCategoria.forEach((card, i) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(40px) scale(0.95)';
+        card.style.transition = `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`;
+    });
+
+    // 2. Cards do carrossel — entram da esquerda
+    const cardees = document.querySelectorAll('.cardee');
+    cardees.forEach((card, i) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateX(40px)';
+        card.style.transition = `opacity 0.5s ease ${i * 0.08}s, transform 0.5s ease ${i * 0.08}s`;
+    });
+
+    // 3. Títulos e textos
+    const titulos = document.querySelectorAll('h1, h2, .colunas p');
+    titulos.forEach((el, i) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(24px)';
+        el.style.transition = `opacity 0.6s ease ${i * 0.1}s, transform 0.6s ease ${i * 0.1}s`;
+    });
+
+    // 4. Observer para activar animações
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.style.opacity = '1';
+                e.target.style.transform = 'translateY(0) translateX(0) scale(1)';
+                observer.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    [...cardsCategoria, ...cardees, ...titulos].forEach(el => observer.observe(el));
+
+    // 5. Efeito hover extra nos cards coloridos
+    cardsCategoria.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.boxShadow = '0 20px 50px rgba(0,0,0,0.25)';
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)';
+        });
+    });
+
+    // 6. Animação do ícone ao hover
+    cardsCategoria.forEach(card => {
+        const icon = card.querySelector('.icon');
+        if (!icon) return;
+        card.addEventListener('mouseenter', () => {
+            icon.style.transform = 'scale(1.2) rotate(10deg)';
+            icon.style.transition = 'transform 0.3s ease';
+        });
+        card.addEventListener('mouseleave', () => {
+            icon.style.transform = 'scale(1) rotate(0deg)';
+        });
+    });
+});
+</script>
 
 </body>
 </html>

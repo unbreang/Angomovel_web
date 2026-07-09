@@ -1,35 +1,475 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-ao">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../css/global.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>AngoMovel — Sobre Nós</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/global.css">
+    <style>
+        body { background: #F5F0E8; color: #111; }
+
+        /* ── HERO ── */
+        .sobre-hero {
+            background: linear-gradient(135deg, #0A0A0A 0%, #1a0a0a 50%, #CC0000 100%);
+            padding: 140px 24px 100px;
+            position: relative; overflow: hidden;
+            text-align: center;
+        }
+
+        .sobre-hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1400&q=80');
+            background-size: cover; background-position: center;
+            opacity: 0.1;
+        }
+
+        .sobre-hero::after {
+            content: 'ANGOLA';
+            position: absolute; bottom: -60px; left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--fonte-titulo);
+            font-size: 220px; font-weight: 900;
+            color: rgba(255,255,255,0.03);
+            pointer-events: none; white-space: nowrap;
+        }
+
+        .sobre-hero-inner {
+            max-width: 800px; margin: 0 auto;
+            position: relative; z-index: 1;
+        }
+
+        .sobre-hero .badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(240,180,41,0.15);
+            border: 1px solid rgba(240,180,41,0.3);
+            color: #F0B429; padding: 6px 18px; border-radius: 999px;
+            font-size: 11px; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            margin-bottom: 28px;
+        }
+
+        .sobre-hero h1 {
+            font-family: var(--fonte-titulo);
+            font-size: clamp(40px, 6vw, 72px);
+            font-weight: 900; color: #fff;
+            line-height: 1.05; letter-spacing: -2px;
+            margin-bottom: 24px;
+        }
+
+        .sobre-hero h1 em {
+            font-style: normal;
+            background: linear-gradient(90deg, #E8192C, #F0B429);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sobre-hero p {
+            font-size: 18px; color: rgba(255,255,255,0.7);
+            line-height: 1.75; max-width: 600px; margin: 0 auto;
+        }
+
+        /* ── STATS ── */
+        .stats-secao {
+            background: #fff; padding: 60px 24px;
+        }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 24px; max-width: 900px; margin: 0 auto;
+        }
+
+        .stat-item { text-align: center; }
+
+        .stat-num {
+            font-family: var(--fonte-titulo);
+            font-size: 48px; font-weight: 900;
+            color: #E8192C; line-height: 1; margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px; color: #6b6560; font-weight: 500;
+        }
+
+        /* ── MISSÃO ── */
+        .missao-secao {
+            padding: 80px 24px; background: #F5F0E8;
+        }
+
+        .missao-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 60px; align-items: center;
+            max-width: 1100px; margin: 0 auto;
+        }
+
+        .missao-texto h2 {
+            font-family: var(--fonte-titulo);
+            font-size: clamp(28px, 4vw, 44px);
+            font-weight: 900; color: #111;
+            line-height: 1.1; letter-spacing: -1px;
+            margin-bottom: 20px;
+        }
+
+        .missao-texto h2 em {
+            font-style: normal; color: #E8192C;
+        }
+
+        .missao-texto p {
+            font-size: 16px; color: #555048;
+            line-height: 1.8; margin-bottom: 16px;
+        }
+
+        .missao-valores {
+            display: flex; flex-direction: column; gap: 14px;
+        }
+
+        .valor-item {
+            display: flex; align-items: flex-start; gap: 14px;
+            background: #fff; padding: 18px; border-radius: 14px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: 0.25s;
+        }
+
+        .valor-item:hover { transform: translateX(4px); box-shadow: 0 6px 24px rgba(0,0,0,0.1); }
+
+        .valor-icone {
+            width: 44px; height: 44px; border-radius: 12px;
+            background: rgba(232,25,44,0.08);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; flex-shrink: 0;
+        }
+
+        .valor-texto h4 { font-size: 15px; font-weight: 800; color: #111; margin-bottom: 4px; }
+        .valor-texto p  { font-size: 13px; color: #6b6560; line-height: 1.55; margin: 0; }
+
+        /* ── TECNOLOGIA ── */
+        .tech-secao {
+            background: #111; padding: 80px 24px;
+            position: relative; overflow: hidden;
+        }
+
+        .tech-secao::before {
+            content: '';
+            position: absolute; top: -100px; right: -100px;
+            width: 400px; height: 400px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(232,25,44,0.1), transparent 70%);
+        }
+
+        .tech-secao .titulo-secao { color: #fff; }
+        .tech-secao .titulo-secao::after { background: linear-gradient(135deg, #D4A017, #F0B429); }
+
+        .tech-secao .subtitulo-secao { color: rgba(255,255,255,0.5); }
+
+        .tech-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 20px; max-width: 1000px; margin: 0 auto;
+        }
+
+        .tech-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px; padding: 28px;
+            transition: 0.3s;
+        }
+
+        .tech-card:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(232,25,44,0.3);
+            transform: translateY(-4px);
+        }
+
+        .tech-icone {
+            font-size: 36px; margin-bottom: 14px; display: block;
+        }
+
+        .tech-card h3 { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+        .tech-card p  { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.65; }
+
+        .tech-tag {
+            display: inline-block; margin-top: 12px;
+            background: rgba(240,180,41,0.12);
+            border: 1px solid rgba(240,180,41,0.2);
+            color: #F0B429; font-size: 11px; font-weight: 700;
+            padding: 3px 10px; border-radius: 6px;
+        }
+
+        /* ── EQUIPA ── */
+        .equipa-secao { padding: 80px 24px; background: #fff; }
+
+        .equipa-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 24px; max-width: 900px; margin: 0 auto;
+        }
+
+        .membro-card {
+            text-align: center; padding: 32px 24px;
+            background: #F5F0E8; border-radius: 20px;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .membro-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+
+        .membro-avatar {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: linear-gradient(135deg, #CC0000, #E8192C);
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--fonte-titulo); font-size: 32px;
+            font-weight: 900; color: #fff; margin: 0 auto 16px;
+        }
+
+        .membro-nome { font-family: var(--fonte-titulo); font-size: 18px; font-weight: 800; color: #111; margin-bottom: 4px; }
+        .membro-cargo { font-size: 12px; color: #E8192C; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+        .membro-desc  { font-size: 13px; color: #6b6560; line-height: 1.65; }
+
+        /* ── VISÃO ── */
+        .visao-secao {
+            background: linear-gradient(135deg, #E8192C, #A00000);
+            padding: 80px 24px; text-align: center;
+            position: relative; overflow: hidden;
+        }
+
+        .visao-secao::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1400&q=80');
+            background-size: cover; background-position: center;
+            opacity: 0.08;
+        }
+
+        .visao-inner {
+            max-width: 700px; margin: 0 auto;
+            position: relative; z-index: 1;
+        }
+
+        .visao-inner h2 {
+            font-family: var(--fonte-titulo);
+            font-size: clamp(28px, 4vw, 48px);
+            font-weight: 900; color: #fff;
+            margin-bottom: 20px; letter-spacing: -1px;
+        }
+
+        .visao-inner p { font-size: 30px; color: rgba(255,255,255,0.85); line-height: 1.5; margin-bottom: 32px; }
+
+        .btn-visao {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #fff; color: #E8192C;
+            padding: 14px 32px; border-radius: 999px;
+            font-weight: 800; font-size: 15px;
+            text-decoration: none; transition: 0.3s;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.2);
+        }
+
+        .btn-visao:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(0,0,0,0.3); }
+
+        /* ── RESPONSIVIDADE ── */
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .tech-grid  { grid-template-columns: repeat(2, 1fr); }
+            .equipa-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .missao-grid { grid-template-columns: 1fr; gap: 40px; }
+            .stats-grid  { grid-template-columns: repeat(2, 1fr); }
+            .tech-grid   { grid-template-columns: 1fr; }
+            .equipa-grid { grid-template-columns: 1fr; max-width: 400px; }
+            .sobre-hero  { padding: 120px 16px 80px; }
+        }
+    </style>
 </head>
 <body>
-    <header class="header">
+
+<!-- HEADER -->
+<header class="header">
     <div class="header-inner">
-        <a href="angomovel.html" class="logo">
+        <a href="../angomovel.html" class="logo">
             <span class="icon-aviao">✈</span>
             <h1>ANGOMOVEL</h1>
         </a>
         <nav class="nav">
-            <a href="../abas/categorias.html">Categorias</a>
-            <a href="../abas/guia.html">Guias</a>
-            <a href="../abas/destino.html">Destinos</a>
-            <a href="../abas/sobre.html">Sobre</a>
+            <a href="../angomovel.html">Início</a>
+            <a href="categorias.html">Categorias</a>
+            <a href="guia.html">Guias</a>
+            <a href="destino.html">Destinos</a>
+            <a href="sobre.html">Sobre</a>
         </nav>
-        <a href="../abas/cadastroAngo.html">
+        <a href="cadastroAngo.html">
             <button class="btn-entrar">Entrar</button>
         </a>
     </div>
-   </header>
+</header>
 
-    <footer class="main-footer">
+<!-- HERO -->
+<section class="sobre-hero">
+    <div class="sobre-hero-inner">
+        <div class="badge">🇦🇴 Feito em Angola, para o Mundo</div>
+        <h1>A plataforma que coloca Angola<br>no <em>mapa do turismo</em></h1>
+        <p>O AngoMovel nasceu da vontade de digitalizar e valorizar o turismo angolano, conectando viajantes com guias locais certificados e destinos autênticos.</p>
+    </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-secao">
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-num">15+</div>
+            <div class="stat-label">Destinos Turísticos</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">18</div>
+            <div class="stat-label">Províncias Cobertas</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">3</div>
+            <div class="stat-label">Tipos de Utilizadores</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">100%</div>
+            <div class="stat-label">Feito em Angola</div>
+        </div>
+    </div>
+</section>
+
+<!-- MISSÃO -->
+<section class="missao-secao">
+    <div class="missao-grid">
+        <div class="missao-texto">
+            <h2>A nossa <em>missão</em> é simples</h2>
+            <p>Queremos tornar Angola num destino turístico de referência mundial, dando aos turistas as ferramentas certas para explorar o país com confiança e segurança.</p>
+            <p>Acreditamos que o turismo bem organizado é um motor de desenvolvimento económico e cultural para Angola e para os angolanos.</p>
+        </div>
+        <div class="missao-valores">
+            <div class="valor-item">
+                <div class="valor-icone">🎯</div>
+                <div class="valor-texto">
+                    <h4>Credibilidade</h4>
+                    <p>Guias verificados, avaliações reais e informação confiável sobre cada destino.</p>
+                </div>
+            </div>
+            <div class="valor-item">
+                <div class="valor-icone">🔒</div>
+                <div class="valor-texto">
+                    <h4>Segurança</h4>
+                    <p>Sistema seguro de reservas com autenticação JWT e dados encriptados.</p>
+                </div>
+            </div>
+            <div class="valor-item">
+                <div class="valor-icone">🌍</div>
+                <div class="valor-texto">
+                    <h4>Inclusão</h4>
+                    <p>Plataforma acessível para turistas nacionais e internacionais.</p>
+                </div>
+            </div>
+            <div class="valor-item">
+                <div class="valor-icone">📱</div>
+                <div class="valor-texto">
+                    <h4>Inovação</h4>
+                    <p>Tecnologia moderna com mapas interactivos, chat em tempo real e muito mais.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TECNOLOGIA -->
+<section class="tech-secao">
+    <div style="max-width:1000px;margin:0 auto;">
+        <h2 class="titulo-secao">Stack Tecnológico</h2>
+        <p class="subtitulo-secao">Construído com tecnologias modernas e escaláveis</p>
+
+        <div class="tech-grid">
+            <div class="tech-card">
+                <span class="tech-icone">🌐</span>
+                <h3>Frontend</h3>
+                <p>HTML5, CSS3 e JavaScript puro com Progressive Web App. Design system customizado com tema claro e escuro.</p>
+                <span class="tech-tag">PWA</span>
+            </div>
+            <div class="tech-card">
+                <span class="tech-icone">⚙️</span>
+                <h3>Backend</h3>
+                <p>Node.js com NestJS framework. Arquitectura modular com autenticação JWT, guards e DTOs com validação.</p>
+                <span class="tech-tag">NestJS + Node.js</span>
+            </div>
+            <div class="tech-card">
+                <span class="tech-icone">🗄️</span>
+                <h3>Base de Dados</h3>
+                <p>PostgreSQL como base de dados principal com TypeORM. Redis para cache e optimização de desempenho.</p>
+                <span class="tech-tag">PostgreSQL + Redis</span>
+            </div>
+            <div class="tech-card">
+                <span class="tech-icone">🐳</span>
+                <h3>Infraestrutura</h3>
+                <p>Docker para containerização dos serviços. Ambiente isolado e reproduzível para desenvolvimento e produção.</p>
+                <span class="tech-tag">Docker</span>
+            </div>
+            <div class="tech-card">
+                <span class="tech-icone">🗺️</span>
+                <h3>Mapas</h3>
+                <p>Leaflet.js com OpenStreetMap para mapas interactivos gratuitos. Nominatim e OSRM para pesquisa e rotas.</p>
+                <span class="tech-tag">Leaflet + OSM</span>
+            </div>
+            <div class="tech-card">
+                <span class="tech-icone">💬</span>
+                <h3>Tempo Real</h3>
+                <p>Socket.io com WebSockets para chat em tempo real entre clientes e guias turísticos.</p>
+                <span class="tech-tag">Socket.io</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- EQUIPA -->
+<section class="equipa-secao">
+    <div style="max-width:1000px;margin:0 auto;">
+        <h2 class="titulo-secao">A Nossa Equipa</h2>
+        <p class="subtitulo-secao">Estudantes angolanos a construir o futuro do turismo digital</p>
+
+        <div class="equipa-grid">
+            <div class="membro-card">
+                <div class="membro-avatar">A</div>
+                <div class="membro-nome">Abraão Xiquia</div>
+                <div class="membro-cargo">Desenvolvedor Full-Stack</div>
+                <div class="membro-desc">Responsável pelo desenvolvimento completo da plataforma AngoMovel — frontend, backend e arquitectura do sistema.</div>
+            </div>
+            <div class="membro-card">
+                <div class="membro-avatar" style="background:linear-gradient(135deg,#D4A017,#F0B429);color:#111;">🏫</div>
+                <div class="membro-nome">Escola Técnica</div>
+                <div class="membro-cargo">Projecto PAP 2026</div>
+                <div class="membro-desc">Este projecto foi desenvolvido como Projecto de Aptidão Profissional (PAP) no âmbito do curso técnico de informática.</div>
+            </div>
+            <div class="membro-card">
+                <div class="membro-avatar" style="background:linear-gradient(135deg,#1a7a3f,#4CAF50);">🇦🇴</div>
+                <div class="membro-nome">Angola</div>
+                <div class="membro-cargo">Nossa Inspiração</div>
+                <div class="membro-desc">Angola com as suas 18 províncias, culturas ricas e paisagens deslumbrantes é a razão de existir do AngoMovel.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- VISÃO -->
+<section class="visao-secao">
+    <div class="visao-inner">
+        <h2>Conclusão</h2>
+        <h2>Juntos pelo turismo angolano 🇦🇴</h2>
+        <p>O AngoMovel é mais do que uma plataforma é um sitema web de turismo que será uma ferramenta útil para visitantes e moradores, promovendo a cultura local e fortalecendo a economia Angolana. É um compromisso com o desenvolvimento do turismo em Angola. Começa hoje a explorar o que o nosso país tem de melhor.</p>
+        <p>Obrigado pela atenção!</p>
+        <a href="destino.html" class="btn-visao">
+            <i class="ph-fill ph-map-pin"></i> Explorar Destinos
+        </a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="main-footer">
     <div class="footer-inner">
         <div class="footer-brand">
             <h2>ANGOMOVEL<span>.</span></h2>
-            <p>A tua porta de entrada para o turismo autêntico em Angola. Descobre resorts, guias e sabores únicos.</p>
+            <p>A tua porta de entrada para o turismo autêntico em Angola.</p>
             <div class="social-icons">
                 <a href="#"><i class="ph ph-instagram-logo"></i></a>
                 <a href="#"><i class="ph ph-facebook-logo"></i></a>
@@ -39,10 +479,10 @@
         <div class="footer-nav">
             <h3>Explorar</h3>
             <ul>
-                <li><a href="angomovel.html">Início</a></li>
-                <li><a href="abas/guia.html">Guias Certificados</a></li>
-                <li><a href="abas/categorias.html">Categorias</a></li>
-                <li><a href="abas/destino.html">Destinos Populares</a></li>
+                <li><a href="../angomovel.html">Início</a></li>
+                <li><a href="guia.html">Guias Certificados</a></li>
+                <li><a href="categorias.html">Categorias</a></li>
+                <li><a href="destino.html">Destinos</a></li>
             </ul>
         </div>
         <div class="footer-contact">
@@ -55,9 +495,20 @@
     <div class="footer-bottom">
         <p>© 2026 AngoMovel - Todos os direitos reservados 🇦🇴</p>
     </div>
-   </footer>
-<button class="btn-entrar"><a href="../Angomovestudio/angomovelstudio.html">AngoMovel<span>studios</span></a></button> 
-<button class="btn-entrar"><a href="https://www.canva.com/design/DAHMQvzLvNc/pjF18DBzZh8mMBdBeip9VA/edit?ui=e30">FINAL</a></button>
-   <script src="../js/auth.js"></script>
+</footer>
+
+<script src="../js/auth.js"></script>
+<script>
+    // Animação de scroll
+    const observer = new IntersectionObserver(
+        entries => entries.forEach(e => {
+            if (e.isIntersecting) e.target.classList.add('visivel');
+        }),
+        { threshold: 0.12 }
+    );
+    document.querySelectorAll('.reveal, .reveal-esquerda, .reveal-direita')
+        .forEach(el => observer.observe(el));
+</script>
+
 </body>
 </html>

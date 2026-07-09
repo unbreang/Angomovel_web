@@ -275,5 +275,134 @@
 <script src="js/add.js"></script>
 <script src="js/scripp.js"></script>
 
+<script>
+// ══════════════════════════════════════════
+// ANIMAÇÕES DE SCROLL — Página Inicial
+// ══════════════════════════════════════════
+
+// 1. Adicionar classes reveal aos elementos
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Secção intro — texto da esquerda e stats da direita
+    document.querySelectorAll('.intro-grid > *:first-child').forEach(el => {
+        el.classList.add('reveal-esquerda');
+    });
+    document.querySelectorAll('.intro-grid > *:last-child').forEach(el => {
+        el.classList.add('reveal-direita');
+    });
+
+    // Stat cards com delay
+    document.querySelectorAll('.stat-card').forEach((el, i) => {
+        el.classList.add('reveal');
+        el.classList.add('delay-' + (i + 1));
+    });
+
+    // Banners de promoção
+    document.querySelectorAll('.featured-banner').forEach((el, i) => {
+        el.classList.add('reveal');
+        el.classList.add('delay-' + (i + 1));
+    });
+
+    // Cards de destinos
+    document.querySelectorAll('.destino-card').forEach((el, i) => {
+        el.classList.add('reveal');
+        el.style.transitionDelay = (i * 0.1) + 's';
+    });
+
+    // Cards de guias
+    document.querySelectorAll('.guide-card, .guia-item').forEach((el, i) => {
+        el.classList.add('reveal');
+        el.style.transitionDelay = (i * 0.12) + 's';
+    });
+
+    // Secção motivacional
+    document.querySelectorAll('.motivacional p, .motivacional .autor').forEach((el, i) => {
+        el.classList.add('reveal');
+        el.classList.add('delay-' + (i + 1));
+    });
+
+    // Cards rápidos
+    document.querySelectorAll('.card-arma').forEach((el, i) => {
+        el.classList.add('reveal');
+        el.classList.add('delay-' + (i + 1));
+    });
+
+    // Títulos de secção
+    document.querySelectorAll('.titulo-secao, .subtitulo-secao').forEach(el => {
+        el.classList.add('reveal');
+    });
+
+    // Iniciar observer
+    const observer = new IntersectionObserver(
+        entries => entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visivel');
+                observer.unobserve(e.target); // só anima uma vez
+            }
+        }),
+        { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('.reveal, .reveal-esquerda, .reveal-direita')
+        .forEach(el => observer.observe(el));
+
+    // 2. Contador animado nos números
+    function animarContador(el, fim, duracao) {
+        let inicio = 0;
+        const step = fim / (duracao / 16);
+        const timer = setInterval(() => {
+            inicio += step;
+            if (inicio >= fim) {
+                el.textContent = el.dataset.sufixo
+                    ? fim + el.dataset.sufixo
+                    : fim + (el.dataset.plus ? '+' : '');
+                clearInterval(timer);
+            } else {
+                el.textContent = Math.floor(inicio) + (el.dataset.plus ? '+' : '');
+            }
+        }, 16);
+    }
+
+    // Observer para contadores
+    const obsContador = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                const el  = e.target;
+                const fim = parseInt(el.dataset.valor || el.textContent.replace(/\D/g, ''));
+                animarContador(el, fim, 1500);
+                obsContador.unobserve(el);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stat-numero').forEach(el => {
+        const val = el.textContent.replace(/\D/g, '');
+        el.dataset.valor = val;
+        if (el.textContent.includes('+')) el.dataset.plus = '1';
+        obsContador.observe(el);
+    });
+
+    // 3. Parallax suave no hero
+    window.addEventListener('scroll', () => {
+        const hero = document.querySelector('.carousel');
+        if (hero) {
+            const scroll = window.pageYOffset;
+            const rate   = scroll * 0.3;
+            hero.style.backgroundPositionY = rate + 'px';
+        }
+    }, { passive: true });
+
+    // 4. Header com sombra ao fazer scroll
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.style.boxShadow = '0 4px 30px rgba(0,0,0,0.3)';
+        } else {
+            header.style.boxShadow = 'none';
+        }
+    }, { passive: true });
+});
+</script>
+
 </body>
 </html>
